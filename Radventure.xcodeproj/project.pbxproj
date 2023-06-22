@@ -1,0 +1,607 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1FDC802A2A44927E00F9CC96 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC80292A44927E00F9CC96 /* AppDelegate.swift */; };
+		1FDC802C2A44927E00F9CC96 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC802B2A44927E00F9CC96 /* SceneDelegate.swift */; };
+		1FDC802E2A44927E00F9CC96 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC802D2A44927E00F9CC96 /* ViewController.swift */; };
+		1FDC80312A44927E00F9CC96 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC802F2A44927E00F9CC96 /* Main.storyboard */; };
+		1FDC80332A44927F00F9CC96 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC80322A44927F00F9CC96 /* Assets.xcassets */; };
+		1FDC80362A44927F00F9CC96 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC80342A44927F00F9CC96 /* LaunchScreen.storyboard */; };
+		1FDC80412A44927F00F9CC96 /* RadventureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC80402A44927F00F9CC96 /* RadventureTests.swift */; };
+		1FDC804B2A44927F00F9CC96 /* RadventureUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC804A2A44927F00F9CC96 /* RadventureUITests.swift */; };
+		1FDC804D2A44927F00F9CC96 /* RadventureUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC804C2A44927F00F9CC96 /* RadventureUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1FDC803D2A44927F00F9CC96 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1FDC801E2A44927E00F9CC96 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1FDC80252A44927E00F9CC96;
+			remoteInfo = Radventure;
+		};
+		1FDC80472A44927F00F9CC96 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1FDC801E2A44927E00F9CC96 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1FDC80252A44927E00F9CC96;
+			remoteInfo = Radventure;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1FDC80262A44927E00F9CC96 /* Radventure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Radventure.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FDC80292A44927E00F9CC96 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		1FDC802B2A44927E00F9CC96 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		1FDC802D2A44927E00F9CC96 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		1FDC80302A44927E00F9CC96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1FDC80322A44927F00F9CC96 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1FDC80352A44927F00F9CC96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		1FDC80372A44927F00F9CC96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1FDC803C2A44927F00F9CC96 /* RadventureTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RadventureTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FDC80402A44927F00F9CC96 /* RadventureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadventureTests.swift; sourceTree = "<group>"; };
+		1FDC80462A44927F00F9CC96 /* RadventureUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RadventureUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FDC804A2A44927F00F9CC96 /* RadventureUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadventureUITests.swift; sourceTree = "<group>"; };
+		1FDC804C2A44927F00F9CC96 /* RadventureUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadventureUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1FDC80232A44927E00F9CC96 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1FDC80392A44927F00F9CC96 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1FDC80432A44927F00F9CC96 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1FDC801D2A44927E00F9CC96 = {
+			isa = PBXGroup;
+			children = (
+				1FDC80282A44927E00F9CC96 /* Radventure */,
+				1FDC803F2A44927F00F9CC96 /* RadventureTests */,
+				1FDC80492A44927F00F9CC96 /* RadventureUITests */,
+				1FDC80272A44927E00F9CC96 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1FDC80272A44927E00F9CC96 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1FDC80262A44927E00F9CC96 /* Radventure.app */,
+				1FDC803C2A44927F00F9CC96 /* RadventureTests.xctest */,
+				1FDC80462A44927F00F9CC96 /* RadventureUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1FDC80282A44927E00F9CC96 /* Radventure */ = {
+			isa = PBXGroup;
+			children = (
+				1FDC80292A44927E00F9CC96 /* AppDelegate.swift */,
+				1FDC802B2A44927E00F9CC96 /* SceneDelegate.swift */,
+				1FDC802D2A44927E00F9CC96 /* ViewController.swift */,
+				1FDC802F2A44927E00F9CC96 /* Main.storyboard */,
+				1FDC80322A44927F00F9CC96 /* Assets.xcassets */,
+				1FDC80342A44927F00F9CC96 /* LaunchScreen.storyboard */,
+				1FDC80372A44927F00F9CC96 /* Info.plist */,
+			);
+			path = Radventure;
+			sourceTree = "<group>";
+		};
+		1FDC803F2A44927F00F9CC96 /* RadventureTests */ = {
+			isa = PBXGroup;
+			children = (
+				1FDC80402A44927F00F9CC96 /* RadventureTests.swift */,
+			);
+			path = RadventureTests;
+			sourceTree = "<group>";
+		};
+		1FDC80492A44927F00F9CC96 /* RadventureUITests */ = {
+			isa = PBXGroup;
+			children = (
+				1FDC804A2A44927F00F9CC96 /* RadventureUITests.swift */,
+				1FDC804C2A44927F00F9CC96 /* RadventureUITestsLaunchTests.swift */,
+			);
+			path = RadventureUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1FDC80252A44927E00F9CC96 /* Radventure */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1FDC80502A44927F00F9CC96 /* Build configuration list for PBXNativeTarget "Radventure" */;
+			buildPhases = (
+				1FDC80222A44927E00F9CC96 /* Sources */,
+				1FDC80232A44927E00F9CC96 /* Frameworks */,
+				1FDC80242A44927E00F9CC96 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Radventure;
+			productName = Radventure;
+			productReference = 1FDC80262A44927E00F9CC96 /* Radventure.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1FDC803B2A44927F00F9CC96 /* RadventureTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1FDC80532A44927F00F9CC96 /* Build configuration list for PBXNativeTarget "RadventureTests" */;
+			buildPhases = (
+				1FDC80382A44927F00F9CC96 /* Sources */,
+				1FDC80392A44927F00F9CC96 /* Frameworks */,
+				1FDC803A2A44927F00F9CC96 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1FDC803E2A44927F00F9CC96 /* PBXTargetDependency */,
+			);
+			name = RadventureTests;
+			productName = RadventureTests;
+			productReference = 1FDC803C2A44927F00F9CC96 /* RadventureTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		1FDC80452A44927F00F9CC96 /* RadventureUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1FDC80562A44927F00F9CC96 /* Build configuration list for PBXNativeTarget "RadventureUITests" */;
+			buildPhases = (
+				1FDC80422A44927F00F9CC96 /* Sources */,
+				1FDC80432A44927F00F9CC96 /* Frameworks */,
+				1FDC80442A44927F00F9CC96 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1FDC80482A44927F00F9CC96 /* PBXTargetDependency */,
+			);
+			name = RadventureUITests;
+			productName = RadventureUITests;
+			productReference = 1FDC80462A44927F00F9CC96 /* RadventureUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1FDC801E2A44927E00F9CC96 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1430;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					1FDC80252A44927E00F9CC96 = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
+					1FDC803B2A44927F00F9CC96 = {
+						CreatedOnToolsVersion = 14.3.1;
+						TestTargetID = 1FDC80252A44927E00F9CC96;
+					};
+					1FDC80452A44927F00F9CC96 = {
+						CreatedOnToolsVersion = 14.3.1;
+						TestTargetID = 1FDC80252A44927E00F9CC96;
+					};
+				};
+			};
+			buildConfigurationList = 1FDC80212A44927E00F9CC96 /* Build configuration list for PBXProject "Radventure" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1FDC801D2A44927E00F9CC96;
+			productRefGroup = 1FDC80272A44927E00F9CC96 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1FDC80252A44927E00F9CC96 /* Radventure */,
+				1FDC803B2A44927F00F9CC96 /* RadventureTests */,
+				1FDC80452A44927F00F9CC96 /* RadventureUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1FDC80242A44927E00F9CC96 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1FDC80362A44927F00F9CC96 /* LaunchScreen.storyboard in Resources */,
+				1FDC80332A44927F00F9CC96 /* Assets.xcassets in Resources */,
+				1FDC80312A44927E00F9CC96 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1FDC803A2A44927F00F9CC96 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1FDC80442A44927F00F9CC96 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1FDC80222A44927E00F9CC96 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1FDC802E2A44927E00F9CC96 /* ViewController.swift in Sources */,
+				1FDC802A2A44927E00F9CC96 /* AppDelegate.swift in Sources */,
+				1FDC802C2A44927E00F9CC96 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1FDC80382A44927F00F9CC96 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1FDC80412A44927F00F9CC96 /* RadventureTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1FDC80422A44927F00F9CC96 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1FDC804D2A44927F00F9CC96 /* RadventureUITestsLaunchTests.swift in Sources */,
+				1FDC804B2A44927F00F9CC96 /* RadventureUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1FDC803E2A44927F00F9CC96 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1FDC80252A44927E00F9CC96 /* Radventure */;
+			targetProxy = 1FDC803D2A44927F00F9CC96 /* PBXContainerItemProxy */;
+		};
+		1FDC80482A44927F00F9CC96 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1FDC80252A44927E00F9CC96 /* Radventure */;
+			targetProxy = 1FDC80472A44927F00F9CC96 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		1FDC802F2A44927E00F9CC96 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1FDC80302A44927E00F9CC96 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		1FDC80342A44927F00F9CC96 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1FDC80352A44927F00F9CC96 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1FDC804E2A44927F00F9CC96 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		1FDC804F2A44927F00F9CC96 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1FDC80512A44927F00F9CC96 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NV57XZ3KBV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Radventure/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.CanDuru.Radventure;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1FDC80522A44927F00F9CC96 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NV57XZ3KBV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Radventure/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.CanDuru.Radventure;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		1FDC80542A44927F00F9CC96 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NV57XZ3KBV;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.CanDuru.RadventureTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Radventure.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Radventure";
+			};
+			name = Debug;
+		};
+		1FDC80552A44927F00F9CC96 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NV57XZ3KBV;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.CanDuru.RadventureTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Radventure.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Radventure";
+			};
+			name = Release;
+		};
+		1FDC80572A44927F00F9CC96 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NV57XZ3KBV;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.CanDuru.RadventureUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Radventure;
+			};
+			name = Debug;
+		};
+		1FDC80582A44927F00F9CC96 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NV57XZ3KBV;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.CanDuru.RadventureUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Radventure;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1FDC80212A44927E00F9CC96 /* Build configuration list for PBXProject "Radventure" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1FDC804E2A44927F00F9CC96 /* Debug */,
+				1FDC804F2A44927F00F9CC96 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1FDC80502A44927F00F9CC96 /* Build configuration list for PBXNativeTarget "Radventure" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1FDC80512A44927F00F9CC96 /* Debug */,
+				1FDC80522A44927F00F9CC96 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1FDC80532A44927F00F9CC96 /* Build configuration list for PBXNativeTarget "RadventureTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1FDC80542A44927F00F9CC96 /* Debug */,
+				1FDC80552A44927F00F9CC96 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1FDC80562A44927F00F9CC96 /* Build configuration list for PBXNativeTarget "RadventureUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1FDC80572A44927F00F9CC96 /* Debug */,
+				1FDC80582A44927F00F9CC96 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1FDC801E2A44927E00F9CC96 /* Project object */;
+}
