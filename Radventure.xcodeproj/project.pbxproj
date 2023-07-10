@@ -7,15 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F7DF46F2A4DD3F900093A3F /* Color Codes.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F7DF46E2A4DD3F900093A3F /* Color Codes.png */; };
 		1FDC802A2A44927E00F9CC96 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC80292A44927E00F9CC96 /* AppDelegate.swift */; };
 		1FDC802C2A44927E00F9CC96 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC802B2A44927E00F9CC96 /* SceneDelegate.swift */; };
-		1FDC802E2A44927E00F9CC96 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC802D2A44927E00F9CC96 /* ViewController.swift */; };
-		1FDC80312A44927E00F9CC96 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC802F2A44927E00F9CC96 /* Main.storyboard */; };
+		1FDC802E2A44927E00F9CC96 /* HomeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC802D2A44927E00F9CC96 /* HomeMapViewController.swift */; };
 		1FDC80332A44927F00F9CC96 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC80322A44927F00F9CC96 /* Assets.xcassets */; };
 		1FDC80362A44927F00F9CC96 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FDC80342A44927F00F9CC96 /* LaunchScreen.storyboard */; };
 		1FDC80412A44927F00F9CC96 /* RadventureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC80402A44927F00F9CC96 /* RadventureTests.swift */; };
 		1FDC804B2A44927F00F9CC96 /* RadventureUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC804A2A44927F00F9CC96 /* RadventureUITests.swift */; };
 		1FDC804D2A44927F00F9CC96 /* RadventureUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC804C2A44927F00F9CC96 /* RadventureUITestsLaunchTests.swift */; };
+		1FDC80622A44984600F9CC96 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC80612A44984600F9CC96 /* TabBarViewController.swift */; };
+		1FDC80642A4499B700F9CC96 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC80632A4499B700F9CC96 /* ProfileViewController.swift */; };
+		1FDC80662A449A0C00F9CC96 /* ScoreboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC80652A449A0C00F9CC96 /* ScoreboardViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,11 +39,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1F097B202A5CA127005FBA32 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		1F097B212A5CA134005FBA32 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
+		1F7DF46E2A4DD3F900093A3F /* Color Codes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Color Codes.png"; sourceTree = "<group>"; };
 		1FDC80262A44927E00F9CC96 /* Radventure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Radventure.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FDC80292A44927E00F9CC96 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1FDC802B2A44927E00F9CC96 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		1FDC802D2A44927E00F9CC96 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		1FDC80302A44927E00F9CC96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1FDC802D2A44927E00F9CC96 /* HomeMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMapViewController.swift; sourceTree = "<group>"; };
 		1FDC80322A44927F00F9CC96 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1FDC80352A44927F00F9CC96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1FDC80372A44927F00F9CC96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -49,6 +54,9 @@
 		1FDC80462A44927F00F9CC96 /* RadventureUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RadventureUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FDC804A2A44927F00F9CC96 /* RadventureUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadventureUITests.swift; sourceTree = "<group>"; };
 		1FDC804C2A44927F00F9CC96 /* RadventureUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadventureUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		1FDC80612A44984600F9CC96 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
+		1FDC80632A4499B700F9CC96 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		1FDC80652A449A0C00F9CC96 /* ScoreboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreboardViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,9 +84,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1F7DF46D2A4DD3E800093A3F /* Color Codes */ = {
+			isa = PBXGroup;
+			children = (
+				1F7DF46E2A4DD3F900093A3F /* Color Codes.png */,
+			);
+			path = "Color Codes";
+			sourceTree = "<group>";
+		};
 		1FDC801D2A44927E00F9CC96 = {
 			isa = PBXGroup;
 			children = (
+				1F097B202A5CA127005FBA32 /* README.md */,
+				1F097B212A5CA134005FBA32 /* CHANGELOG.md */,
+				1F7DF46D2A4DD3E800093A3F /* Color Codes */,
+				1FDC805A2A44975C00F9CC96 /* Images */,
 				1FDC80282A44927E00F9CC96 /* Radventure */,
 				1FDC803F2A44927F00F9CC96 /* RadventureTests */,
 				1FDC80492A44927F00F9CC96 /* RadventureUITests */,
@@ -99,10 +119,14 @@
 		1FDC80282A44927E00F9CC96 /* Radventure */ = {
 			isa = PBXGroup;
 			children = (
+				1FDC805B2A44978000F9CC96 /* Helper */,
+				1FDC805C2A44978A00F9CC96 /* Home */,
+				1FDC805D2A44979B00F9CC96 /* Score Board */,
+				1FDC805E2A4497A300F9CC96 /* Profile */,
+				1FDC80592A44971600F9CC96 /* Translation */,
 				1FDC80292A44927E00F9CC96 /* AppDelegate.swift */,
 				1FDC802B2A44927E00F9CC96 /* SceneDelegate.swift */,
-				1FDC802D2A44927E00F9CC96 /* ViewController.swift */,
-				1FDC802F2A44927E00F9CC96 /* Main.storyboard */,
+				1FDC80612A44984600F9CC96 /* TabBarViewController.swift */,
 				1FDC80322A44927F00F9CC96 /* Assets.xcassets */,
 				1FDC80342A44927F00F9CC96 /* LaunchScreen.storyboard */,
 				1FDC80372A44927F00F9CC96 /* Info.plist */,
@@ -125,6 +149,67 @@
 				1FDC804C2A44927F00F9CC96 /* RadventureUITestsLaunchTests.swift */,
 			);
 			path = RadventureUITests;
+			sourceTree = "<group>";
+		};
+		1FDC80592A44971600F9CC96 /* Translation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Translation;
+			sourceTree = "<group>";
+		};
+		1FDC805A2A44975C00F9CC96 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		1FDC805B2A44978000F9CC96 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		1FDC805C2A44978A00F9CC96 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				1FDC802D2A44927E00F9CC96 /* HomeMapViewController.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		1FDC805D2A44979B00F9CC96 /* Score Board */ = {
+			isa = PBXGroup;
+			children = (
+				1FDC80652A449A0C00F9CC96 /* ScoreboardViewController.swift */,
+			);
+			path = "Score Board";
+			sourceTree = "<group>";
+		};
+		1FDC805E2A4497A300F9CC96 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				1FDC80602A4497B600F9CC96 /* Signup */,
+				1FDC805F2A4497B100F9CC96 /* Login */,
+				1FDC80632A4499B700F9CC96 /* ProfileViewController.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		1FDC805F2A4497B100F9CC96 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		1FDC80602A4497B600F9CC96 /* Signup */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Signup;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -233,7 +318,7 @@
 			files = (
 				1FDC80362A44927F00F9CC96 /* LaunchScreen.storyboard in Resources */,
 				1FDC80332A44927F00F9CC96 /* Assets.xcassets in Resources */,
-				1FDC80312A44927E00F9CC96 /* Main.storyboard in Resources */,
+				1F7DF46F2A4DD3F900093A3F /* Color Codes.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,8 +343,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1FDC802E2A44927E00F9CC96 /* ViewController.swift in Sources */,
+				1FDC80622A44984600F9CC96 /* TabBarViewController.swift in Sources */,
+				1FDC802E2A44927E00F9CC96 /* HomeMapViewController.swift in Sources */,
+				1FDC80642A4499B700F9CC96 /* ProfileViewController.swift in Sources */,
 				1FDC802A2A44927E00F9CC96 /* AppDelegate.swift in Sources */,
+				1FDC80662A449A0C00F9CC96 /* ScoreboardViewController.swift in Sources */,
 				1FDC802C2A44927E00F9CC96 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -297,14 +385,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		1FDC802F2A44927E00F9CC96 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1FDC80302A44927E00F9CC96 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		1FDC80342A44927F00F9CC96 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -440,11 +520,14 @@
 				DEVELOPMENT_TEAM = NV57XZ3KBV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Radventure/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Radventure;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -452,9 +535,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.CanDuru.Radventure;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -468,11 +554,14 @@
 				DEVELOPMENT_TEAM = NV57XZ3KBV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Radventure/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Radventure;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -480,9 +569,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.CanDuru.Radventure;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
