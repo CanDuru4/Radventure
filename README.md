@@ -5,9 +5,13 @@
 <br />
 <p align="center">
   <a href="https://canduru.net">
-    <img src="https://user-images.githubusercontent.com/73294429/186248765-a5b646f6-77fe-4bea-9638-50bb746c01f2.png" alt="Logo" width="221" height="90">
+    <img src="https://github.com/CanDuru4/Radventure/assets/73294429/03ab857f-df2b-45af-b69e-e9790bddc95" alt="Logo" width="221" height="90">
   </a>
 </p>
+
+## Status
+
+This application is currently in development stage.
 
 ## Meta
 
