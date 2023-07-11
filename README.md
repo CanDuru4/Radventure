@@ -5,7 +5,7 @@
 <br />
 <p align="center">
   <a href="https://canduru.net">
-    <img src="https://github.com/CanDuru4/Radventure/assets/73294429/03ab857f-df2b-45af-b69e-e9790bddc95" alt="Logo" width="221" height="90">
+    <img src="https://github.com/CanDuru4/Radventure/assets/73294429/f265d379-16a4-41a2-9f3d-b58e2c846137" alt="Logo" width="221" height="90">
   </a>
 </p>
 
