@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F4EFC362A65E110009D0461 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EFC352A65E110009D0461 /* LogInViewController.swift */; };
+		1F4EFC382A65E388009D0461 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EFC372A65E388009D0461 /* LocationManager.swift */; };
 		1F7DF46F2A4DD3F900093A3F /* Color Codes.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F7DF46E2A4DD3F900093A3F /* Color Codes.png */; };
 		1FDC802A2A44927E00F9CC96 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC80292A44927E00F9CC96 /* AppDelegate.swift */; };
 		1FDC802C2A44927E00F9CC96 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC802B2A44927E00F9CC96 /* SceneDelegate.swift */; };
@@ -41,6 +43,8 @@
 /* Begin PBXFileReference section */
 		1F097B202A5CA127005FBA32 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		1F097B212A5CA134005FBA32 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
+		1F4EFC352A65E110009D0461 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
+		1F4EFC372A65E388009D0461 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		1F7DF46E2A4DD3F900093A3F /* Color Codes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Color Codes.png"; sourceTree = "<group>"; };
 		1FDC80262A44927E00F9CC96 /* Radventure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Radventure.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FDC80292A44927E00F9CC96 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -97,8 +101,8 @@
 			children = (
 				1F097B202A5CA127005FBA32 /* README.md */,
 				1F097B212A5CA134005FBA32 /* CHANGELOG.md */,
+				1FDC80592A44971600F9CC96 /* Translation */,
 				1F7DF46D2A4DD3E800093A3F /* Color Codes */,
-				1FDC805A2A44975C00F9CC96 /* Images */,
 				1FDC80282A44927E00F9CC96 /* Radventure */,
 				1FDC803F2A44927F00F9CC96 /* RadventureTests */,
 				1FDC80492A44927F00F9CC96 /* RadventureUITests */,
@@ -123,7 +127,6 @@
 				1FDC805C2A44978A00F9CC96 /* Home */,
 				1FDC805D2A44979B00F9CC96 /* Score Board */,
 				1FDC805E2A4497A300F9CC96 /* Profile */,
-				1FDC80592A44971600F9CC96 /* Translation */,
 				1FDC80292A44927E00F9CC96 /* AppDelegate.swift */,
 				1FDC802B2A44927E00F9CC96 /* SceneDelegate.swift */,
 				1FDC80612A44984600F9CC96 /* TabBarViewController.swift */,
@@ -158,16 +161,10 @@
 			path = Translation;
 			sourceTree = "<group>";
 		};
-		1FDC805A2A44975C00F9CC96 /* Images */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Images;
-			sourceTree = "<group>";
-		};
 		1FDC805B2A44978000F9CC96 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				1F4EFC372A65E388009D0461 /* LocationManager.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -191,7 +188,6 @@
 		1FDC805E2A4497A300F9CC96 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				1FDC80602A4497B600F9CC96 /* Signup */,
 				1FDC805F2A4497B100F9CC96 /* Login */,
 				1FDC80632A4499B700F9CC96 /* ProfileViewController.swift */,
 			);
@@ -201,15 +197,9 @@
 		1FDC805F2A4497B100F9CC96 /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				1F4EFC352A65E110009D0461 /* LogInViewController.swift */,
 			);
 			path = Login;
-			sourceTree = "<group>";
-		};
-		1FDC80602A4497B600F9CC96 /* Signup */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Signup;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -346,6 +336,8 @@
 				1FDC80622A44984600F9CC96 /* TabBarViewController.swift in Sources */,
 				1FDC802E2A44927E00F9CC96 /* HomeMapViewController.swift in Sources */,
 				1FDC80642A4499B700F9CC96 /* ProfileViewController.swift in Sources */,
+				1F4EFC362A65E110009D0461 /* LogInViewController.swift in Sources */,
+				1F4EFC382A65E388009D0461 /* LocationManager.swift in Sources */,
 				1FDC802A2A44927E00F9CC96 /* AppDelegate.swift in Sources */,
 				1FDC80662A449A0C00F9CC96 /* ScoreboardViewController.swift in Sources */,
 				1FDC802C2A44927E00F9CC96 /* SceneDelegate.swift in Sources */,
