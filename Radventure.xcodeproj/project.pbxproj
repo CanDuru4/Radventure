@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		1F4EFC362A65E110009D0461 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EFC352A65E110009D0461 /* LogInViewController.swift */; };
 		1F4EFC382A65E388009D0461 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EFC372A65E388009D0461 /* LocationManager.swift */; };
+		1F4EFC3A2A668D34009D0461 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1F4EFC392A668D34009D0461 /* GoogleService-Info.plist */; };
+		1F4EFC3C2A66A452009D0461 /* CustomAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EFC3B2A66A452009D0461 /* CustomAnnotation.swift */; };
+		1F4EFC402A66C8FC009D0461 /* RulesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EFC3F2A66C8FC009D0461 /* RulesViewController.swift */; };
 		1F7DF46F2A4DD3F900093A3F /* Color Codes.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F7DF46E2A4DD3F900093A3F /* Color Codes.png */; };
 		1FDC802A2A44927E00F9CC96 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC80292A44927E00F9CC96 /* AppDelegate.swift */; };
 		1FDC802C2A44927E00F9CC96 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC802B2A44927E00F9CC96 /* SceneDelegate.swift */; };
@@ -19,8 +22,10 @@
 		1FDC804B2A44927F00F9CC96 /* RadventureUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC804A2A44927F00F9CC96 /* RadventureUITests.swift */; };
 		1FDC804D2A44927F00F9CC96 /* RadventureUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC804C2A44927F00F9CC96 /* RadventureUITestsLaunchTests.swift */; };
 		1FDC80622A44984600F9CC96 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC80612A44984600F9CC96 /* TabBarViewController.swift */; };
-		1FDC80642A4499B700F9CC96 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC80632A4499B700F9CC96 /* ProfileViewController.swift */; };
 		1FDC80662A449A0C00F9CC96 /* ScoreboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC80652A449A0C00F9CC96 /* ScoreboardViewController.swift */; };
+		9F03547E24F121D36340D071 /* Pods_Radventure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E89C99EF46DB4D73FC659D5 /* Pods_Radventure.framework */; };
+		A6112EEB21BBA4961BD8FB44 /* Pods_Radventure_RadventureUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F3DEC6255BACBD86DA772F /* Pods_Radventure_RadventureUITests.framework */; };
+		E69C194ACE2F31E9AEC6669B /* Pods_RadventureTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB07F2051FC083DF8555911 /* Pods_RadventureTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,10 +46,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0146CBFFB61537359B6A5282 /* Pods-RadventureTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RadventureTests.debug.xcconfig"; path = "Target Support Files/Pods-RadventureTests/Pods-RadventureTests.debug.xcconfig"; sourceTree = "<group>"; };
+		05C6ECC8E20BF2CCEEEF6759 /* Pods-Radventure.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Radventure.release.xcconfig"; path = "Target Support Files/Pods-Radventure/Pods-Radventure.release.xcconfig"; sourceTree = "<group>"; };
+		18F3DEC6255BACBD86DA772F /* Pods_Radventure_RadventureUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Radventure_RadventureUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F097B202A5CA127005FBA32 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		1F097B212A5CA134005FBA32 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		1F4EFC352A65E110009D0461 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		1F4EFC372A65E388009D0461 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		1F4EFC392A668D34009D0461 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		1F4EFC3B2A66A452009D0461 /* CustomAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnotation.swift; sourceTree = "<group>"; };
+		1F4EFC3F2A66C8FC009D0461 /* RulesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesViewController.swift; sourceTree = "<group>"; };
 		1F7DF46E2A4DD3F900093A3F /* Color Codes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Color Codes.png"; sourceTree = "<group>"; };
 		1FDC80262A44927E00F9CC96 /* Radventure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Radventure.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FDC80292A44927E00F9CC96 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -59,8 +70,13 @@
 		1FDC804A2A44927F00F9CC96 /* RadventureUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadventureUITests.swift; sourceTree = "<group>"; };
 		1FDC804C2A44927F00F9CC96 /* RadventureUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadventureUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		1FDC80612A44984600F9CC96 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
-		1FDC80632A4499B700F9CC96 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		1FDC80652A449A0C00F9CC96 /* ScoreboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreboardViewController.swift; sourceTree = "<group>"; };
+		2E89C99EF46DB4D73FC659D5 /* Pods_Radventure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Radventure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		393BDE8A88D89E4649F67EC2 /* Pods-Radventure-RadventureUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Radventure-RadventureUITests.debug.xcconfig"; path = "Target Support Files/Pods-Radventure-RadventureUITests/Pods-Radventure-RadventureUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		8FB07F2051FC083DF8555911 /* Pods_RadventureTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RadventureTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E3416BAC17DBFB8D715EFA3 /* Pods-RadventureTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RadventureTests.release.xcconfig"; path = "Target Support Files/Pods-RadventureTests/Pods-RadventureTests.release.xcconfig"; sourceTree = "<group>"; };
+		B12467E55EAA471AA3517220 /* Pods-Radventure.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Radventure.debug.xcconfig"; path = "Target Support Files/Pods-Radventure/Pods-Radventure.debug.xcconfig"; sourceTree = "<group>"; };
+		FDECD9791A9CD2DFA0671D29 /* Pods-Radventure-RadventureUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Radventure-RadventureUITests.release.xcconfig"; path = "Target Support Files/Pods-Radventure-RadventureUITests/Pods-Radventure-RadventureUITests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F03547E24F121D36340D071 /* Pods_Radventure.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E69C194ACE2F31E9AEC6669B /* Pods_RadventureTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6112EEB21BBA4961BD8FB44 /* Pods_Radventure_RadventureUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,6 +126,8 @@
 				1FDC803F2A44927F00F9CC96 /* RadventureTests */,
 				1FDC80492A44927F00F9CC96 /* RadventureUITests */,
 				1FDC80272A44927E00F9CC96 /* Products */,
+				80684BC2994B3DA299CDFE51 /* Pods */,
+				AC90152F563020AB613D7567 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -126,13 +147,14 @@
 				1FDC805B2A44978000F9CC96 /* Helper */,
 				1FDC805C2A44978A00F9CC96 /* Home */,
 				1FDC805D2A44979B00F9CC96 /* Score Board */,
-				1FDC805E2A4497A300F9CC96 /* Profile */,
+				1FDC805F2A4497B100F9CC96 /* Login */,
 				1FDC80292A44927E00F9CC96 /* AppDelegate.swift */,
 				1FDC802B2A44927E00F9CC96 /* SceneDelegate.swift */,
 				1FDC80612A44984600F9CC96 /* TabBarViewController.swift */,
 				1FDC80322A44927F00F9CC96 /* Assets.xcassets */,
 				1FDC80342A44927F00F9CC96 /* LaunchScreen.storyboard */,
 				1FDC80372A44927F00F9CC96 /* Info.plist */,
+				1F4EFC392A668D34009D0461 /* GoogleService-Info.plist */,
 			);
 			path = Radventure;
 			sourceTree = "<group>";
@@ -165,6 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				1F4EFC372A65E388009D0461 /* LocationManager.swift */,
+				1F4EFC3F2A66C8FC009D0461 /* RulesViewController.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -173,6 +196,7 @@
 			isa = PBXGroup;
 			children = (
 				1FDC802D2A44927E00F9CC96 /* HomeMapViewController.swift */,
+				1F4EFC3B2A66A452009D0461 /* CustomAnnotation.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -185,21 +209,35 @@
 			path = "Score Board";
 			sourceTree = "<group>";
 		};
-		1FDC805E2A4497A300F9CC96 /* Profile */ = {
-			isa = PBXGroup;
-			children = (
-				1FDC805F2A4497B100F9CC96 /* Login */,
-				1FDC80632A4499B700F9CC96 /* ProfileViewController.swift */,
-			);
-			path = Profile;
-			sourceTree = "<group>";
-		};
 		1FDC805F2A4497B100F9CC96 /* Login */ = {
 			isa = PBXGroup;
 			children = (
 				1F4EFC352A65E110009D0461 /* LogInViewController.swift */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		80684BC2994B3DA299CDFE51 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B12467E55EAA471AA3517220 /* Pods-Radventure.debug.xcconfig */,
+				05C6ECC8E20BF2CCEEEF6759 /* Pods-Radventure.release.xcconfig */,
+				393BDE8A88D89E4649F67EC2 /* Pods-Radventure-RadventureUITests.debug.xcconfig */,
+				FDECD9791A9CD2DFA0671D29 /* Pods-Radventure-RadventureUITests.release.xcconfig */,
+				0146CBFFB61537359B6A5282 /* Pods-RadventureTests.debug.xcconfig */,
+				9E3416BAC17DBFB8D715EFA3 /* Pods-RadventureTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		AC90152F563020AB613D7567 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2E89C99EF46DB4D73FC659D5 /* Pods_Radventure.framework */,
+				18F3DEC6255BACBD86DA772F /* Pods_Radventure_RadventureUITests.framework */,
+				8FB07F2051FC083DF8555911 /* Pods_RadventureTests.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -209,9 +247,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1FDC80502A44927F00F9CC96 /* Build configuration list for PBXNativeTarget "Radventure" */;
 			buildPhases = (
+				15FEDA5CD5CE29363A51D76C /* [CP] Check Pods Manifest.lock */,
 				1FDC80222A44927E00F9CC96 /* Sources */,
 				1FDC80232A44927E00F9CC96 /* Frameworks */,
 				1FDC80242A44927E00F9CC96 /* Resources */,
+				6ABB7065490A64861D99990F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -226,6 +266,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1FDC80532A44927F00F9CC96 /* Build configuration list for PBXNativeTarget "RadventureTests" */;
 			buildPhases = (
+				CC95C19B0A75D9F11AD7E7D8 /* [CP] Check Pods Manifest.lock */,
 				1FDC80382A44927F00F9CC96 /* Sources */,
 				1FDC80392A44927F00F9CC96 /* Frameworks */,
 				1FDC803A2A44927F00F9CC96 /* Resources */,
@@ -244,9 +285,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1FDC80562A44927F00F9CC96 /* Build configuration list for PBXNativeTarget "RadventureUITests" */;
 			buildPhases = (
+				924FEDB9B445A22F287F2625 /* [CP] Check Pods Manifest.lock */,
 				1FDC80422A44927F00F9CC96 /* Sources */,
 				1FDC80432A44927F00F9CC96 /* Frameworks */,
 				1FDC80442A44927F00F9CC96 /* Resources */,
+				779F9203B276A2A615439B0D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -307,6 +350,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1FDC80362A44927F00F9CC96 /* LaunchScreen.storyboard in Resources */,
+				1F4EFC3A2A668D34009D0461 /* GoogleService-Info.plist in Resources */,
 				1FDC80332A44927F00F9CC96 /* Assets.xcassets in Resources */,
 				1F7DF46F2A4DD3F900093A3F /* Color Codes.png in Resources */,
 			);
@@ -328,14 +372,118 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		15FEDA5CD5CE29363A51D76C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Radventure-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6ABB7065490A64861D99990F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Radventure/Pods-Radventure-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Radventure/Pods-Radventure-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Radventure/Pods-Radventure-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		779F9203B276A2A615439B0D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Radventure-RadventureUITests/Pods-Radventure-RadventureUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Radventure-RadventureUITests/Pods-Radventure-RadventureUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Radventure-RadventureUITests/Pods-Radventure-RadventureUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		924FEDB9B445A22F287F2625 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Radventure-RadventureUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CC95C19B0A75D9F11AD7E7D8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RadventureTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		1FDC80222A44927E00F9CC96 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F4EFC402A66C8FC009D0461 /* RulesViewController.swift in Sources */,
 				1FDC80622A44984600F9CC96 /* TabBarViewController.swift in Sources */,
 				1FDC802E2A44927E00F9CC96 /* HomeMapViewController.swift in Sources */,
-				1FDC80642A4499B700F9CC96 /* ProfileViewController.swift in Sources */,
+				1F4EFC3C2A66A452009D0461 /* CustomAnnotation.swift in Sources */,
 				1F4EFC362A65E110009D0461 /* LogInViewController.swift in Sources */,
 				1F4EFC382A65E388009D0461 /* LocationManager.swift in Sources */,
 				1FDC802A2A44927E00F9CC96 /* AppDelegate.swift in Sources */,
@@ -504,6 +652,7 @@
 		};
 		1FDC80512A44927F00F9CC96 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B12467E55EAA471AA3517220 /* Pods-Radventure.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -538,6 +687,7 @@
 		};
 		1FDC80522A44927F00F9CC96 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 05C6ECC8E20BF2CCEEEF6759 /* Pods-Radventure.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -572,6 +722,7 @@
 		};
 		1FDC80542A44927F00F9CC96 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0146CBFFB61537359B6A5282 /* Pods-RadventureTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -592,6 +743,7 @@
 		};
 		1FDC80552A44927F00F9CC96 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9E3416BAC17DBFB8D715EFA3 /* Pods-RadventureTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -612,6 +764,7 @@
 		};
 		1FDC80572A44927F00F9CC96 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 393BDE8A88D89E4649F67EC2 /* Pods-Radventure-RadventureUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -630,6 +783,7 @@
 		};
 		1FDC80582A44927F00F9CC96 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FDECD9791A9CD2DFA0671D29 /* Pods-Radventure-RadventureUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
