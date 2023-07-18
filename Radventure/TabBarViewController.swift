@@ -23,8 +23,7 @@ class TabBarViewController : UITabBarController {
     func setupVCs() {
           viewControllers = [
             createNavController(for: HomeMapViewController(), title: NSLocalizedString("", comment: ""), image: UIImage(systemName: "map.fill")!.withRenderingMode(.alwaysOriginal).withTintColor(.systemBlue)),
-              createNavController(for: ProfileViewController(), title: NSLocalizedString("", comment: ""), image: UIImage(systemName: "flag.checkered.2.crossed")!.withRenderingMode(.alwaysOriginal).withTintColor(.systemBlue)),
-              createNavController(for: ScoreboardViewController(), title: NSLocalizedString("", comment: ""), image: UIImage(systemName: "person.fill")!.withRenderingMode(.alwaysOriginal).withTintColor(.systemBlue)),
+              createNavController(for: ScoreboardViewController(), title: NSLocalizedString("", comment: ""), image: UIImage(systemName: "flag.checkered.2.crossed")!.withRenderingMode(.alwaysOriginal).withTintColor(.systemBlue))
           ]
       }
     
@@ -33,7 +32,7 @@ class TabBarViewController : UITabBarController {
     fileprivate func createNavController(for rootViewController: UIViewController,
                                                     title: String,
                                                     image: UIImage) -> UIViewController {
-          let items = ["Map", "Scoreboard", "Profile"]
+          let items = ["Map", "Scoreboard"]
           i = i+1
           let navController = UINavigationController(rootViewController: rootViewController)
 

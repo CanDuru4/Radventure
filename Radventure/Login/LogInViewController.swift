@@ -7,7 +7,7 @@
 
 //MARK: Import
 import UIKit
-//import FirebaseAuth
+import FirebaseAuth
 
 class LogInViewController: UIViewController {
     
@@ -25,8 +25,15 @@ class LogInViewController: UIViewController {
     //MARK: Load
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "AppColor1")
-        setLabels()
+        view.backgroundColor = UIColor(named: "AppColor2")
+        Auth.auth().addStateDidChangeListener { auth, user in
+            if user != nil {
+               self.navigationController?.pushViewController(TabBarViewController(), animated: true)
+               self.navigationController?.setNavigationBarHidden(true, animated: true)
+           } else {
+           }
+        }
+        self.setLabels()
         
         //MARK: Hide Keyboard
         self.hideKeyboardWhenTappedAround()
@@ -49,7 +56,7 @@ class LogInViewController: UIViewController {
         //MARK: Email Field Features
         emailField.placeholder = "Email"
         emailField.borderStyle = .roundedRect
-        emailField.layer.borderColor = CGColor(red: 255/255, green: 191/255, blue: 69/255, alpha: 1)
+        emailField.layer.borderColor = CGColor(red: 64/255, green: 64/255, blue: 64/255, alpha: 1)
         emailField.layer.borderWidth = CGFloat(1)
         emailField.autocorrectionType = .no
         emailField.autocapitalizationType = .none
@@ -59,7 +66,7 @@ class LogInViewController: UIViewController {
         //MARK: Password Field Features
         passwordField.placeholder = "Password"
         passwordField.borderStyle = .roundedRect
-        passwordField.layer.borderColor = CGColor(red: 255/255, green: 191/255, blue: 69/255, alpha: 1)
+        passwordField.layer.borderColor = CGColor(red: 64/255, green: 64/255, blue: 64/255, alpha: 1)
         passwordField.layer.borderWidth = CGFloat(1)
         view.addSubview(passwordField)
         passwordField.isSecureTextEntry = true
@@ -68,7 +75,7 @@ class LogInViewController: UIViewController {
         passwordField.translatesAutoresizingMaskIntoConstraints = false
         
         //MARK: Login Button Features
-        loginButton.backgroundColor = UIColor(named: "AppColor2")
+        loginButton.backgroundColor = UIColor(named: "AppColor1")
         loginButton.setTitle("Login", for: .normal)
         loginButton.tintColor = .white
         loginButton.layer.cornerRadius = 5
@@ -84,8 +91,8 @@ class LogInViewController: UIViewController {
             //MARK: Image Constraints
             imageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             imageView.bottomAnchor.constraint(equalTo: emailField.topAnchor, constant: 75),
-            imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 50),
-            imageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -50),
+            imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 150),
+            imageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -150),
             
             //MARK: Email Field Constraints
             emailField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
@@ -117,34 +124,34 @@ class LogInViewController: UIViewController {
     @objc func logIn(){
         
         
-//        //MARK: Validate All Fields Filled
-//        let error = validateFields()
-//        
-//        
-//        //MARK: Not Filled
-//        if error != nil {
-//            let alert = UIAlertController(title: "Please fill the all fields.", message: "", preferredStyle: .alert)
-//            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-//            self.present(alert, animated: true, completion: nil)
-//            
-//            //MARK: Filled
-//        } else {
-//            let email = emailField.text?.lowercased()
-//            let password = passwordField.text
-//            Auth.auth().signIn(withEmail: email ?? "", password: password ?? "") { [weak self] authResult, error in
-//              guard let strongSelf = self else { return }
-//                //MARK: Wrong User Credentials
-//                if error != nil {
-//                    let alert = UIAlertController(title: "Credentials are not correct. Check your email and password.", message: "", preferredStyle: .alert)
-//                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-//                    strongSelf.present(alert, animated: true, completion: nil)
-//
-//                //MARK: Correct User Credentials
-//                } else {
-//                    self?.dismiss(animated: true, completion: nil)
-//                }
-//            }
-//        }
+        //MARK: Validate All Fields Filled
+        let error = validateFields()
+        
+        
+        //MARK: Not Filled
+        if error != nil {
+            let alert = UIAlertController(title: "Please fill the all fields.", message: "", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            
+            //MARK: Filled
+        } else {
+            let email = emailField.text?.lowercased()
+            let password = passwordField.text
+            Auth.auth().signIn(withEmail: email ?? "", password: password ?? "") { [weak self] authResult, error in
+              guard let strongSelf = self else { return }
+                //MARK: Wrong User Credentials
+                if error != nil {
+                    let alert = UIAlertController(title: "Credentials are not correct. Check your email and password.", message: "", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                    strongSelf.present(alert, animated: true, completion: nil)
+
+                //MARK: Correct User Credentials
+                } else {
+                    self?.dismiss(animated: true, completion: nil)
+                }
+            }
+        }
     }
 
     
