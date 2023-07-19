@@ -49,7 +49,7 @@ class HomeMapViewController: UIViewController {
     var forceQuitPassword = ""
     var randomRoute = 100
     var RandomRouteChoice = ""
-    var randomRouteArray = ["coordinates", "coordinates2", "coordinates3"]
+    var randomRouteArray = ["coordinates", "coordinates2", "coordinates3", "coordinates4"]
     var user_latitude = 0.0
     var user_longitude = 0.0
     
@@ -417,7 +417,7 @@ class HomeMapViewController: UIViewController {
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             } else {
-                self.randomRoute = Int.random(in: 0...2)
+                self.randomRoute = Int.random(in: 0...3)
                 self.RandomRouteChoice = self.randomRouteArray[self.randomRoute]
                 self.didSetCount1 = 0
                 self.didSetCount2 = 0
