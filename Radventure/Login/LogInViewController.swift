@@ -8,6 +8,7 @@
 //MARK: Import
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 class LogInViewController: UIViewController {
     
@@ -21,17 +22,15 @@ class LogInViewController: UIViewController {
     var loginButton = UIButton()
     
     
-    
     //MARK: Load
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "AppColor2")
-        Auth.auth().addStateDidChangeListener { auth, user in
-            if user != nil {
-               self.navigationController?.pushViewController(TabBarViewController(), animated: true)
-               self.navigationController?.setNavigationBarHidden(true, animated: true)
-           } else {
-           }
+        view.backgroundColor = UIColor(named: "AppColor1")
+        if Auth.auth().currentUser?.uid != nil {
+            self.navigationController?.pushViewController(TabBarViewController(), animated: true)
+            self.navigationController?.setNavigationBarHidden(true, animated: true)
+        }else{
+             //user is not logged in
         }
         self.setLabels()
         
@@ -46,27 +45,39 @@ class LogInViewController: UIViewController {
         
         
         //MARK: Image Features
-        let imageLogo = UIImage(named: "Logo")
+        let imageLogo = UIImage(named: "AppLogo")
         let imageView = UIImageView(image: imageLogo)
         imageView.clipsToBounds = true
-        imageView.contentMode = UIView.ContentMode.scaleAspectFit
+        imageView.contentMode = .scaleAspectFit
         view.addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
         //MARK: Email Field Features
-        emailField.placeholder = "Email"
+        emailField.attributedPlaceholder = NSAttributedString(
+            string: "Password",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.white]
+        )
         emailField.borderStyle = .roundedRect
-        emailField.layer.borderColor = CGColor(red: 64/255, green: 64/255, blue: 64/255, alpha: 1)
+        emailField.backgroundColor = UIColor.clear
+        emailField.layer.borderColor = UIColor.white.cgColor
         emailField.layer.borderWidth = CGFloat(1)
+        emailField.placeholder = "Email"
+        emailField.textColor = .white
+        emailField.borderStyle = .roundedRect
         emailField.autocorrectionType = .no
         emailField.autocapitalizationType = .none
         view.addSubview(emailField)
         emailField.translatesAutoresizingMaskIntoConstraints = false
         
         //MARK: Password Field Features
-        passwordField.placeholder = "Password"
+        passwordField.attributedPlaceholder = NSAttributedString(
+            string: "Password",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.white]
+        )
         passwordField.borderStyle = .roundedRect
-        passwordField.layer.borderColor = CGColor(red: 64/255, green: 64/255, blue: 64/255, alpha: 1)
+        passwordField.backgroundColor = UIColor.clear
+        passwordField.layer.borderColor = UIColor.white.cgColor
+        passwordField.textColor = .white
         passwordField.layer.borderWidth = CGFloat(1)
         view.addSubview(passwordField)
         passwordField.isSecureTextEntry = true
@@ -75,9 +86,9 @@ class LogInViewController: UIViewController {
         passwordField.translatesAutoresizingMaskIntoConstraints = false
         
         //MARK: Login Button Features
-        loginButton.backgroundColor = UIColor(named: "AppColor1")
+        loginButton.backgroundColor = UIColor(named: "AppColor2")
         loginButton.setTitle("Login", for: .normal)
-        loginButton.tintColor = .white
+        loginButton.setTitleColor(UIColor(named: "AppColor1"), for: .normal)
         loginButton.layer.cornerRadius = 5
         loginButton.clipsToBounds = true
         view.addSubview(loginButton)
@@ -90,9 +101,10 @@ class LogInViewController: UIViewController {
             
             //MARK: Image Constraints
             imageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            imageView.bottomAnchor.constraint(equalTo: emailField.topAnchor, constant: 75),
-            imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 150),
-            imageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -150),
+            imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            imageView.bottomAnchor.constraint(equalTo: emailField.topAnchor, constant: 40),
+            imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 5),
+            imageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -5),
             
             //MARK: Email Field Constraints
             emailField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
@@ -103,7 +115,7 @@ class LogInViewController: UIViewController {
             
             //MARK: Password Field Constraints
             passwordField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            passwordField.topAnchor.constraint(equalTo: emailField.bottomAnchor, constant: 5),
+            passwordField.topAnchor.constraint(equalTo: emailField.bottomAnchor, constant: 10),
             passwordField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             passwordField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             passwordField.heightAnchor.constraint(equalToConstant: 35),
@@ -111,7 +123,7 @@ class LogInViewController: UIViewController {
             
             //MARK: Login Button Constraints
             loginButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            loginButton.topAnchor.constraint(equalTo: passwordField.bottomAnchor, constant: 5),
+            loginButton.topAnchor.constraint(equalTo: passwordField.bottomAnchor, constant: 10),
             loginButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             loginButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             loginButton.heightAnchor.constraint(equalToConstant: 35),
@@ -148,14 +160,54 @@ class LogInViewController: UIViewController {
 
                 //MARK: Correct User Credentials
                 } else {
-                    self?.dismiss(animated: true, completion: nil)
+                    //MARK: Create User
+                    let db = Firestore.firestore()
+                    let removetext = "@robcol.k12.tr"
+                    var name = email
+                    if let range = name!.range(of: removetext) {
+                        name!.removeSubrange(range)
+                    }
+                    let docRef = db.collection("users").document(Auth.auth().currentUser!.uid)
+                    docRef.getDocument { (document, error) in
+                        if let document = document, document.exists {
+                            let data_document = document.data()?["login"] as? Int ?? 0
+                            if data_document == 1 {
+                                let alert = UIAlertController(title: "Logged in another device", message: "Please log out in another device. If you do not have access to your device, please get in contact with your administrator.", preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                                self!.present(alert, animated: true, completion: nil)
+                            } else {
+                                db.collection("users").document(Auth.auth().currentUser!.uid).updateData(["login": 1]) { (error) in
+                                    if error != nil {
+                                    }
+                                }
+                                self?.dismiss(animated: true, completion: nil)
+                                self?.navigationController?.pushViewController(TabBarViewController(), animated: true)
+                                self?.navigationController?.setNavigationBarHidden(true, animated: true)
+                            }
+                        } else {
+                            db.collection("users").document(Auth.auth().currentUser!.uid).setData([
+                                "name": name!,
+                                "score": 0,
+                                "login": 1
+                            ]) { err in
+                                if let err = err {
+                                    print("Error writing document: \(err)")
+                                } else {
+                                    print("Document successfully written!")
+                                }
+                            }
+                            self?.dismiss(animated: true, completion: nil)
+                            self?.navigationController?.pushViewController(TabBarViewController(), animated: true)
+                            self?.navigationController?.setNavigationBarHidden(true, animated: true)
+                        }
+                    }
                 }
             }
         }
     }
-
+     
     
-    
+        
     //MARK: Validate All Fields
     func validateFields() -> String? {
         if emailField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||

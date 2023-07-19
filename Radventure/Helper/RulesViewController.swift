@@ -21,7 +21,7 @@ class RulesViewController: UIViewController, WKNavigationDelegate, WKUIDelegate 
         view = webView
         
         let backButton = UIButton()
-        backButton.setImage(UIImage(systemName: "arrow.backward"), for: .normal)
+        backButton.setImage(UIImage(systemName: "arrow.backward")?.withTintColor(UIColor(named: "AppColor1")!, renderingMode: .alwaysOriginal), for: .normal)
         backButton.addTarget(self, action: #selector(self_dismiss), for: .touchUpInside)
         view.addSubview(backButton)
         backButton.contentHorizontalAlignment = .fill
