@@ -82,12 +82,20 @@ class ScoreboardViewController: UIViewController {
         scoreboardLabel.underline()
         
         scoreboardLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([scoreboardLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -20), scoreboardLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20), scoreboardLabel.heightAnchor.constraint(equalToConstant: 40)])
+        NSLayoutConstraint.activate([scoreboardLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -20), scoreboardLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)])
         
+        let scoreboardexplainationLabel = UILabel()
+        scoreboardexplainationLabel.textColor = UIColor(named: "AppColor2")
+        scoreboardexplainationLabel.text = "Scoreboard updates in every 10 seconds."
+        scoreboardexplainationLabel.textAlignment = .left
+        scoreboardexplainationLabel.clipsToBounds = true
+        view.addSubview(scoreboardexplainationLabel)
         
+        scoreboardexplainationLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([scoreboardexplainationLabel.topAnchor.constraint(equalTo: scoreboardLabel.bottomAnchor, constant: 5), scoreboardexplainationLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)])
         
         ScoreboardTable.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([ScoreboardTable.topAnchor.constraint(equalTo: scoreboardLabel.bottomAnchor, constant: 10), ScoreboardTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor), ScoreboardTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor), ScoreboardTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)])
+        NSLayoutConstraint.activate([ScoreboardTable.topAnchor.constraint(equalTo: scoreboardexplainationLabel.bottomAnchor, constant: 10), ScoreboardTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor), ScoreboardTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor), ScoreboardTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)])
     }
     
     var name = ""
@@ -171,7 +179,11 @@ extension ScoreboardViewController: UITableViewDelegate, UITableViewDataSource {
         cell.detailLabel_score.font = cell.titleLabel.font.withSize(15)
         cell.detailLabel_score.textColor = UIColor(named: "AppColor2")
         
-        cell.detailLabel_time.text = "Remaining Time: \(sortedscoreboardData[indexPath.row].time)"
+        if (sortedscoreboardData[indexPath.row].time) == "" {
+            cell.detailLabel_time.text = "Not submitted any question yet."
+        } else {
+            cell.detailLabel_time.text = "Remaining Time: \(sortedscoreboardData[indexPath.row].time)"
+        }
         cell.detailLabel_time.textAlignment = .right
         cell.detailLabel_time.font = cell.titleLabel.font.withSize(15)
         cell.detailLabel_time.textColor = UIColor(named: "AppColor2")

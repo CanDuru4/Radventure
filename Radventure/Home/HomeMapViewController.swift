@@ -70,7 +70,6 @@ class HomeMapViewController: UIViewController {
                 filteredpinlocationsdata = pinlocationsdata
             } else if didSetCount2 == children_count2 {
                 pinLocations()
-                print(pinlocationsdata)
                 filteredpinlocationsdata = pinlocationsdata
             }
         }
@@ -99,6 +98,7 @@ class HomeMapViewController: UIViewController {
                     let hour = Calendar.current.component(.hour, from: Date())
                     let min = Calendar.current.component(.minute, from: Date())
                     if (self.finishHourIntStart < hour) {
+                        AudioServicesPlaySystemSound(SystemSoundID(1304))
                         AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
                         self.forceQuitButton.isHidden = true
                         self.startButton.isHidden = false
@@ -123,6 +123,7 @@ class HomeMapViewController: UIViewController {
                         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
                         self.present(alert, animated: true, completion: nil)
                     } else if (self.finishHourIntStart == hour && self.finishMinuteIntStart < min){
+                        AudioServicesPlaySystemSound(SystemSoundID(1304))
                         AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
                         self.forceQuitButton.isHidden = true
                         self.startButton.isHidden = false
@@ -347,9 +348,6 @@ class HomeMapViewController: UIViewController {
     //MARK: Log Out Button Action
     @objc func logOutAction(){
         let firebaseAuth = Auth.auth()
-        print("--------------")
-        print("GİRDİ")
-        print("--------------")
         updateUserlogin {
             do {
               try firebaseAuth.signOut()
@@ -363,9 +361,6 @@ class HomeMapViewController: UIViewController {
                     }
                 }
             }
-            print("--------------")
-            print("TAMAM")
-            print("--------------")
             self.didSetCount1 = 0
             self.didSetCount2 = 0
             self.tabBarController?.tabBar.isHidden = true
@@ -382,9 +377,6 @@ class HomeMapViewController: UIViewController {
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }
-            print("--------------")
-            print("UPDATELADİ")
-            print("--------------")
             completion()
         }
     }
@@ -417,23 +409,32 @@ class HomeMapViewController: UIViewController {
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             } else {
-                self.randomRoute = Int.random(in: 0...3)
-                self.RandomRouteChoice = self.randomRouteArray[self.randomRoute]
-                self.didSetCount1 = 0
-                self.didSetCount2 = 0
-                self.updateUserDatato0()
-                self.timerLabelFunction()
-                self.countPins(choice_pin: self.RandomRouteChoice) {
-                    self.PinLocationData(choice_pinlocationdata: self.RandomRouteChoice){
-                        self.startButton.isHidden = true
-                        self.forceQuitButton.isHidden = false
-                        self.logOutButton.isHidden = true
-                        self.forceQuitButtonCheck = 1
-                        self.startButtoncheck = 0
-                        self.score = 0
-                        self.done_array = []
+                AudioServicesPlaySystemSound(SystemSoundID(1304))
+                AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+                let alert = UIAlertController(title: "Your data will be lost!", message: "When you start the activity, if exist, your previous score from another activity will be erased.", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "I am aware of my action.", style: .default, handler: { (_) in
+                    self.randomRoute = Int.random(in: 0...3)
+                    self.RandomRouteChoice = self.randomRouteArray[self.randomRoute]
+                    self.didSetCount1 = 0
+                    self.didSetCount2 = 0
+                    self.updateUserDatato0()
+                    self.timerLabelFunction()
+                    self.countPins(choice_pin: self.RandomRouteChoice) {
+                        self.PinLocationData(choice_pinlocationdata: self.RandomRouteChoice){
+                            self.startButton.isHidden = true
+                            self.forceQuitButton.isHidden = false
+                            self.logOutButton.isHidden = true
+                            self.forceQuitButtonCheck = 1
+                            self.startButtoncheck = 0
+                            self.score = 0
+                            self.done_array = []
+                        }
                     }
-                }
+                })
+                alert.addAction(okAction)
+                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil))
+                alert.preferredAction = okAction
+                self.present(alert, animated: true, completion: nil)
             }
         }
     }
@@ -497,7 +498,7 @@ class HomeMapViewController: UIViewController {
     
     //MARK: Update Score with starting
     func updateUserDatato0(){
-        db.collection("users").document(self.useruid!).updateData(["score": 0, "start": 1,"time": "0", "uid": self.useruid!, "locations": [String](), "route": self.RandomRouteChoice]) { (error) in
+        db.collection("users").document(self.useruid!).updateData(["score": 0, "start": 1,"time": "", "uid": self.useruid!, "locations": [String](), "route": self.RandomRouteChoice]) { (error) in
             if error != nil {
                 let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
@@ -573,76 +574,78 @@ class HomeMapViewController: UIViewController {
     
     //MARK: Timer Label Function
     var timer_label = Timer()
+    var finishHourInt = 0
+    var finishMinuteInt = 0
     func timerLabelFunction(){
-        var finishHourInt = 0
-        var finishMinuteInt = 0
-        _ = 60
-
+        timer_label = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
+            self.timer_database {
+                let hour = Calendar.current.component(.hour, from: Date())
+                let min = Calendar.current.component(.minute, from: Date())
+                let sec = Calendar.current.component(.second, from: Date())
+                let date1 = DateComponents(calendar: .current, year: 1, month: 1, day: 1, hour: hour, minute: min, second: sec).date!
+                let date2 = DateComponents(calendar: .current, year: 1, month: 1, day: 1, hour: self.finishHourInt, minute: self.finishMinuteInt).date!
+                let minutes = date2.minutes(from: date1)
+                let seconds = date2.seconds(from: date1)
+                let seconds_text = seconds % 60
+                
+                if minutes == 0 && seconds_text == 0 {
+                    AudioServicesPlaySystemSound(SystemSoundID(1304))
+                    AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+                    let alert = UIAlertController(title: "Time finished!", message: "Please go back to the Maze.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    self.startButton.isHidden = false
+                    self.forceQuitButton.isHidden = true
+                    self.logOutButton.isHidden = false
+                    self.forceQuitButtonCheck = 0
+                    self.startButtoncheck = 1
+                    self.timer_label.invalidate()
+                    self.timer.invalidate()
+                    self.timerLabel.text = "00:00"
+                    for PinAnnotation in self.map.annotations {
+                        self.map.removeAnnotation(PinAnnotation)
+                    }
+                    self.db.collection("users").document(self.useruid!).updateData(["start": 0, "locations": [String]()]) { (error) in
+                        if error != nil {
+                            let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                            self.present(alert, animated: true, completion: nil)
+                        }
+                    }
+                } else if (seconds_text < 10) {
+                    let timeString = String(minutes)
+                    let secondString = String(seconds_text)
+                    self.timerLabel.text = "\(timeString):0\(secondString)"
+                } else if (minutes < 10) {
+                    let timeString = String(minutes)
+                    let secondString = String(seconds_text)
+                    self.timerLabel.text = "0\(timeString):\(secondString)"
+                } else if (seconds_text < 10 && minutes < 10) {
+                    let timeString = String(minutes)
+                    let secondString = String(seconds_text)
+                    self.timerLabel.text = "0\(timeString):0\(secondString)"
+                } else {
+                    let timeString = String(minutes)
+                    let secondString = String(seconds_text)
+                    self.timerLabel.text = "\(timeString):\(secondString)"
+                }
+            }
+        })
+    }
+    
+    func timer_database(completion: @escaping () -> ()){
         let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("time")
         ref.observeSingleEvent(of: .value) { snapshot in
             for case let child as DataSnapshot in snapshot.children {
                 guard let dict = child.value as? [String:Any] else {
                     return
                 }
-                finishHourInt = dict["finishHourInt"] as! Int
-                finishMinuteInt = dict["finishMinuteInt"] as! Int
+                self.finishHourInt = dict["finishHourInt"] as! Int
+                self.finishMinuteInt = dict["finishMinuteInt"] as! Int
+                completion()
             }
         }
-        timer_label = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
-            let hour = Calendar.current.component(.hour, from: Date())
-            let min = Calendar.current.component(.minute, from: Date())
-            let sec = Calendar.current.component(.second, from: Date())
-            
-            let date1 = DateComponents(calendar: .current, year: 1, month: 1, day: 1, hour: hour, minute: min, second: sec).date!
-            let date2 = DateComponents(calendar: .current, year: 1, month: 1, day: 1, hour: finishHourInt, minute: finishMinuteInt).date!
-            let minutes = date2.minutes(from: date1)
-            let seconds = date2.seconds(from: date1)
-            let seconds_text = seconds % 60
-            
-            if minutes == 0 && seconds_text == 0 {
-                AudioServicesPlaySystemSound(SystemSoundID(1304))
-                AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-                let alert = UIAlertController(title: "Time finished!", message: "Please go back to the Maze.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-                self.startButton.isHidden = false
-                self.forceQuitButton.isHidden = true
-                self.logOutButton.isHidden = false
-                self.forceQuitButtonCheck = 0
-                self.startButtoncheck = 1
-                self.timer_label.invalidate()
-                self.timer.invalidate()
-                self.timerLabel.text = "00:00"
-                for PinAnnotation in self.map.annotations {
-                    self.map.removeAnnotation(PinAnnotation)
-                }
-                self.db.collection("users").document(self.useruid!).updateData(["start": 0, "locations": [String]()]) { (error) in
-                    if error != nil {
-                        let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-                        self.present(alert, animated: true, completion: nil)
-                    }
-                }
-            } else if (seconds_text < 10) {
-                let timeString = String(minutes)
-                let secondString = String(seconds_text)
-                self.timerLabel.text = "\(timeString):0\(secondString)"
-            } else if (minutes < 10) {
-                let timeString = String(minutes)
-                let secondString = String(seconds_text)
-                self.timerLabel.text = "0\(timeString):\(secondString)"
-            } else if (seconds_text < 10 && minutes < 10) {
-                let timeString = String(minutes)
-                let secondString = String(seconds_text)
-                self.timerLabel.text = "0\(timeString):0\(secondString)"
-            } else {
-                let timeString = String(minutes)
-                let secondString = String(seconds_text)
-                self.timerLabel.text = "\(timeString):\(secondString)"
-            }
-        })
     }
-    
     
     
     //MARK: Pin Location Annotation
