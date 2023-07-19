@@ -78,7 +78,7 @@ class ScoreboardTableViewCell: UITableViewCell {
             
             detailLabel_time.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
             detailLabel_time.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
-            detailLabel_time.widthAnchor.constraint(equalToConstant: 200),
+            detailLabel_time.widthAnchor.constraint(equalToConstant: 250),
         ])
         
     }
