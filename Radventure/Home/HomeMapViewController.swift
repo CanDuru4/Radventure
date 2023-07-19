@@ -23,22 +23,35 @@ struct PinLocationsStructure{
 class HomeMapViewController: UIViewController {
 
 //MARK: Set Up
-    
-    
+
     
     //MARK: Variable Setup
     var center_coordinate = CLLocationCoordinate2D(latitude: 41.066993155414536, longitude: 29.034859552149705)
     var place_name = ""
     var user_answer = ""
     var passwordKeyDatabase = ""
+    var useruid = Auth.auth().currentUser?.uid
+    var db = Firestore.firestore()
     var score = 0
     var alert_count = 1
+    var location_count = 0
+    var start_check = 0
+    var children_count = 999
+    var children_count2 = 999
+    var didSetCount1 = 0
+    var didSetCount2 = 0
     var timerLabel = UILabel()
     var startButton = UIButton(type: .custom)
     var startButtoncheck = 1
     var forceQuitButtonCheck = 0
     var forceQuitButton = UIButton(type: .custom)
+    var logOutButton = UIButton(type: .custom)
     var forceQuitPassword = ""
+    var randomRoute = 100
+    var RandomRouteChoice = ""
+    var randomRouteArray = ["coordinates", "coordinates2", "coordinates3"]
+    var user_latitude = 0.0
+    var user_longitude = 0.0
     
     //MARK: Map Setup
     private let map: MKMapView = {
@@ -52,33 +65,17 @@ class HomeMapViewController: UIViewController {
             for PinAnnotation in self.map.annotations {
                 self.map.removeAnnotation(PinAnnotation)
             }
-            pinLocations()
-            filteredpinlocationsdata = pinlocationsdata
-            if pinlocationsdata.isEmpty{
-                if alert_count != 0 {
-                    self.alert_count = self.alert_count - 1
-                } else {
-                    AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-                    AudioServicesPlaySystemSound(SystemSoundID(1304))
-                    let alert = UIAlertController(title: "You finished the activity!", message: "Please return to the Maze.", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                    forceQuitButton.isHidden = true
-                    startButton.isHidden = false
-                    forceQuitButtonCheck = 0
-                    startButtoncheck = 1
-                    score = 0
-                    timer_label.invalidate()
-                    timer.invalidate()
-                    timerLabel.text = "00:00"
-                    for PinAnnotation in self.map.annotations {
-                        self.map.removeAnnotation(PinAnnotation)
-                    }
-                }
+            if didSetCount1 == children_count {
+                pinLocations()
+                filteredpinlocationsdata = pinlocationsdata
+            } else if didSetCount2 == children_count2 {
+                pinLocations()
+                print(pinlocationsdata)
+                filteredpinlocationsdata = pinlocationsdata
             }
         }
     }
-    
+    var done_array = [String]()
     var filteredpinlocationsdata:[PinLocationsStructure] = []
     
     
@@ -86,26 +83,99 @@ class HomeMapViewController: UIViewController {
 //MARK: Load
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         //MARK: General Load
         view.backgroundColor = UIColor(named: "AppColor1")
         self.navigationController?.setNavigationBarHidden(true, animated: true)
-
+        
         //MARK: Map Load
         view.addSubview(map)
         setMapLayout()
         mapLocation()
         setButton()
-        if (startButtoncheck == 0) {
-            startButton.isHidden = true
-            forceQuitButton.isHidden = false
-        }
-        forceQuitButton.isHidden = true
         map.delegate = self
+        getUserData(){
+            if self.start_check == 1 {
+                self.contactDatabase {
+                    let hour = Calendar.current.component(.hour, from: Date())
+                    let min = Calendar.current.component(.minute, from: Date())
+                    if (self.finishHourIntStart < hour) {
+                        AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+                        self.forceQuitButton.isHidden = true
+                        self.startButton.isHidden = false
+                        self.logOutButton.isHidden = false
+                        self.forceQuitButtonCheck = 0
+                        self.startButtoncheck = 1
+                        self.score = 0
+                        self.timer.invalidate()
+                        self.timer_label.invalidate()
+                        self.timerLabel.text = "00:00"
+                        for PinAnnotation in self.map.annotations {
+                            self.map.removeAnnotation(PinAnnotation)
+                        }
+                        self.db.collection("users").document(self.useruid!).updateData(["start": 0, "locations": [String]()]) { (error) in
+                            if error != nil {
+                                let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                                self.present(alert, animated: true, completion: nil)
+                            }
+                        }
+                        let alert = UIAlertController(title: "Activity automatically stopped.", message: "Since the finishing time is passed, activity is stopped.", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    } else if (self.finishHourIntStart == hour && self.finishMinuteIntStart < min){
+                        AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+                        self.forceQuitButton.isHidden = true
+                        self.startButton.isHidden = false
+                        self.logOutButton.isHidden = false
+                        self.forceQuitButtonCheck = 0
+                        self.startButtoncheck = 1
+                        self.score = 0
+                        self.timer.invalidate()
+                        self.timer_label.invalidate()
+                        self.timerLabel.text = "00:00"
+                        for PinAnnotation in self.map.annotations {
+                            self.map.removeAnnotation(PinAnnotation)
+                        }
+                        self.db.collection("users").document(self.useruid!).updateData(["start": 0, "locations": [String]()]) { (error) in
+                            if error != nil {
+                                let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                                self.present(alert, animated: true, completion: nil)
+                            }
+                        }
+                        let alert = UIAlertController(title: "Activity automatically stopped.", message: "Since the finishing time is passed, activity is stopped.", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    } else {
+                        self.timerLabelFunction()
+                        self.countPins2(choice_pin2: self.RandomRouteChoice) {
+                            self.PinLocationData(choice_pinlocationdata: self.RandomRouteChoice){
+                                self.startButton.isHidden = true
+                                self.forceQuitButton.isHidden = false
+                                self.logOutButton.isHidden = true
+                                self.forceQuitButtonCheck = 1
+                                self.startButtoncheck = 0
+                                self.location_count = self.pinlocationsdata.count
+                                for i in self.done_array{
+                                    self.pinlocationsdata = self.pinlocationsdata.filter { $0.name.lowercased() != i.lowercased() }
+                                    self.didSetCount2 = self.didSetCount2 - 1
+                                    self.children_count2 = self.children_count2 - 1
+                                    self.location_count = self.location_count - 1
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                self.startButton.isHidden = false
+                self.forceQuitButton.isHidden = true
+                self.logOutButton.isHidden = false
+                //MARK: Pin Location Data
+                self.pinlocationsdata = []
+                self.done_array = []
+            }
+        }
 
-        
-        //MARK: Pin Location Data
-        pinlocationsdata = []
         
         //MARK: Button Setup
         let backButton = UIBarButtonItem()
@@ -139,77 +209,6 @@ class HomeMapViewController: UIViewController {
     func setButton(){
         
         
-        //MARK: Current Location Button
-        let currentlocationButton = UIButton(type: .custom)
-        currentlocationButton.backgroundColor = UIColor(white: 1, alpha: 0.8)
-        currentlocationButton.setImage(UIImage(systemName: "location.fill")?.resized(to: CGSize(width: 25, height: 25)).withTintColor(.systemBlue), for: .normal)
-        currentlocationButton.addTarget(self, action: #selector(pressed), for: .touchUpInside)
-        view.addSubview(currentlocationButton)
-        
-        currentlocationButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([currentlocationButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10), currentlocationButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30), currentlocationButton.widthAnchor.constraint(equalToConstant: 50), currentlocationButton.heightAnchor.constraint(equalToConstant: 50)])
-        currentlocationButton.layer.cornerRadius = 25
-        currentlocationButton.layer.masksToBounds = true
-        
-        //MARK: Zoom Out Button
-        let zoomOutButton = UIButton(type: .custom)
-        zoomOutButton.backgroundColor = UIColor(white: 1, alpha: 0.8)
-        zoomOutButton.setImage(UIImage(systemName: "minus.square.fill")?.resized(to: CGSize(width: 25, height: 25)).withTintColor(.systemBlue), for: .normal)
-        zoomOutButton.addTarget(self, action: #selector(zoomOut), for: .touchUpInside)
-        view.addSubview(zoomOutButton)
-        
-        zoomOutButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([zoomOutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10), zoomOutButton.bottomAnchor.constraint(equalTo: currentlocationButton.topAnchor, constant: -20), zoomOutButton.widthAnchor.constraint(equalToConstant: 50), zoomOutButton.heightAnchor.constraint(equalToConstant: 50)])
-        zoomOutButton.layer.cornerRadius = 10
-        zoomOutButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner] // Top right corner, Top left corner respectively
-        
-        //MARK: Zoom In Button
-        let zoomInButton = UIButton(type: .custom)
-        zoomInButton.backgroundColor = UIColor(white: 1, alpha: 0.8)
-        zoomInButton.setImage(UIImage(systemName: "plus.square.fill")?.resized(to: CGSize(width: 25, height: 25)).withTintColor(.systemBlue), for: .normal)
-        zoomInButton.addTarget(self, action: #selector(zoomIn), for: .touchUpInside)
-        view.addSubview(zoomInButton)
-        
-        zoomInButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([zoomInButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10), zoomInButton.bottomAnchor.constraint(equalTo: zoomOutButton.topAnchor), zoomInButton.widthAnchor.constraint(equalToConstant: 50), zoomInButton.heightAnchor.constraint(equalToConstant: 50)])
-        zoomInButton.layer.cornerRadius = 10
-        zoomInButton.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner] // Top right corner, Top left corner respectively
-        
-        //MARK: Rules Button
-        let rulesButton = UIButton(type: .custom)
-        rulesButton.setTitle("Rules", for: .normal)
-        rulesButton.setTitleColor(UIColor(named: "AppColor2"), for: .normal)
-        rulesButton.backgroundColor = UIColor(named: "AppColor1")
-        rulesButton.layer.cornerRadius = 15
-        rulesButton.clipsToBounds = true
-        rulesButton.addTarget(self, action: #selector(rules), for: .touchUpInside)
-        view.addSubview(rulesButton)
-        
-        rulesButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([rulesButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15), rulesButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10), rulesButton.widthAnchor.constraint(equalToConstant: 75), rulesButton.heightAnchor.constraint(equalToConstant: 30)])
-        
-        //MARK: Log Out Button
-        let logOutButton = UIButton(type: .custom)
-        logOutButton.setTitle("Log Out", for: .normal)
-        logOutButton.setTitleColor(UIColor(named: "AppColor1"), for: .normal)
-        logOutButton.addTarget(self, action: #selector(logOutAction), for: .touchUpInside)
-        logOutButton.underline()
-        view.addSubview(logOutButton)
-        
-        logOutButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([logOutButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15), logOutButton.bottomAnchor.constraint(equalTo: rulesButton.topAnchor, constant: -2), logOutButton.widthAnchor.constraint(equalToConstant: 75), logOutButton.heightAnchor.constraint(equalToConstant: 20)])
-        
-        //MARK: Timer Label
-        timerLabel.backgroundColor = UIColor(named: "AppColor1")
-        timerLabel.textColor = UIColor(named: "AppColor2")
-        timerLabel.text = "Time"
-        timerLabel.layer.cornerRadius = 15
-        timerLabel.textAlignment = .center
-        timerLabel.clipsToBounds = true
-        view.addSubview(timerLabel)
-        
-        timerLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([timerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15), timerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10), timerLabel.widthAnchor.constraint(equalToConstant: 100), timerLabel.heightAnchor.constraint(equalToConstant: 30)])
         
         //MARK: Start Button
         startButton.setTitle("Start", for: .normal)
@@ -224,6 +223,71 @@ class HomeMapViewController: UIViewController {
         startButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([startButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor), startButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40), startButton.widthAnchor.constraint(equalToConstant: 250), startButton.heightAnchor.constraint(equalToConstant: 45)])
         
+        //MARK: Current Location Button
+        let currentlocationButton = UIButton(type: .custom)
+        currentlocationButton.backgroundColor = UIColor(named: "AppColor1")
+        currentlocationButton.setImage(UIImage(systemName: "location.fill")?.resized(to: CGSize(width: 25, height: 25)).withTintColor(.white), for: .normal)
+//        currentlocationButton.backgroundColor = UIColor(white: 1, alpha: 0.8)
+//        currentlocationButton.setImage(UIImage(systemName: "location.fill")?.resized(to: CGSize(width: 25, height: 25)).withTintColor(UIColor(named: "AppColor1")!), for: .normal)
+        currentlocationButton.addTarget(self, action: #selector(pressed), for: .touchUpInside)
+        view.addSubview(currentlocationButton)
+        
+        currentlocationButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([currentlocationButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10), currentlocationButton.centerYAnchor.constraint(equalTo: startButton.centerYAnchor), currentlocationButton.widthAnchor.constraint(equalToConstant: 50), currentlocationButton.heightAnchor.constraint(equalToConstant: 50)])
+        currentlocationButton.layer.cornerRadius = 25
+        currentlocationButton.layer.masksToBounds = true
+        
+        //MARK: Zoom Out Button
+        let zoomOutButton = UIButton(type: .custom)
+        zoomOutButton.backgroundColor = UIColor(named: "AppColor1")
+        zoomOutButton.setImage(UIImage(systemName: "minus.square.fill")?.resized(to: CGSize(width: 25, height: 25)).withTintColor(.white), for: .normal)
+//        zoomOutButton.backgroundColor = UIColor(white: 1, alpha: 0.8)
+//        zoomOutButton.setImage(UIImage(systemName: "minus.square.fill")?.resized(to: CGSize(width: 25, height: 25)).withTintColor(UIColor(named: "AppColor1")!), for: .normal)
+        zoomOutButton.addTarget(self, action: #selector(zoomOut), for: .touchUpInside)
+        view.addSubview(zoomOutButton)
+        
+        zoomOutButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([zoomOutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10), zoomOutButton.bottomAnchor.constraint(equalTo: currentlocationButton.topAnchor, constant: -20), zoomOutButton.widthAnchor.constraint(equalToConstant: 50), zoomOutButton.heightAnchor.constraint(equalToConstant: 50)])
+        zoomOutButton.layer.cornerRadius = 10
+        zoomOutButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner] // Top right corner, Top left corner respectively
+        
+        //MARK: Zoom In Button
+        let zoomInButton = UIButton(type: .custom)
+        zoomInButton.backgroundColor = UIColor(named: "AppColor1")
+        zoomInButton.setImage(UIImage(systemName: "plus.square.fill")?.resized(to: CGSize(width: 25, height: 25)).withTintColor(.white), for: .normal)
+//        zoomInButton.backgroundColor = UIColor(white: 1, alpha: 0.8)
+//        zoomInButton.setImage(UIImage(systemName: "plus.square.fill")?.resized(to: CGSize(width: 25, height: 25)).withTintColor(UIColor(named: "AppColor1")!), for: .normal)
+        zoomInButton.addTarget(self, action: #selector(zoomIn), for: .touchUpInside)
+        view.addSubview(zoomInButton)
+        
+        zoomInButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([zoomInButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10), zoomInButton.bottomAnchor.constraint(equalTo: zoomOutButton.topAnchor), zoomInButton.widthAnchor.constraint(equalToConstant: 50), zoomInButton.heightAnchor.constraint(equalToConstant: 50)])
+        zoomInButton.layer.cornerRadius = 10
+        zoomInButton.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner] // Top right corner, Top left corner respectively
+        
+        //MARK: Log Out Button
+        logOutButton.setTitle("Log Out", for: .normal)
+        logOutButton.setTitleColor(UIColor(named: "AppColor1"), for: .normal)
+        logOutButton.addTarget(self, action: #selector(logOutAction), for: .touchUpInside)
+        logOutButton.underline()
+        view.addSubview(logOutButton)
+        
+        logOutButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([logOutButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15), logOutButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5), logOutButton.widthAnchor.constraint(equalToConstant: 75), logOutButton.heightAnchor.constraint(equalToConstant: 20)])
+        
+        //MARK: Rules Button
+        let rulesButton = UIButton(type: .custom)
+        rulesButton.setTitle("Rules", for: .normal)
+        rulesButton.setTitleColor(UIColor(named: "AppColor2"), for: .normal)
+        rulesButton.backgroundColor = UIColor(named: "AppColor1")
+        rulesButton.layer.cornerRadius = 15
+        rulesButton.clipsToBounds = true
+        rulesButton.addTarget(self, action: #selector(rules), for: .touchUpInside)
+        view.addSubview(rulesButton)
+        
+        rulesButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([rulesButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15), rulesButton.topAnchor.constraint(equalTo: logOutButton.bottomAnchor, constant: 2), rulesButton.widthAnchor.constraint(equalToConstant: 75), rulesButton.heightAnchor.constraint(equalToConstant: 30)])
+        
         //MARK: Force Quit Button
         forceQuitButton.setTitle("Force Quit", for: .normal)
         forceQuitButton.setTitleColor(UIColor(named: "AppColor1"), for: .normal)
@@ -232,7 +296,19 @@ class HomeMapViewController: UIViewController {
         forceQuitButton.underline()
         
         forceQuitButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([forceQuitButton.centerXAnchor.constraint(equalTo: timerLabel.centerXAnchor), forceQuitButton.bottomAnchor.constraint(equalTo: timerLabel.topAnchor, constant: -1), forceQuitButton.widthAnchor.constraint(equalToConstant: 100), forceQuitButton.heightAnchor.constraint(equalToConstant: 20)])
+        NSLayoutConstraint.activate([forceQuitButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15), forceQuitButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5), forceQuitButton.widthAnchor.constraint(equalToConstant: 100), forceQuitButton.heightAnchor.constraint(equalToConstant: 20)])
+        
+        //MARK: Timer Label
+        timerLabel.backgroundColor = UIColor(named: "AppColor1")
+        timerLabel.textColor = UIColor(named: "AppColor2")
+        timerLabel.text = "Time"
+        timerLabel.layer.cornerRadius = 15
+        timerLabel.textAlignment = .center
+        timerLabel.clipsToBounds = true
+        view.addSubview(timerLabel)
+        
+        timerLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([timerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15), timerLabel.topAnchor.constraint(equalTo: forceQuitButton.bottomAnchor, constant: 2), timerLabel.widthAnchor.constraint(equalToConstant: 100), timerLabel.heightAnchor.constraint(equalToConstant: 30)])
     }
 
     //MARK: Current Location Button Action
@@ -271,15 +347,46 @@ class HomeMapViewController: UIViewController {
     //MARK: Log Out Button Action
     @objc func logOutAction(){
         let firebaseAuth = Auth.auth()
-        do {
-          try firebaseAuth.signOut()
-        } catch let signOutError as NSError {
-          print("Error signing out: %@", signOutError)
+        print("--------------")
+        print("GİRDİ")
+        print("--------------")
+        updateUserlogin {
+            do {
+              try firebaseAuth.signOut()
+            } catch let signOutError as NSError {
+                print("Error signing out: %@", signOutError)
+                self.db.collection("users").document(self.useruid!).updateData(["login": 1]) { (error) in
+                    if error != nil {
+                        let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                }
+            }
+            print("--------------")
+            print("TAMAM")
+            print("--------------")
+            self.didSetCount1 = 0
+            self.didSetCount2 = 0
+            self.tabBarController?.tabBar.isHidden = true
+            let newViewControllers = NSMutableArray()
+            newViewControllers.add(LogInViewController())
+            self.navigationController?.setViewControllers(newViewControllers as! [UIViewController], animated: true)
         }
-        self.tabBarController?.tabBar.isHidden = true
-        let newViewControllers = NSMutableArray()
-        newViewControllers.add(LogInViewController())
-        self.navigationController?.setViewControllers(newViewControllers as! [UIViewController], animated: true)
+    }
+    
+    func updateUserlogin(completion: @escaping () -> ()){
+        db.collection("users").document(self.useruid!).updateData(["login": 0]) { (error) in
+            if error != nil {
+                let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+            print("--------------")
+            print("UPDATELADİ")
+            print("--------------")
+            completion()
+        }
     }
     
     //MARK: Start Button Action
@@ -310,17 +417,97 @@ class HomeMapViewController: UIViewController {
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             } else {
-                self.PinLocationData()
+                self.randomRoute = Int.random(in: 0...2)
+                self.RandomRouteChoice = self.randomRouteArray[self.randomRoute]
+                self.didSetCount1 = 0
+                self.didSetCount2 = 0
+                self.updateUserDatato0()
                 self.timerLabelFunction()
-                self.startButton.isHidden = true
-                self.forceQuitButton.isHidden = false
-                self.forceQuitButtonCheck = 1
-                self.startButtoncheck = 0
+                self.countPins(choice_pin: self.RandomRouteChoice) {
+                    self.PinLocationData(choice_pinlocationdata: self.RandomRouteChoice){
+                        self.startButton.isHidden = true
+                        self.forceQuitButton.isHidden = false
+                        self.logOutButton.isHidden = true
+                        self.forceQuitButtonCheck = 1
+                        self.startButtoncheck = 0
+                        self.score = 0
+                        self.done_array = []
+                    }
+                }
             }
         }
     }
     
 
+//    //MARK: Create Score
+//    func createuserData(uid1: String){
+//        //MARK: Create User
+//        let db = Firestore.firestore()
+//        db.collection("users").document(uid1).setData([
+//            "score": 0
+//        ]) { err in
+//            if let err = err {
+//                print("Error writing document: \(err)")
+//            } else {
+//                print("Document successfully written!")
+//            }
+//        }
+//    }
+//    //MARK: Get User Path
+//    func userid(name: String, completion: @escaping (String) -> Void){
+//        let db = Firestore.firestore()
+//        let user = Auth.auth().currentUser
+//        let uid = user!.uid
+//        db.collection("users").whereField("uid", isEqualTo: uid)
+//            .getDocuments() { (querySnapshot, err) in
+//                if err != nil {
+//                    let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
+//                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+//                    self.present(alert, animated: true, completion: nil)
+//                } else {
+//                    if querySnapshot!.documents.count == 0 {
+//                        self.createuserData(uid1: uid)
+//                    } else {
+//                        for document in (querySnapshot!.documents) {
+//                            let useruid = document.documentID
+//                            completion(useruid)
+//                        }
+//                    }
+//                }
+//            }
+//    }
+
+    //MARK: Get User Data
+    func getUserData(completion: @escaping () -> ()){
+        let db = Firestore.firestore()
+        let docRef = db.collection("users").document(useruid!)
+        docRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                self.start_check = document.data()?["start"] as? Int ?? 0
+                self.done_array = document.data()?["locations"] as? Array ?? []
+                self.score = document.data()?["score"] as! Int
+                self.RandomRouteChoice = document.data()?["route"] as? String ?? "coordinates"
+                completion()
+            } else {
+                print("Document does not exist")
+            }
+        }
+    }
+
+    
+    //MARK: Update Score with starting
+    func updateUserDatato0(){
+        db.collection("users").document(self.useruid!).updateData(["score": 0, "start": 1,"time": "0", "uid": self.useruid!, "locations": [String](), "route": self.RandomRouteChoice]) { (error) in
+            if error != nil {
+                let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
+        
+    
+    
     
     //MARK: Force Quit Button Action
     @objc func forceQuitButtonAction(){
@@ -346,6 +533,7 @@ class HomeMapViewController: UIViewController {
                 self.present(alert, animated: true, completion: nil)
                 self.forceQuitButton.isHidden = true
                 self.startButton.isHidden = false
+                self.logOutButton.isHidden = false
                 self.forceQuitButtonCheck = 0
                 self.startButtoncheck = 1
                 self.score = 0
@@ -354,6 +542,13 @@ class HomeMapViewController: UIViewController {
                 self.timerLabel.text = "00:00"
                 for PinAnnotation in self.map.annotations {
                     self.map.removeAnnotation(PinAnnotation)
+                }
+                self.db.collection("users").document(self.useruid!).updateData(["start": 0, "locations": [String]()]) { (error) in
+                    if error != nil {
+                        let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    }
                 }
             } else {
                 let alert = UIAlertController(title: "Password is incorrect.", message: "Communicate with an administrator to enter the password.", preferredStyle: .alert)
@@ -412,6 +607,7 @@ class HomeMapViewController: UIViewController {
                 self.present(alert, animated: true, completion: nil)
                 self.startButton.isHidden = false
                 self.forceQuitButton.isHidden = true
+                self.logOutButton.isHidden = false
                 self.forceQuitButtonCheck = 0
                 self.startButtoncheck = 1
                 self.timer_label.invalidate()
@@ -419,6 +615,13 @@ class HomeMapViewController: UIViewController {
                 self.timerLabel.text = "00:00"
                 for PinAnnotation in self.map.annotations {
                     self.map.removeAnnotation(PinAnnotation)
+                }
+                self.db.collection("users").document(self.useruid!).updateData(["start": 0, "locations": [String]()]) { (error) in
+                    if error != nil {
+                        let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    }
                 }
             } else if (seconds_text < 10) {
                 let timeString = String(minutes)
@@ -448,8 +651,9 @@ class HomeMapViewController: UIViewController {
     
     //MARK: Check and mark pin locations in every 15 second
     @objc func pinLocations(){
-        let locationCount = pinlocationsdata.count
-        for i in (0..<locationCount){
+        let locationCount = pinlocationsdata.count - 1
+        if ((locationCount+1) != 0) {
+            let i = Int.random(in: 0...locationCount)
             let coordinate = CLLocationCoordinate2DMake(CLLocationDegrees(pinlocationsdata[i].latitude), CLLocationDegrees(pinlocationsdata[i].longitude))
             let PinAnnotation = CustomPointAnnotation()
             PinAnnotation.coordinate = coordinate
@@ -457,20 +661,47 @@ class HomeMapViewController: UIViewController {
             PinAnnotation.customidentifier = "pinAnnotation"
             map.addAnnotation(PinAnnotation)
         }
+//        let locationCount = pinlocationsdata.count
+//        for i in (0..<locationCount){
+//            let coordinate = CLLocationCoordinate2DMake(CLLocationDegrees(pinlocationsdata[i].latitude), CLLocationDegrees(pinlocationsdata[i].longitude))
+//            let PinAnnotation = CustomPointAnnotation()
+//            PinAnnotation.coordinate = coordinate
+//            PinAnnotation.title = pinlocationsdata[i].name
+//            PinAnnotation.customidentifier = "pinAnnotation"
+//            map.addAnnotation(PinAnnotation)
+//        }
     }
     
     var timer = Timer()
-    func PinLocationDataRepeat(){
-        timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
-            self.PinLocationData()
-        })
-    }
+//    func PinLocationDataRepeat(){
+//        timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
+//            self.PinLocationData(){
+//
+//            }
+//        })
+//    }
     
     
     
     //MARK: Location Data
-    @objc func PinLocationData(){
-        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("coordinates")
+    func countPins(choice_pin: String, completion: @escaping () -> ()){
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child(choice_pin)
+        ref.observe(DataEventType.value, with: { (snapshot) in
+            self.children_count = Int(snapshot.childrenCount)
+            completion()
+        })
+    }
+    
+    func countPins2(choice_pin2: String, completion: @escaping () -> ()){
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child(choice_pin2)
+        ref.observe(DataEventType.value, with: { (snapshot) in
+            self.children_count2 = Int(snapshot.childrenCount)
+            completion()
+        })
+    }
+    
+    @objc func PinLocationData(choice_pinlocationdata: String, completion: @escaping () -> ()){
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child(choice_pinlocationdata)
         var name = ""
         var latitude = 0.000
         var longitude = 0.000
@@ -488,35 +719,102 @@ class HomeMapViewController: UIViewController {
                 question = dict["question"] as! String
                 answer = dict["answer"] as! String
                 
+                self.didSetCount1 = self.didSetCount1 + 1
+                self.didSetCount2 = self.didSetCount2 + 1
                 self.pinlocationsdata.append(PinLocationsStructure(latitude: latitude, longitude: longitude, name: name, question: question, answer: answer))
+                self.location_count = self.pinlocationsdata.count
             }
+            completion()
         }
     }
     
     //MARK: Display Question Function
     @objc func displayQuestion(){
-        filteredpinlocationsdata = filteredpinlocationsdata.filter { ($0.name.lowercased().contains(place_name.lowercased())) }
-        let name_chosen = filteredpinlocationsdata[0].name
-        let question_chosen = filteredpinlocationsdata[0].question
-        let alert = UIAlertController(title: "Question of the \(name_chosen)", message: question_chosen, preferredStyle: .alert)
-        alert.addTextField { (textField) in
-            textField.placeholder = "Please enter your answer"
+        location_check {
+            self.filteredpinlocationsdata = self.filteredpinlocationsdata.filter { ($0.name.lowercased().contains(self.place_name.lowercased())) }
+            let selectedItem = CLLocation(latitude: (self.filteredpinlocationsdata[0].latitude), longitude: (self.filteredpinlocationsdata[0].longitude))
+            let userLocation = CLLocation(latitude: (self.user_latitude), longitude: (self.user_longitude))
+            let distancetodestination = selectedItem.distance(from: userLocation)
+        
+            if distancetodestination < 60 {
+                let name_chosen = self.filteredpinlocationsdata[0].name
+                let question_chosen = self.filteredpinlocationsdata[0].question
+                let alert = UIAlertController(title: "Question of the \(name_chosen)", message: question_chosen, preferredStyle: .alert)
+                alert.addTextField { (textField) in
+                    textField.placeholder = "Please enter your answer"
+                }
+                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil))
+                alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
+                    self.user_answer = alert?.textFields![0].text ?? ""
+                    self.answercheck()
+                }))
+                self.present(alert, animated: true, completion: nil)
+            } else {
+                let alert = UIAlertController(title: "You are not in the correct location.", message: "You should be in 100 perimeter circle around the point.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
         }
-        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil))
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
-            self.user_answer = alert?.textFields![0].text ?? ""
-            self.answercheck()
-        }))
-        self.present(alert, animated: true, completion: nil)
     }
     
+    func location_check(completion: @escaping () -> ()) {
+        LocationManager.shared.getUserLocation { [weak self] location in DispatchQueue.main.async {
+            guard self != nil else {
+                    return
+            }
+            self!.user_longitude = location.coordinate.longitude
+            self!.user_latitude = location.coordinate.latitude
+            completion()
+            }
+        }
+    }
     
     
     //MARK: Check Answer Function
     func answercheck(){
-        let real_answer = filteredpinlocationsdata[0].answer
-        if user_answer == real_answer {
-            pinlocationsdata = pinlocationsdata.filter { $0.question.lowercased() != filteredpinlocationsdata[0].answer.lowercased() }
+        let real_answer = filteredpinlocationsdata[0].answer.lowercased()
+        if user_answer.lowercased() == real_answer {
+            self.location_count = self.location_count - 1
+            self.children_count = self.children_count - 1
+            self.children_count2 = self.children_count2 - 1
+            self.didSetCount1 = self.didSetCount1 - 1
+            self.didSetCount2 = self.didSetCount2 - 1
+
+            self.done_array.append(filteredpinlocationsdata[0].name)
+            pinlocationsdata = pinlocationsdata.filter { $0.name.lowercased() != filteredpinlocationsdata[0].name.lowercased() }
+            score = score + 100
+            self.db.collection("users").document(self.useruid!).updateData(["locations": self.done_array,"score": self.score, "time": self.timerLabel.text!, "uid": self.useruid ?? ""]) { (error) in
+                if error != nil {
+                    let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }
+            if self.location_count == 0 {
+                AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+                AudioServicesPlaySystemSound(SystemSoundID(1304))
+                let alert = UIAlertController(title: "You finished the activity!", message: "Please return to the Maze.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                forceQuitButton.isHidden = true
+                startButton.isHidden = false
+                logOutButton.isHidden = false
+                forceQuitButtonCheck = 0
+                startButtoncheck = 1
+                timer_label.invalidate()
+                timer.invalidate()
+                timerLabel.text = "00:00"
+                for PinAnnotation in self.map.annotations {
+                    self.map.removeAnnotation(PinAnnotation)
+                }
+                self.db.collection("users").document(self.useruid!).updateData(["start": 0, "locations": [String]()]) { (error) in
+                    if error != nil {
+                        let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                }
+            }
         } else {
             let alert = UIAlertController(title: "Answer is not correct.", message: "Please try again.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
