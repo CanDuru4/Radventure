@@ -411,7 +411,7 @@ class HomeMapViewController: UIViewController {
             } else {
                 AudioServicesPlaySystemSound(SystemSoundID(1304))
                 AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-                let alert = UIAlertController(title: "Your data will be lost!", message: "When you start the activity, if exist, your previous score from another activity will be erased.", preferredStyle: .alert)
+                let alert = UIAlertController(title: "Your data will be lost!", message: "When you start the activity, if exists, your previous score from another activity will be erased.", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "I am aware of my action.", style: .default, handler: { (_) in
                     self.randomRoute = Int.random(in: 0...3)
                     self.RandomRouteChoice = self.randomRouteArray[self.randomRoute]
@@ -739,24 +739,40 @@ class HomeMapViewController: UIViewController {
             let userLocation = CLLocation(latitude: (self.user_latitude), longitude: (self.user_longitude))
             let distancetodestination = selectedItem.distance(from: userLocation)
         
-            if distancetodestination < 60 {
-                let name_chosen = self.filteredpinlocationsdata[0].name
-                let question_chosen = self.filteredpinlocationsdata[0].question
-                let alert = UIAlertController(title: "Question of the \(name_chosen)", message: question_chosen, preferredStyle: .alert)
-                alert.addTextField { (textField) in
-                    textField.placeholder = "Please enter your answer"
-                }
-                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil))
-                alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
-                    self.user_answer = alert?.textFields![0].text ?? ""
-                    self.answercheck()
-                }))
-                self.present(alert, animated: true, completion: nil)
-            } else {
-                let alert = UIAlertController(title: "You are not in the correct location.", message: "You should be in 100 perimeter circle around the point.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
+            //MARK: CLOSED FOR TESTİNG
+            //MARK: Verification of Location: Perimeter is 35 meters
+//            if distancetodestination < 40 {
+//                let name_chosen = self.filteredpinlocationsdata[0].name
+//                let question_chosen = self.filteredpinlocationsdata[0].question
+//                let alert = UIAlertController(title: "Question of the \(name_chosen)", message: question_chosen, preferredStyle: .alert)
+//                alert.addTextField { (textField) in
+//                    textField.placeholder = "Please enter your answer"
+//                }
+//                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil))
+//                alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
+//                    self.user_answer = alert?.textFields![0].text ?? ""
+//                    self.answercheck()
+//                }))
+//                self.present(alert, animated: true, completion: nil)
+//            } else {
+//                let alert = UIAlertController(title: "You are not in the correct location.", message: "You should be in 100 perimeter circle around the point.", preferredStyle: .alert)
+//                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+//                self.present(alert, animated: true, completion: nil)
+//            }
+            
+            //MARK: WILL BE ERASED AFTER TESTING
+            let name_chosen = self.filteredpinlocationsdata[0].name
+            let question_chosen = self.filteredpinlocationsdata[0].question
+            let alert = UIAlertController(title: "Question of the \(name_chosen)", message: question_chosen, preferredStyle: .alert)
+            alert.addTextField { (textField) in
+                textField.placeholder = "Please enter your answer"
             }
+            alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil))
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
+                self.user_answer = alert?.textFields![0].text ?? ""
+                self.answercheck()
+            }))
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
