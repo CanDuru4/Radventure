@@ -24,12 +24,22 @@
                                     <constraint firstAttribute="width" constant="350" id="sFX-uz-lH8"/>
                                 </constraints>
                             </imageView>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="by Can Duru" textAlignment="center" minimumFontSize="21" translatesAutoresizingMaskIntoConstraints="NO" id="J1N-TT-ODX">
+                                <rect key="frame" x="142" y="792.66666666666663" width="109" height="25.333333333333371"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="AppColor1"/>
                         <constraints>
                             <constraint firstItem="t91-Xy-K6r" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="28g-6u-v9W"/>
+                            <constraint firstItem="J1N-TT-ODX" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Rcg-3t-u1C"/>
                             <constraint firstItem="t91-Xy-K6r" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="sEd-8K-rKo"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="J1N-TT-ODX" secondAttribute="bottom" id="yGX-r5-lRb"/>
                         </constraints>
                     </view>
                 </viewController>
