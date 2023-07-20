@@ -20,6 +20,7 @@ xcuserdata/
 ## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
 *.xcscmblueprint
 *.xccheckout
+**/xcuserdata/canduru04.xcuserdatad/xcschemes/xcschememanagement.plist
 
 ## compatibility with Xcode 3 and earlier (ignoring not required starting Xcode 4)
 build/
@@ -104,7 +105,7 @@ iOSInjectionProject/
 !*.xcodeproj/project.xcworkspace/
 !*.xcworkspace/contents.xcworkspacedata
 /*.gcno
-**/xcshareddata/WorkspaceSettings.xcsettings
+**/xcshareddata/WorkspaceSettings.xcsettingsü
 
 **/Radventure/GoogleService-Info.plist
 # End of https://www.toptal.com/developers/gitignore/api/xcode,swift,cocoapods
