@@ -176,14 +176,12 @@ class LogInViewController: UIViewController {
                                 self!.present(alert, animated: true, completion: nil)
                             } else {
                                 self?.updateUserDataLogIn(){
-                                    self?.dismiss(animated: true, completion: nil)
                                     self?.navigationController?.pushViewController(TabBarViewController(), animated: true)
                                     self?.navigationController?.setNavigationBarHidden(true, animated: true)
                                 }
                             }
                         } else {
                             self?.updateUserData(name: name!) {
-                                self?.dismiss(animated: true, completion: nil)
                                 self?.navigationController?.pushViewController(TabBarViewController(), animated: true)
                                 self?.navigationController?.setNavigationBarHidden(true, animated: true)
                             }
