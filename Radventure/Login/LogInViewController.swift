@@ -20,7 +20,7 @@ class LogInViewController: UIViewController {
     var emailField = UITextField()
     var passwordField = UITextField()
     var loginButton = UIButton()
-    
+    var db = Firestore.firestore()
     
     //MARK: Load
     override func viewDidLoad() {
@@ -161,14 +161,13 @@ class LogInViewController: UIViewController {
                 //MARK: Correct User Credentials
                 } else {
                     //MARK: Create User
-                    let db = Firestore.firestore()
                     let removetext = "@robcol.k12.tr"
                     var name = email
                     if let range = name!.range(of: removetext) {
                         name!.removeSubrange(range)
                     }
-                    let docRef = db.collection("users").document(Auth.auth().currentUser!.uid)
-                    docRef.getDocument { (document, error) in
+                    let docRef = self?.db.collection("users").document(Auth.auth().currentUser!.uid)
+                    docRef?.getDocument { (document, error) in
                         if let document = document, document.exists {
                             let data_document = document.data()?["login"] as? Int ?? 0
                             if data_document == 1 {
@@ -176,32 +175,44 @@ class LogInViewController: UIViewController {
                                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
                                 self!.present(alert, animated: true, completion: nil)
                             } else {
-                                db.collection("users").document(Auth.auth().currentUser!.uid).updateData(["login": 1]) { (error) in
-                                    if error != nil {
-                                    }
+                                self?.updateUserDataLogIn(){
+                                    self?.dismiss(animated: true, completion: nil)
+                                    self?.navigationController?.pushViewController(TabBarViewController(), animated: true)
+                                    self?.navigationController?.setNavigationBarHidden(true, animated: true)
                                 }
+                            }
+                        } else {
+                            self?.updateUserData(name: name!) {
                                 self?.dismiss(animated: true, completion: nil)
                                 self?.navigationController?.pushViewController(TabBarViewController(), animated: true)
                                 self?.navigationController?.setNavigationBarHidden(true, animated: true)
                             }
-                        } else {
-                            db.collection("users").document(Auth.auth().currentUser!.uid).setData([
-                                "name": name!,
-                                "score": 0,
-                                "login": 1
-                            ]) { err in
-                                if let err = err {
-                                    print("Error writing document: \(err)")
-                                } else {
-                                    print("Document successfully written!")
-                                }
-                            }
-                            self?.dismiss(animated: true, completion: nil)
-                            self?.navigationController?.pushViewController(TabBarViewController(), animated: true)
-                            self?.navigationController?.setNavigationBarHidden(true, animated: true)
                         }
                     }
                 }
+            }
+        }
+    }
+    
+    func updateUserDataLogIn(completion: @escaping () -> ()){
+        db.collection("users").document(Auth.auth().currentUser!.uid).updateData(["login": 1]) { (error) in
+            if error != nil {
+            }
+        }
+        completion()
+    }
+    
+    func updateUserData(name: String,completion: @escaping () -> ()){
+        db.collection("users").document(Auth.auth().currentUser!.uid).setData([
+            "name": name,
+            "score": 0,
+            "login": 1
+        ]) { err in
+            if let err = err {
+                print("Error writing document: \(err)")
+            } else {
+                print("Document successfully written!")
+                completion()
             }
         }
     }
