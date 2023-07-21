@@ -13,6 +13,7 @@
 		1F4EFC3C2A66A452009D0461 /* CustomAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EFC3B2A66A452009D0461 /* CustomAnnotation.swift */; };
 		1F4EFC402A66C8FC009D0461 /* RulesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EFC3F2A66C8FC009D0461 /* RulesViewController.swift */; };
 		1F4EFC422A67E372009D0461 /* ScoreboardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EFC412A67E372009D0461 /* ScoreboardTableViewCell.swift */; };
+		1FAD08392A6AA26300EA7D3F /* AppCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAD08382A6AA26300EA7D3F /* AppCheck.swift */; };
 		1FDC802A2A44927E00F9CC96 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC80292A44927E00F9CC96 /* AppDelegate.swift */; };
 		1FDC802C2A44927E00F9CC96 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC802B2A44927E00F9CC96 /* SceneDelegate.swift */; };
 		1FDC802E2A44927E00F9CC96 /* HomeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC802D2A44927E00F9CC96 /* HomeMapViewController.swift */; };
@@ -58,6 +59,8 @@
 		1F4EFC3B2A66A452009D0461 /* CustomAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnotation.swift; sourceTree = "<group>"; };
 		1F4EFC3F2A66C8FC009D0461 /* RulesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesViewController.swift; sourceTree = "<group>"; };
 		1F4EFC412A67E372009D0461 /* ScoreboardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreboardTableViewCell.swift; sourceTree = "<group>"; };
+		1FAD08362A6A92E700EA7D3F /* Radventure.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Radventure.entitlements; sourceTree = "<group>"; };
+		1FAD08382A6AA26300EA7D3F /* AppCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCheck.swift; sourceTree = "<group>"; };
 		1FDC80262A44927E00F9CC96 /* Radventure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Radventure.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FDC80292A44927E00F9CC96 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1FDC802B2A44927E00F9CC96 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -146,6 +149,7 @@
 		1FDC80282A44927E00F9CC96 /* Radventure */ = {
 			isa = PBXGroup;
 			children = (
+				1FAD08362A6A92E700EA7D3F /* Radventure.entitlements */,
 				1FDC805B2A44978000F9CC96 /* Helper */,
 				1FDC805C2A44978A00F9CC96 /* Home */,
 				1FDC805D2A44979B00F9CC96 /* Score Board */,
@@ -190,6 +194,7 @@
 			children = (
 				1F4EFC372A65E388009D0461 /* LocationManager.swift */,
 				1F4EFC3F2A66C8FC009D0461 /* RulesViewController.swift */,
+				1FAD08382A6AA26300EA7D3F /* AppCheck.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -255,6 +260,7 @@
 				1FDC80232A44927E00F9CC96 /* Frameworks */,
 				1FDC80242A44927E00F9CC96 /* Resources */,
 				6ABB7065490A64861D99990F /* [CP] Embed Pods Frameworks */,
+				1FAD08372A6A9E5000EA7D3F /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -398,6 +404,25 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		1FAD08372A6A9E5000EA7D3F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
+		};
 		6ABB7065490A64861D99990F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -489,6 +514,7 @@
 				1F4EFC3C2A66A452009D0461 /* CustomAnnotation.swift in Sources */,
 				1F4EFC362A65E110009D0461 /* LogInViewController.swift in Sources */,
 				1F4EFC422A67E372009D0461 /* ScoreboardTableViewCell.swift in Sources */,
+				1FAD08392A6AA26300EA7D3F /* AppCheck.swift in Sources */,
 				1F4EFC382A65E388009D0461 /* LocationManager.swift in Sources */,
 				1FDC802A2A44927E00F9CC96 /* AppDelegate.swift in Sources */,
 				1FDC80662A449A0C00F9CC96 /* ScoreboardViewController.swift in Sources */,
@@ -660,8 +686,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Radventure/Radventure.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = NV57XZ3KBV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Radventure/Info.plist;
@@ -695,8 +723,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Radventure/Radventure.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = NV57XZ3KBV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Radventure/Info.plist;
