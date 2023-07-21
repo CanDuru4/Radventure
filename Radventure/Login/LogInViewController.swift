@@ -21,6 +21,9 @@ class LogInViewController: UIViewController {
     var passwordField = UITextField()
     var loginButton = UIButton()
     var db = Firestore.firestore()
+    var loggedin = 0
+    var account_check = 0
+    var isLoggedInOnAnotherDevice = false
     
     //MARK: Load
     override func viewDidLoad() {
@@ -133,31 +136,123 @@ class LogInViewController: UIViewController {
     
     
     //MARK: Log In Button Action
-    @objc func logIn(){
-        
-        
+//    @objc func logIn(){
+//
+//
+//        //MARK: Validate All Fields Filled
+//        let error = validateFields()
+//        account_check = 0
+//
+//        //MARK: Not Filled
+//        if error != nil {
+//            let alert = UIAlertController(title: "Please fill the all fields.", message: "", preferredStyle: .alert)
+//            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+//            self.present(alert, animated: true, completion: nil)
+//
+//            //MARK: Filled
+//        } else {
+//            let email = emailField.text?.lowercased()
+//            let password = passwordField.text
+//            Auth.auth().signIn(withEmail: email ?? "", password: password ?? "") { [weak self] authResult, error in
+//              guard let strongSelf = self else { return }
+//                //MARK: Wrong User Credentials
+//                if error != nil {
+//                    let alert = UIAlertController(title: "Credentials are not correct.", message: "Check your email and/or password.", preferredStyle: .alert)
+//                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+//                    strongSelf.present(alert, animated: true, completion: nil)
+//
+//                //MARK: Correct User Credentials
+//                } else {
+//                    //MARK: Create User
+//                    let removetext = "@robcol.k12.tr"
+//                    var name = email
+//                    if let range = name!.range(of: removetext) {
+//                        name!.removeSubrange(range)
+//                    }
+//                    self?.getUserData {
+//                        if self?.account_check == 1{
+//                            if self?.loggedin == 1 {
+//                                let alert = UIAlertController(title: "Logged in another device", message: "Please log out in another device. If you do not have access to your device, please get in contact with your administrator.", preferredStyle: .alert)
+//                                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+//                                self!.present(alert, animated: true, completion: nil)
+//                            } else {
+//                                self?.updateUserDataLogIn(){
+//                                    self?.navigationController?.pushViewController(TabBarViewController(), animated: true)
+//                                    self?.navigationController?.setNavigationBarHidden(true, animated: true)
+//                                }
+//                            }
+//                        } else if self?.account_check == 0{
+//                            self?.updateUserData(name: name!) {
+//                                self?.navigationController?.pushViewController(TabBarViewController(), animated: true)
+//                                self?.navigationController?.setNavigationBarHidden(true, animated: true)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    func getUserData(completion: @escaping () -> ()){
+//        let docRef = self.db.collection("users").document(Auth.auth().currentUser!.uid)
+//        docRef.getDocument { (document, error) in
+//            if let document = document, document.exists {
+//                let data_document = document.data()?["login"] as? Int ?? 0
+//                self.loggedin = data_document
+//                self.account_check = 1
+//            } else {
+//                self.account_check = 0
+//            }
+//            completion()
+//        }
+//    }
+//
+//    func updateUserDataLogIn(completion: @escaping () -> ()){
+//        db.collection("users").document(Auth.auth().currentUser!.uid).updateData(["login": 1]) { (error) in
+//            if error != nil {
+//            }
+//        }
+//        completion()
+//    }
+//
+//    func updateUserData(name: String,completion: @escaping () -> ()){
+//        db.collection("users").document(Auth.auth().currentUser!.uid).setData([
+//            "name": name,
+//            "score": 0,
+//            "login": 1
+//        ]) { err in
+//            if let err = err {
+//                print("Error writing document: \(err)")
+//            } else {
+//                print("Document successfully written!")
+//                completion()
+//            }
+//        }
+//    }
+     
+    @objc func logIn() {
         //MARK: Validate All Fields Filled
         let error = validateFields()
-        
+        account_check = 0
         
         //MARK: Not Filled
         if error != nil {
-            let alert = UIAlertController(title: "Please fill the all fields.", message: "", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Please fill in all fields.", message: "", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             
-            //MARK: Filled
+        //MARK: Filled
         } else {
             let email = emailField.text?.lowercased()
             let password = passwordField.text
             Auth.auth().signIn(withEmail: email ?? "", password: password ?? "") { [weak self] authResult, error in
-              guard let strongSelf = self else { return }
+                guard let strongSelf = self else { return }
                 //MARK: Wrong User Credentials
-                if error != nil {
-                    let alert = UIAlertController(title: "Credentials are not correct. Check your email and password.", message: "", preferredStyle: .alert)
+                if let error = error {
+                    let alert = UIAlertController(title: "Credentials are not correct.", message: "Check your email and/or password.", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
                     strongSelf.present(alert, animated: true, completion: nil)
-
+                    
                 //MARK: Correct User Credentials
                 } else {
                     //MARK: Create User
@@ -166,24 +261,21 @@ class LogInViewController: UIViewController {
                     if let range = name!.range(of: removetext) {
                         name!.removeSubrange(range)
                     }
-                    let docRef = self?.db.collection("users").document(Auth.auth().currentUser!.uid)
-                    docRef?.getDocument { (document, error) in
-                        if let document = document, document.exists {
-                            let data_document = document.data()?["login"] as? Int ?? 0
-                            if data_document == 1 {
-                                let alert = UIAlertController(title: "Logged in another device", message: "Please log out in another device. If you do not have access to your device, please get in contact with your administrator.", preferredStyle: .alert)
-                                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-                                self!.present(alert, animated: true, completion: nil)
-                            } else {
-                                self?.updateUserDataLogIn(){
-                                    self?.navigationController?.pushViewController(TabBarViewController(), animated: true)
-                                    self?.navigationController?.setNavigationBarHidden(true, animated: true)
-                                }
-                            }
+                    self?.getUserData {
+                        if self?.isLoggedInOnAnotherDevice == true {
+                            let alert = UIAlertController(title: "Logged in another device", message: "Please log out on another device. If you do not have access to your device, please get in contact with your administrator.", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                            self?.present(alert, animated: true, completion: nil)
+                            
                         } else {
-                            self?.updateUserData(name: name!) {
-                                self?.navigationController?.pushViewController(TabBarViewController(), animated: true)
-                                self?.navigationController?.setNavigationBarHidden(true, animated: true)
+                            if self?.account_check == 1 {
+                                self?.navigateToTabBarViewController()
+                                self?.updateUserDataLogIn() {
+                                }
+                            } else if self?.account_check == 0 {
+                                self?.navigateToTabBarViewController()
+                                self?.updateUserData(name: name!) {
+                                }
                             }
                         }
                     }
@@ -191,16 +283,37 @@ class LogInViewController: UIViewController {
             }
         }
     }
-    
-    func updateUserDataLogIn(completion: @escaping () -> ()){
+
+    func navigateToTabBarViewController() {
+        self.navigationController?.pushViewController(TabBarViewController(), animated: true)
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+
+    func getUserData(completion: @escaping () -> ()) {
+        let docRef = self.db.collection("users").document(Auth.auth().currentUser!.uid)
+        docRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                let data_document = document.data()?["login"] as? Int ?? 0
+                self.loggedin = data_document
+                self.isLoggedInOnAnotherDevice = data_document == 1
+                self.account_check = 1
+            } else {
+                self.account_check = 0
+            }
+            completion()
+        }
+    }
+
+    func updateUserDataLogIn(completion: @escaping () -> ()) {
         db.collection("users").document(Auth.auth().currentUser!.uid).updateData(["login": 1]) { (error) in
             if error != nil {
+                // Handle the error if needed
             }
+            completion()
         }
-        completion()
     }
-    
-    func updateUserData(name: String,completion: @escaping () -> ()){
+
+    func updateUserData(name: String, completion: @escaping () -> ()) {
         db.collection("users").document(Auth.auth().currentUser!.uid).setData([
             "name": name,
             "score": 0,
@@ -214,8 +327,8 @@ class LogInViewController: UIViewController {
             }
         }
     }
-     
-    
+
+
         
     //MARK: Validate All Fields
     func validateFields() -> String? {
