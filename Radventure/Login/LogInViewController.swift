@@ -152,7 +152,7 @@ class LogInViewController: UIViewController {
             Auth.auth().signIn(withEmail: email ?? "", password: password ?? "") { [weak self] authResult, error in
                 guard let strongSelf = self else { return }
                 //MARK: Wrong User Credentials
-                if let error = error {
+                if error != nil {
                     let alert = UIAlertController(title: "Credentials are not correct.", message: "Check your email and/or password.", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
                     strongSelf.present(alert, animated: true, completion: nil)
