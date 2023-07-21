@@ -132,104 +132,8 @@ class LogInViewController: UIViewController {
             loginButton.heightAnchor.constraint(equalToConstant: 35),
         ])
     }
-    
-    
-    
-    //MARK: Log In Button Action
-//    @objc func logIn(){
-//
-//
-//        //MARK: Validate All Fields Filled
-//        let error = validateFields()
-//        account_check = 0
-//
-//        //MARK: Not Filled
-//        if error != nil {
-//            let alert = UIAlertController(title: "Please fill the all fields.", message: "", preferredStyle: .alert)
-//            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-//            self.present(alert, animated: true, completion: nil)
-//
-//            //MARK: Filled
-//        } else {
-//            let email = emailField.text?.lowercased()
-//            let password = passwordField.text
-//            Auth.auth().signIn(withEmail: email ?? "", password: password ?? "") { [weak self] authResult, error in
-//              guard let strongSelf = self else { return }
-//                //MARK: Wrong User Credentials
-//                if error != nil {
-//                    let alert = UIAlertController(title: "Credentials are not correct.", message: "Check your email and/or password.", preferredStyle: .alert)
-//                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-//                    strongSelf.present(alert, animated: true, completion: nil)
-//
-//                //MARK: Correct User Credentials
-//                } else {
-//                    //MARK: Create User
-//                    let removetext = "@robcol.k12.tr"
-//                    var name = email
-//                    if let range = name!.range(of: removetext) {
-//                        name!.removeSubrange(range)
-//                    }
-//                    self?.getUserData {
-//                        if self?.account_check == 1{
-//                            if self?.loggedin == 1 {
-//                                let alert = UIAlertController(title: "Logged in another device", message: "Please log out in another device. If you do not have access to your device, please get in contact with your administrator.", preferredStyle: .alert)
-//                                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-//                                self!.present(alert, animated: true, completion: nil)
-//                            } else {
-//                                self?.updateUserDataLogIn(){
-//                                    self?.navigationController?.pushViewController(TabBarViewController(), animated: true)
-//                                    self?.navigationController?.setNavigationBarHidden(true, animated: true)
-//                                }
-//                            }
-//                        } else if self?.account_check == 0{
-//                            self?.updateUserData(name: name!) {
-//                                self?.navigationController?.pushViewController(TabBarViewController(), animated: true)
-//                                self?.navigationController?.setNavigationBarHidden(true, animated: true)
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    func getUserData(completion: @escaping () -> ()){
-//        let docRef = self.db.collection("users").document(Auth.auth().currentUser!.uid)
-//        docRef.getDocument { (document, error) in
-//            if let document = document, document.exists {
-//                let data_document = document.data()?["login"] as? Int ?? 0
-//                self.loggedin = data_document
-//                self.account_check = 1
-//            } else {
-//                self.account_check = 0
-//            }
-//            completion()
-//        }
-//    }
-//
-//    func updateUserDataLogIn(completion: @escaping () -> ()){
-//        db.collection("users").document(Auth.auth().currentUser!.uid).updateData(["login": 1]) { (error) in
-//            if error != nil {
-//            }
-//        }
-//        completion()
-//    }
-//
-//    func updateUserData(name: String,completion: @escaping () -> ()){
-//        db.collection("users").document(Auth.auth().currentUser!.uid).setData([
-//            "name": name,
-//            "score": 0,
-//            "login": 1
-//        ]) { err in
-//            if let err = err {
-//                print("Error writing document: \(err)")
-//            } else {
-//                print("Document successfully written!")
-//                completion()
-//            }
-//        }
-//    }
      
+    //MARK: Log In Function
     @objc func logIn() {
         //MARK: Validate All Fields Filled
         let error = validateFields()
@@ -284,11 +188,13 @@ class LogInViewController: UIViewController {
         }
     }
 
+    //MARK: Navigation to TabBarViewController
     func navigateToTabBarViewController() {
         self.navigationController?.pushViewController(TabBarViewController(), animated: true)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
+    //MARK: Getting User Login Data
     func getUserData(completion: @escaping () -> ()) {
         let docRef = self.db.collection("users").document(Auth.auth().currentUser!.uid)
         docRef.getDocument { (document, error) in
@@ -304,6 +210,7 @@ class LogInViewController: UIViewController {
         }
     }
 
+    //MARK: Updating User Data (previously logged in)
     func updateUserDataLogIn(completion: @escaping () -> ()) {
         db.collection("users").document(Auth.auth().currentUser!.uid).updateData(["login": 1]) { (error) in
             if error != nil {
@@ -313,6 +220,7 @@ class LogInViewController: UIViewController {
         }
     }
 
+    //MARK: Creating User Data (previously not logged in)
     func updateUserData(name: String, completion: @escaping () -> ()) {
         db.collection("users").document(Auth.auth().currentUser!.uid).setData([
             "name": name,
