@@ -2,7 +2,7 @@
 
 Radventure Application for multipurpose usage;
 
-## [1.0.0] (1) (2023-07-20)
+## [1.1.0] (1) (2023-07-20)
 - Ver. 1.1.0 buid is ready for testing.
 - Adjusted to iOS 14.0.
 - Updated login function and fixed alert bug.
