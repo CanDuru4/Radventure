@@ -5,6 +5,7 @@
 //  Created by Can Duru on 22.06.2023.
 //
 
+//MARK: Import
 import UIKit
 import MapKit
 import CoreLocation
@@ -14,18 +15,20 @@ import FirebaseDatabase
 import AVFoundation
 import AudioToolbox
 import FirebaseAuth
+import SceneKit
 
+//MARK: Pin Data Structure
 struct PinLocationsStructure{
     let latitude, longitude: Double
     let name, question, answer: String
 }
 
-class HomeMapViewController: UIViewController {
+class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
 
 //MARK: Set Up
 
     
-    //MARK: Variable Setup
+    //MARK: Variable Set Up
     var center_coordinate = CLLocationCoordinate2D(latitude: 41.066993155414536, longitude: 29.034859552149705)
     var place_name = ""
     var user_answer = ""
@@ -53,12 +56,13 @@ class HomeMapViewController: UIViewController {
     var user_latitude = 0.0
     var user_longitude = 0.0
     
-    //MARK: Map Setup
+    //MARK: Map Set Up
     private let map: MKMapView = {
         let map = MKMapView()
         return map
     }()
     
+    //MARK: Pin Location Data Set Up
     var pinlocationsdata:[PinLocationsStructure] = [] {
         didSet{
             //MARK: Annotate Pin Locations
@@ -77,11 +81,20 @@ class HomeMapViewController: UIViewController {
     var done_array = [String]()
     var filteredpinlocationsdata:[PinLocationsStructure] = []
     
+    //MARK: Compass Setup
+    var sceneView: UIView = {
+        let sceneView = UIView()
+        return sceneView
+    }()
+    let canvasView = CanvasView()
+    let locationManager = CLLocationManager()
+
     
     
 //MARK: Load
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         //MARK: General Load
         view.backgroundColor = UIColor(named: "AppColor1")
         self.navigationController?.setNavigationBarHidden(true, animated: true)
@@ -92,7 +105,16 @@ class HomeMapViewController: UIViewController {
         mapLocation()
         setButton()
         map.delegate = self
+
+        //MARK: Compass Delegate
+        locationManager.delegate = self
+        locationManager.startUpdatingHeading()
+        
+        //MARK: User Info Load
         getUserData(){
+            
+            
+            //MARK: User Started Before
             if self.start_check == 1 {
                 self.contactDatabase {
                     let hour = Calendar.current.component(.hour, from: Date())
@@ -106,7 +128,6 @@ class HomeMapViewController: UIViewController {
                         self.forceQuitButtonCheck = 0
                         self.startButtoncheck = 1
                         self.score = 0
-                        self.timer.invalidate()
                         self.timer_label.invalidate()
                         self.timerLabel.text = "00:00"
                         for PinAnnotation in self.map.annotations {
@@ -131,7 +152,6 @@ class HomeMapViewController: UIViewController {
                         self.forceQuitButtonCheck = 0
                         self.startButtoncheck = 1
                         self.score = 0
-                        self.timer.invalidate()
                         self.timer_label.invalidate()
                         self.timerLabel.text = "00:00"
                         for PinAnnotation in self.map.annotations {
@@ -167,24 +187,32 @@ class HomeMapViewController: UIViewController {
                         }
                     }
                 }
-            } else {
+            }
+            //MARK: User Starting First Time
+            else {
                 self.startButton.isHidden = false
                 self.forceQuitButton.isHidden = true
                 self.logOutButton.isHidden = false
-                //MARK: Pin Location Data
                 self.pinlocationsdata = []
                 self.done_array = []
             }
         }
 
         
-        //MARK: Button Setup
+        //MARK: Back Button Set Up
         let backButton = UIBarButtonItem()
         backButton.title = "Back"
         self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
     }
    
-    
+//MARK: Location Manager Function for Compass
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        let angle = newHeading.trueHeading * .pi / 180
+        UIView.animate(withDuration:0.1){
+            self.canvasView.transform = CGAffineTransform(rotationAngle: -CGFloat(angle))
+        }
+    }
+
     
 //MARK: Map
     func mapLocation(){
@@ -228,8 +256,6 @@ class HomeMapViewController: UIViewController {
         let currentlocationButton = UIButton(type: .custom)
         currentlocationButton.backgroundColor = UIColor(named: "AppColor1")
         currentlocationButton.setImage(UIImage(systemName: "location.fill")?.resized(to: CGSize(width: 25, height: 25)).withTintColor(.white), for: .normal)
-//        currentlocationButton.backgroundColor = UIColor(white: 1, alpha: 0.8)
-//        currentlocationButton.setImage(UIImage(systemName: "location.fill")?.resized(to: CGSize(width: 25, height: 25)).withTintColor(UIColor(named: "AppColor1")!), for: .normal)
         currentlocationButton.addTarget(self, action: #selector(pressed), for: .touchUpInside)
         view.addSubview(currentlocationButton)
         
@@ -242,8 +268,6 @@ class HomeMapViewController: UIViewController {
         let zoomOutButton = UIButton(type: .custom)
         zoomOutButton.backgroundColor = UIColor(named: "AppColor1")
         zoomOutButton.setImage(UIImage(systemName: "minus.square.fill")?.resized(to: CGSize(width: 25, height: 25)).withTintColor(.white), for: .normal)
-//        zoomOutButton.backgroundColor = UIColor(white: 1, alpha: 0.8)
-//        zoomOutButton.setImage(UIImage(systemName: "minus.square.fill")?.resized(to: CGSize(width: 25, height: 25)).withTintColor(UIColor(named: "AppColor1")!), for: .normal)
         zoomOutButton.addTarget(self, action: #selector(zoomOut), for: .touchUpInside)
         view.addSubview(zoomOutButton)
         
@@ -256,8 +280,6 @@ class HomeMapViewController: UIViewController {
         let zoomInButton = UIButton(type: .custom)
         zoomInButton.backgroundColor = UIColor(named: "AppColor1")
         zoomInButton.setImage(UIImage(systemName: "plus.square.fill")?.resized(to: CGSize(width: 25, height: 25)).withTintColor(.white), for: .normal)
-//        zoomInButton.backgroundColor = UIColor(white: 1, alpha: 0.8)
-//        zoomInButton.setImage(UIImage(systemName: "plus.square.fill")?.resized(to: CGSize(width: 25, height: 25)).withTintColor(UIColor(named: "AppColor1")!), for: .normal)
         zoomInButton.addTarget(self, action: #selector(zoomIn), for: .touchUpInside)
         view.addSubview(zoomInButton)
         
@@ -310,9 +332,21 @@ class HomeMapViewController: UIViewController {
         
         timerLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([timerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15), timerLabel.topAnchor.constraint(equalTo: forceQuitButton.bottomAnchor, constant: 2), timerLabel.widthAnchor.constraint(equalToConstant: 100), timerLabel.heightAnchor.constraint(equalToConstant: 30)])
+        
+        //MARK: Compass View
+        canvasView.backgroundColor = UIColor(named: "AppColor1")
+        view.addSubview(canvasView)
+        canvasView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([canvasView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10), canvasView.centerYAnchor.constraint(equalTo: startButton.centerYAnchor), canvasView.widthAnchor.constraint(equalToConstant: 50), canvasView.heightAnchor.constraint(equalToConstant: 50)])
+        canvasView.layer.cornerRadius = 25
+        canvasView.layer.masksToBounds = true
+        
+        view.addSubview(sceneView)
     }
 
-    //MARK: Current Location Button Action
+    
+    
+//MARK: Current Location Button Action
     @objc func pressed() {
         LocationManager.shared.getUserLocation { [weak self] location in DispatchQueue.main.async {
                 guard let strongSelf = self else {
@@ -324,13 +358,13 @@ class HomeMapViewController: UIViewController {
     }
     
     var zoom_count = 14
-    //MARK: Zoom In Button Action
+//MARK: Zoom In Button Action
     @objc func zoomIn() {
         zoomMap(byFactor: 0.5)
         zoom_count = zoom_count-1
     }
 
-    //MARK: Zoom Out Button Action
+//MARK: Zoom Out Button Action
     @objc func zoomOut() {
         if zoom_count < 14 {
             zoomMap(byFactor: 2)
@@ -338,14 +372,12 @@ class HomeMapViewController: UIViewController {
         }
     }
     
-    //MARK: Rules Button Action
+//MARK: Rules Button Action
     @objc func rules(){
-//        self.navigationController?.setNavigationBarHidden(false, animated: true)
-//        self.navigationController?.pushViewController(RulesViewController(), animated: true)
         self.present(RulesViewController(), animated: true)
     }
     
-    //MARK: Log Out Button Action
+//MARK: Log Out Button Action
     @objc func logOutAction(){
         let firebaseAuth = Auth.auth()
         updateUserlogin {
@@ -381,7 +413,7 @@ class HomeMapViewController: UIViewController {
         }
     }
     
-    //MARK: Start Button Action
+//MARK: Start Button Action
     var startingHourInt = 0
     var startingMinuteInt = 0
     var finishHourIntStart = 0
@@ -438,79 +470,10 @@ class HomeMapViewController: UIViewController {
             }
         }
     }
-    
-
-//    //MARK: Create Score
-//    func createuserData(uid1: String){
-//        //MARK: Create User
-//        let db = Firestore.firestore()
-//        db.collection("users").document(uid1).setData([
-//            "score": 0
-//        ]) { err in
-//            if let err = err {
-//                print("Error writing document: \(err)")
-//            } else {
-//                print("Document successfully written!")
-//            }
-//        }
-//    }
-//    //MARK: Get User Path
-//    func userid(name: String, completion: @escaping (String) -> Void){
-//        let db = Firestore.firestore()
-//        let user = Auth.auth().currentUser
-//        let uid = user!.uid
-//        db.collection("users").whereField("uid", isEqualTo: uid)
-//            .getDocuments() { (querySnapshot, err) in
-//                if err != nil {
-//                    let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
-//                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-//                    self.present(alert, animated: true, completion: nil)
-//                } else {
-//                    if querySnapshot!.documents.count == 0 {
-//                        self.createuserData(uid1: uid)
-//                    } else {
-//                        for document in (querySnapshot!.documents) {
-//                            let useruid = document.documentID
-//                            completion(useruid)
-//                        }
-//                    }
-//                }
-//            }
-//    }
-
-    //MARK: Get User Data
-    func getUserData(completion: @escaping () -> ()){
-        let db = Firestore.firestore()
-        let docRef = db.collection("users").document(useruid!)
-        docRef.getDocument { (document, error) in
-            if let document = document, document.exists {
-                self.start_check = document.data()?["start"] as? Int ?? 0
-                self.done_array = document.data()?["locations"] as? Array ?? []
-                self.score = document.data()?["score"] as! Int
-                self.RandomRouteChoice = document.data()?["route"] as? String ?? "coordinates"
-                completion()
-            } else {
-                print("Document does not exist")
-            }
-        }
-    }
 
     
-    //MARK: Update Score with starting
-    func updateUserDatato0(){
-        db.collection("users").document(self.useruid!).updateData(["score": 0, "start": 1,"time": "", "uid": self.useruid!, "locations": [String](), "route": self.RandomRouteChoice]) { (error) in
-            if error != nil {
-                let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-            }
-        }
-    }
-        
     
-    
-    
-    //MARK: Force Quit Button Action
+//MARK: Force Quit Button Action
     @objc func forceQuitButtonAction(){
         let alert = UIAlertController(title: "Enter the Password", message: "Communicate with your administrator to enter the password.", preferredStyle: .alert)
         alert.addTextField { (textField) in
@@ -524,7 +487,9 @@ class HomeMapViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    //MARK: Check Force Quit Password Function
+    
+
+//MARK: Check Force Quit Password Function
     func forceQuitFunction(){
         contactDatabasePassword {
             if self.passwordKeyDatabase == self.forceQuitPassword{
@@ -538,7 +503,6 @@ class HomeMapViewController: UIViewController {
                 self.forceQuitButtonCheck = 0
                 self.startButtoncheck = 1
                 self.score = 0
-                self.timer.invalidate()
                 self.timer_label.invalidate()
                 self.timerLabel.text = "00:00"
                 for PinAnnotation in self.map.annotations {
@@ -561,7 +525,7 @@ class HomeMapViewController: UIViewController {
     
     
     
-    //MARK: Zoom in and Out Function
+//MARK: Zoom in and Out Function
     func zoomMap(byFactor delta: Double) {
         var region: MKCoordinateRegion = self.map.region
         var span: MKCoordinateSpan = map.region.span
@@ -572,7 +536,7 @@ class HomeMapViewController: UIViewController {
     }
     
     
-    //MARK: Timer Label Function
+//MARK: Timer Label Function
     var timer_label = Timer()
     var finishHourInt = 0
     var finishMinuteInt = 0
@@ -600,7 +564,6 @@ class HomeMapViewController: UIViewController {
                     self.forceQuitButtonCheck = 0
                     self.startButtoncheck = 1
                     self.timer_label.invalidate()
-                    self.timer.invalidate()
                     self.timerLabel.text = "00:00"
                     for PinAnnotation in self.map.annotations {
                         self.map.removeAnnotation(PinAnnotation)
@@ -633,22 +596,8 @@ class HomeMapViewController: UIViewController {
         })
     }
     
-    func timer_database(completion: @escaping () -> ()){
-        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("time")
-        ref.observeSingleEvent(of: .value) { snapshot in
-            for case let child as DataSnapshot in snapshot.children {
-                guard let dict = child.value as? [String:Any] else {
-                    return
-                }
-                self.finishHourInt = dict["finishHourInt"] as! Int
-                self.finishMinuteInt = dict["finishMinuteInt"] as! Int
-                completion()
-            }
-        }
-    }
     
-    
-    //MARK: Pin Location Annotation
+//MARK: Pin Location Annotation
     var PinAnnotations: CustomPointAnnotation!
     var PinAnnotationView:MKPinAnnotationView!
     
@@ -664,29 +613,10 @@ class HomeMapViewController: UIViewController {
             PinAnnotation.customidentifier = "pinAnnotation"
             map.addAnnotation(PinAnnotation)
         }
-//        let locationCount = pinlocationsdata.count
-//        for i in (0..<locationCount){
-//            let coordinate = CLLocationCoordinate2DMake(CLLocationDegrees(pinlocationsdata[i].latitude), CLLocationDegrees(pinlocationsdata[i].longitude))
-//            let PinAnnotation = CustomPointAnnotation()
-//            PinAnnotation.coordinate = coordinate
-//            PinAnnotation.title = pinlocationsdata[i].name
-//            PinAnnotation.customidentifier = "pinAnnotation"
-//            map.addAnnotation(PinAnnotation)
-//        }
     }
+
     
-    var timer = Timer()
-//    func PinLocationDataRepeat(){
-//        timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
-//            self.PinLocationData(){
-//
-//            }
-//        })
-//    }
-    
-    
-    
-    //MARK: Location Data
+//MARK: Location Data
     func countPins(choice_pin: String, completion: @escaping () -> ()){
         let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child(choice_pin)
         ref.observe(DataEventType.value, with: { (snapshot) in
@@ -731,7 +661,7 @@ class HomeMapViewController: UIViewController {
         }
     }
     
-    //MARK: Display Question Function
+//MARK: Display Question Function
     @objc func displayQuestion(){
         location_check {
             self.filteredpinlocationsdata = self.filteredpinlocationsdata.filter { ($0.name.lowercased().contains(self.place_name.lowercased())) }
@@ -760,7 +690,6 @@ class HomeMapViewController: UIViewController {
 //                self.present(alert, animated: true, completion: nil)
 //            }
             
-            //MARK: WILL BE ERASED AFTER TESTING
             let name_chosen = self.filteredpinlocationsdata[0].name
             let question_chosen = self.filteredpinlocationsdata[0].question
             let alert = UIAlertController(title: "Question of the \(name_chosen)", message: question_chosen, preferredStyle: .alert)
@@ -776,6 +705,7 @@ class HomeMapViewController: UIViewController {
         }
     }
     
+//MARK: User Location for Area Check
     func location_check(completion: @escaping () -> ()) {
         LocationManager.shared.getUserLocation { [weak self] location in DispatchQueue.main.async {
             guard self != nil else {
@@ -789,7 +719,7 @@ class HomeMapViewController: UIViewController {
     }
     
     
-    //MARK: Check Answer Function
+//MARK: Check Answer Function
     func answercheck(){
         let real_answer = filteredpinlocationsdata[0].answer.lowercased()
         if user_answer.lowercased() == real_answer {
@@ -821,7 +751,6 @@ class HomeMapViewController: UIViewController {
                 forceQuitButtonCheck = 0
                 startButtoncheck = 1
                 timer_label.invalidate()
-                timer.invalidate()
                 timerLabel.text = "00:00"
                 for PinAnnotation in self.map.annotations {
                     self.map.removeAnnotation(PinAnnotation)
@@ -841,9 +770,26 @@ class HomeMapViewController: UIViewController {
         }
     }
 
+   
+    
+//MARK: Timer Data
+    func timer_database(completion: @escaping () -> ()){
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("time")
+        ref.observeSingleEvent(of: .value) { snapshot in
+            for case let child as DataSnapshot in snapshot.children {
+                guard let dict = child.value as? [String:Any] else {
+                    return
+                }
+                self.finishHourInt = dict["finishHourInt"] as! Int
+                self.finishMinuteInt = dict["finishMinuteInt"] as! Int
+                completion()
+            }
+        }
+    }
+        
     
     
-    //MARK: Communication with Database w/ Completion
+//MARK: Communication with Database w/ Completion
     func contactDatabase(completion: @escaping () -> ()){
         let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("time")
         ref.observeSingleEvent(of: .value) { snapshot in
@@ -860,7 +806,9 @@ class HomeMapViewController: UIViewController {
         }
     }
     
-    //MARK: Communication with Database for Password w/ Completion
+    
+    
+//MARK: Communication with Database for Password w/ Completion
     func contactDatabasePassword(completion: @escaping () -> ()){
         let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("password")
         ref.observeSingleEvent(of: .value) { snapshot in
@@ -870,6 +818,38 @@ class HomeMapViewController: UIViewController {
                 }
                 self.passwordKeyDatabase = dict["password"] as! String
                 completion()
+            }
+        }
+    }
+    
+    
+    
+//MARK: Get User Data
+    func getUserData(completion: @escaping () -> ()){
+        let db = Firestore.firestore()
+        let docRef = db.collection("users").document(useruid!)
+        docRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                self.start_check = document.data()?["start"] as? Int ?? 0
+                self.done_array = document.data()?["locations"] as? Array ?? []
+                self.score = document.data()?["score"] as! Int
+                self.RandomRouteChoice = document.data()?["route"] as? String ?? "coordinates"
+                completion()
+            } else {
+                print("Document does not exist")
+            }
+        }
+    }
+ 
+        
+        
+//MARK: Update Score with starting
+    func updateUserDatato0(){
+        db.collection("users").document(self.useruid!).updateData(["score": 0, "start": 1,"time": "", "uid": self.useruid!, "locations": [String](), "route": self.RandomRouteChoice]) { (error) in
+            if error != nil {
+                let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             }
         }
     }
@@ -997,6 +977,9 @@ extension Date {
     }
 }
 
+
+
+//MARK: UIButton Extension for Underlined Text
 extension UIButton {
     func underline() {
         guard let title = self.titleLabel else { return }

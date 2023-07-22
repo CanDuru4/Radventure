@@ -2,6 +2,13 @@
 
 Radventure Application for multipurpose usage;
 
+## [1.1.0] (1) (2023-07-20)
+- Ver. 1.1.0 buid is ready for testing.
+- Adjusted to iOS 14.0.
+- Updated login function and fixed alert bug.
+- Added compass feature to home page.
+- Added Firebase Analytics, Messaging, Crashlytics, Performance, App Check, In-app Messaging features. 
+
 ## [1.0.0] (1) (2023-07-20)
 - Ver. 1.0.0 build is ready for testing. 
 - Login page is created with Firebase.

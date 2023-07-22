@@ -15,11 +15,12 @@ class RulesViewController: UIViewController, WKNavigationDelegate, WKUIDelegate 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        //MARK: Set Up
+        //MARK: Map Set Up
         let webView = WKWebView()
         webView.navigationDelegate = self
         view = webView
         
+        //MARK: Back Button Set Up
         let backButton = UIButton()
         backButton.setImage(UIImage(systemName: "arrow.backward")?.withTintColor(UIColor(named: "AppColor1")!, renderingMode: .alwaysOriginal), for: .normal)
         backButton.addTarget(self, action: #selector(self_dismiss), for: .touchUpInside)
@@ -38,6 +39,9 @@ class RulesViewController: UIViewController, WKNavigationDelegate, WKUIDelegate 
         webView.allowsBackForwardNavigationGestures = false
     }
     
+    
+    
+    //MARK: Back Button Action
     @objc func self_dismiss(){
         self.dismiss(animated: true)
     }
