@@ -14,6 +14,7 @@
 		1F4EFC402A66C8FC009D0461 /* RulesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EFC3F2A66C8FC009D0461 /* RulesViewController.swift */; };
 		1F4EFC422A67E372009D0461 /* ScoreboardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EFC412A67E372009D0461 /* ScoreboardTableViewCell.swift */; };
 		1FAD08392A6AA26300EA7D3F /* AppCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAD08382A6AA26300EA7D3F /* AppCheck.swift */; };
+		1FD758962A6C165200EA4781 /* CompassCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD758952A6C165200EA4781 /* CompassCanvas.swift */; };
 		1FDC802A2A44927E00F9CC96 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC80292A44927E00F9CC96 /* AppDelegate.swift */; };
 		1FDC802C2A44927E00F9CC96 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC802B2A44927E00F9CC96 /* SceneDelegate.swift */; };
 		1FDC802E2A44927E00F9CC96 /* HomeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC802D2A44927E00F9CC96 /* HomeMapViewController.swift */; };
@@ -61,6 +62,7 @@
 		1F4EFC412A67E372009D0461 /* ScoreboardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreboardTableViewCell.swift; sourceTree = "<group>"; };
 		1FAD08362A6A92E700EA7D3F /* Radventure.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Radventure.entitlements; sourceTree = "<group>"; };
 		1FAD08382A6AA26300EA7D3F /* AppCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCheck.swift; sourceTree = "<group>"; };
+		1FD758952A6C165200EA4781 /* CompassCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCanvas.swift; sourceTree = "<group>"; };
 		1FDC80262A44927E00F9CC96 /* Radventure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Radventure.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FDC80292A44927E00F9CC96 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1FDC802B2A44927E00F9CC96 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 				1F4EFC372A65E388009D0461 /* LocationManager.swift */,
 				1F4EFC3F2A66C8FC009D0461 /* RulesViewController.swift */,
 				1FAD08382A6AA26300EA7D3F /* AppCheck.swift */,
+				1FD758952A6C165200EA4781 /* CompassCanvas.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -512,6 +515,7 @@
 				1FDC80622A44984600F9CC96 /* TabBarViewController.swift in Sources */,
 				1FDC802E2A44927E00F9CC96 /* HomeMapViewController.swift in Sources */,
 				1F4EFC3C2A66A452009D0461 /* CustomAnnotation.swift in Sources */,
+				1FD758962A6C165200EA4781 /* CompassCanvas.swift in Sources */,
 				1F4EFC362A65E110009D0461 /* LogInViewController.swift in Sources */,
 				1F4EFC422A67E372009D0461 /* ScoreboardTableViewCell.swift in Sources */,
 				1FAD08392A6AA26300EA7D3F /* AppCheck.swift in Sources */,

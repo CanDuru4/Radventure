@@ -12,9 +12,9 @@ import FirebaseFirestore
 
 class LogInViewController: UIViewController {
     
-    //MARK: Set Up
+//MARK: Set Up
     
-    
+
     
     //MARK: Set Variables
     var emailField = UITextField()
@@ -25,7 +25,7 @@ class LogInViewController: UIViewController {
     var account_check = 0
     var isLoggedInOnAnotherDevice = false
     
-    //MARK: Load
+//MARK: Load
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "AppColor1")
@@ -43,7 +43,7 @@ class LogInViewController: UIViewController {
     
     
     
-    //MARK: Variable Features
+//MARK: Variable Features
     func setLabels(){
         
         
@@ -132,8 +132,10 @@ class LogInViewController: UIViewController {
             loginButton.heightAnchor.constraint(equalToConstant: 35),
         ])
     }
-     
-    //MARK: Log In Function
+
+    
+    
+//MARK: Log In Function
     @objc func logIn() {
         //MARK: Validate All Fields Filled
         let error = validateFields()
@@ -188,13 +190,17 @@ class LogInViewController: UIViewController {
         }
     }
 
-    //MARK: Navigation to TabBarViewController
+    
+    
+//MARK: Navigation to TabBarViewController
     func navigateToTabBarViewController() {
         self.navigationController?.pushViewController(TabBarViewController(), animated: true)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
-    //MARK: Getting User Login Data
+    
+    
+//MARK: Getting User Login Data
     func getUserData(completion: @escaping () -> ()) {
         let docRef = self.db.collection("users").document(Auth.auth().currentUser!.uid)
         docRef.getDocument { (document, error) in
@@ -210,7 +216,9 @@ class LogInViewController: UIViewController {
         }
     }
 
-    //MARK: Updating User Data (previously logged in)
+    
+    
+//MARK: Updating User Data (previously logged in)
     func updateUserDataLogIn(completion: @escaping () -> ()) {
         db.collection("users").document(Auth.auth().currentUser!.uid).updateData(["login": 1]) { (error) in
             if error != nil {
@@ -220,7 +228,9 @@ class LogInViewController: UIViewController {
         }
     }
 
-    //MARK: Creating User Data (previously not logged in)
+    
+    
+//MARK: Creating User Data (previously not logged in)
     func updateUserData(name: String, completion: @escaping () -> ()) {
         db.collection("users").document(Auth.auth().currentUser!.uid).setData([
             "name": name,
@@ -238,7 +248,7 @@ class LogInViewController: UIViewController {
 
 
         
-    //MARK: Validate All Fields
+//MARK: Validate All Fields
     func validateFields() -> String? {
         if emailField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
             passwordField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
@@ -248,7 +258,7 @@ class LogInViewController: UIViewController {
     }
 }
 
-//MARK: Hide Keyboard
+//MARK: Hide Keyboard Extension
 extension UIViewController {
     func hideKeyboardWhenTappedAround() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
