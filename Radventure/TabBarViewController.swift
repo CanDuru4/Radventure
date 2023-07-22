@@ -19,7 +19,7 @@ class TabBarViewController : UITabBarController {
         setupVCs()
     }
     
-    //MARK: Create ViewControllers
+//MARK: Create ViewControllers
     func setupVCs() {
           viewControllers = [
             createNavController(for: HomeMapViewController(), title: NSLocalizedString("", comment: ""), image: UIImage(systemName: "map.fill")!.withRenderingMode(.alwaysOriginal).withTintColor(UIColor(named: "AppColor2")!)),
@@ -27,7 +27,7 @@ class TabBarViewController : UITabBarController {
           ]
       }
     
-    //MARK: Set Tabbar Items
+//MARK: Set Tabbar Items
     var i = -1
     fileprivate func createNavController(for rootViewController: UIViewController,
                                                     title: String,
