@@ -7,7 +7,6 @@
 
 import Foundation
 import FirebaseAppCheck
-import Firebase
 import FirebaseCore
 
 
