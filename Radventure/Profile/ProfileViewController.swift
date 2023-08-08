@@ -17,6 +17,7 @@ struct Info {
     var name: String
     var score: String
     var time_stamp: String
+    var remainingTime: String
 }
 
 class ProfileViewController: UIViewController {
@@ -32,6 +33,7 @@ class ProfileViewController: UIViewController {
     var gameName = ""
     var score = ""
     var date = ""
+    var time = ""
     var gameArrayCount = 0
     var passwordKeyDatabase = ""
     var scoreClearPassword = ""
@@ -256,9 +258,11 @@ class ProfileViewController: UIViewController {
                                     self.score = value2 as! String
                                 } else if key2 == "date" {
                                     self.date = value2 as! String
+                                } else if key2 == "remainingTime" {
+                                    self.time = value2 as! String
                                 }
                             }
-                            self.profileInfo.append(Info(name: self.gameName, score: self.score, time_stamp: self.date))
+                            self.profileInfo.append(Info(name: self.gameName, score: self.score, time_stamp: self.date, remainingTime: self.time))
                         }
                     }
                 }
@@ -342,6 +346,11 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         cell.detailLabel_score.font = cell.titleLabel.font.withSize(15)
         cell.detailLabel_score.textColor = .white
 
+        let splitStringArray = profileInfo[indexPath.row].remainingTime.split(separator: ":", maxSplits: 1).map(String.init)
+        cell.detailLabel_remaining.text = "Remaining Time: \(splitStringArray[0]) minutes and \(splitStringArray[1]) seconds"
+        cell.detailLabel_remaining.font = cell.titleLabel.font.withSize(15)
+        cell.detailLabel_remaining.textColor = .white
+        
         cell.detailLabel_time.text = "Date: \(profileInfo[indexPath.row].time_stamp)"
         cell.detailLabel_time.font = cell.titleLabel.font.withSize(15)
         cell.detailLabel_time.textColor = .white
@@ -353,7 +362,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
     //MARK: Table Height
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 120
     }
     
     
