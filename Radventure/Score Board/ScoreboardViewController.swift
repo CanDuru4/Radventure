@@ -86,13 +86,14 @@ class ScoreboardViewController: UIViewController {
         
         let scoreboardexplainationLabel = UILabel()
         scoreboardexplainationLabel.textColor = UIColor(named: "AppColor2")
-        scoreboardexplainationLabel.text = "Scoreboard updates in every 10 seconds."
+        scoreboardexplainationLabel.text = "Scoreboard updates in every 10 seconds, and it reflects only on the newest activity."
+        scoreboardexplainationLabel.numberOfLines = -1
         scoreboardexplainationLabel.textAlignment = .left
         scoreboardexplainationLabel.clipsToBounds = true
         view.addSubview(scoreboardexplainationLabel)
         
         scoreboardexplainationLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([scoreboardexplainationLabel.topAnchor.constraint(equalTo: scoreboardLabel.bottomAnchor, constant: 5), scoreboardexplainationLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)])
+        NSLayoutConstraint.activate([scoreboardexplainationLabel.topAnchor.constraint(equalTo: scoreboardLabel.bottomAnchor, constant: 5), scoreboardexplainationLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20), scoreboardexplainationLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)])
         
         ScoreboardTable.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([ScoreboardTable.topAnchor.constraint(equalTo: scoreboardexplainationLabel.bottomAnchor, constant: 10), ScoreboardTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor), ScoreboardTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor), ScoreboardTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)])

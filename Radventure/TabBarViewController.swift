@@ -23,7 +23,8 @@ class TabBarViewController : UITabBarController {
     func setupVCs() {
           viewControllers = [
             createNavController(for: HomeMapViewController(), title: NSLocalizedString("", comment: ""), image: UIImage(systemName: "map.fill")!.withRenderingMode(.alwaysOriginal).withTintColor(UIColor(named: "AppColor2")!)),
-            createNavController(for: ScoreboardViewController(), title: NSLocalizedString("", comment: ""), image: (UIImage(systemName: "flag.checkered.2.crossed")?.withRenderingMode(.alwaysOriginal).withTintColor(UIColor(named: "AppColor2")!) ?? UIImage(systemName: "flag.filled.and.flag.crossed")?.withRenderingMode(.alwaysOriginal).withTintColor(UIColor(named: "AppColor2")!) ?? UIImage(systemName: "checkerboard.rectangle")!.withRenderingMode(.alwaysOriginal).withTintColor(UIColor(named: "AppColor2")!)))
+            createNavController(for: ScoreboardViewController(), title: NSLocalizedString("", comment: ""), image: (UIImage(systemName: "flag.checkered.2.crossed")?.withRenderingMode(.alwaysOriginal).withTintColor(UIColor(named: "AppColor2")!) ?? UIImage(systemName: "flag.filled.and.flag.crossed")?.withRenderingMode(.alwaysOriginal).withTintColor(UIColor(named: "AppColor2")!) ?? UIImage(systemName: "checkerboard.rectangle")!.withRenderingMode(.alwaysOriginal).withTintColor(UIColor(named: "AppColor2")!))),
+            createNavController(for: ProfileViewController(), title: NSLocalizedString("", comment: ""), image: UIImage(systemName: "person.fill")!.withRenderingMode(.alwaysOriginal).withTintColor(UIColor(named: "AppColor2")!)),
           ]
       }
     
@@ -32,7 +33,7 @@ class TabBarViewController : UITabBarController {
     fileprivate func createNavController(for rootViewController: UIViewController,
                                                     title: String,
                                                     image: UIImage) -> UIViewController {
-          let items = ["Map", "Scoreboard"]
+          let items = ["Map", "Scoreboard", "Profile"]
           i = i+1
           let navController = UINavigationController(rootViewController: rootViewController)
 

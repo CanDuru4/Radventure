@@ -10,6 +10,7 @@ import UIKit
 import FirebaseAuth
 import FirebaseFirestore
 
+
 class LogInViewController: UIViewController {
     
 //MARK: Set Up
@@ -24,6 +25,9 @@ class LogInViewController: UIViewController {
     var loggedin = 0
     var account_check = 0
     var isLoggedInOnAnotherDevice = false
+    var provider = OAuthProvider(providerID: "microsoft.com")
+    let loadingVC = LoadingViewController()
+    //let gameNameArray: [String] = []
     
 //MARK: Load
     override func viewDidLoad() {
@@ -55,45 +59,13 @@ class LogInViewController: UIViewController {
         view.addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
-        //MARK: Email Field Features
-        emailField.attributedPlaceholder = NSAttributedString(
-            string: "Password",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.white]
-        )
-        emailField.borderStyle = .roundedRect
-        emailField.backgroundColor = UIColor.clear
-        emailField.layer.borderColor = UIColor.white.cgColor
-        emailField.layer.borderWidth = CGFloat(1)
-        emailField.placeholder = "Email"
-        emailField.textColor = .white
-        emailField.borderStyle = .roundedRect
-        emailField.autocorrectionType = .no
-        emailField.autocapitalizationType = .none
-        view.addSubview(emailField)
-        emailField.translatesAutoresizingMaskIntoConstraints = false
-        
-        //MARK: Password Field Features
-        passwordField.attributedPlaceholder = NSAttributedString(
-            string: "Password",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.white]
-        )
-        passwordField.borderStyle = .roundedRect
-        passwordField.backgroundColor = UIColor.clear
-        passwordField.layer.borderColor = UIColor.white.cgColor
-        passwordField.textColor = .white
-        passwordField.layer.borderWidth = CGFloat(1)
-        view.addSubview(passwordField)
-        passwordField.isSecureTextEntry = true
-        passwordField.autocorrectionType = .no
-        passwordField.autocapitalizationType = .none
-        passwordField.translatesAutoresizingMaskIntoConstraints = false
-        
         //MARK: Login Button Features
         loginButton.backgroundColor = UIColor(named: "AppColor2")
-        loginButton.setTitle("Login", for: .normal)
+        loginButton.setTitle("Log in with Microsoft", for: .normal)
         loginButton.setTitleColor(UIColor(named: "AppColor1"), for: .normal)
         loginButton.layer.cornerRadius = 5
         loginButton.clipsToBounds = true
+        loginButton.setImage(UIImage(named: "Microsoft")?.withRenderingMode(.alwaysOriginal).resized(to: CGSize(width: 30, height: 30)), for: .normal)
         view.addSubview(loginButton)
         loginButton.addTarget(self, action: #selector(logIn), for: .touchUpInside)
         loginButton.translatesAutoresizingMaskIntoConstraints = false
@@ -105,82 +77,83 @@ class LogInViewController: UIViewController {
             //MARK: Image Constraints
             imageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            imageView.bottomAnchor.constraint(equalTo: emailField.topAnchor, constant: 40),
+            imageView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: 20),
             imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 5),
             imageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -5),
             
-            //MARK: Email Field Constraints
-            emailField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            emailField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -50),
-            emailField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            emailField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            emailField.heightAnchor.constraint(equalToConstant: 35),
-            
-            //MARK: Password Field Constraints
-            passwordField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            passwordField.topAnchor.constraint(equalTo: emailField.bottomAnchor, constant: 10),
-            passwordField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            passwordField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            passwordField.heightAnchor.constraint(equalToConstant: 35),
-            
-            
             //MARK: Login Button Constraints
             loginButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            loginButton.topAnchor.constraint(equalTo: passwordField.bottomAnchor, constant: 10),
+            loginButton.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -50),
             loginButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             loginButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             loginButton.heightAnchor.constraint(equalToConstant: 35),
         ])
+        
+        //MARK: Log In Button Image Attributions
+        loginButton.moveImageLeftTextCenter()
     }
 
     
     
 //MARK: Log In Function
+    let kGraphURI = "https://graph.microsoft.com/v1.0/me/"
     @objc func logIn() {
-        //MARK: Validate All Fields Filled
-        let error = validateFields()
+        //MARK: Valid   ate All Fields Filled
         account_check = 0
-        
-        //MARK: Not Filled
-        if error != nil {
-            let alert = UIAlertController(title: "Please fill in all fields.", message: "", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-            
-        //MARK: Filled
-        } else {
-            let email = emailField.text?.lowercased()
-            let password = passwordField.text
-            Auth.auth().signIn(withEmail: email ?? "", password: password ?? "") { [weak self] authResult, error in
-                guard let strongSelf = self else { return }
-                //MARK: Wrong User Credentials
-                if error != nil {
-                    let alert = UIAlertController(title: "Credentials are not correct.", message: "Check your email and/or password.", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-                    strongSelf.present(alert, animated: true, completion: nil)
+        provider.customParameters = [
+            "prompt": "consent",
+            "tenant": "d4bc61be-6893-44c0-8f85-a6e62e5bebee"
+        ]
+        provider.scopes = ["user.read"]
+        provider.getCredentialWith(nil) { credential, error in
+          if error != nil {
+              let alert = UIAlertController(title: "Unsuccessful Log In Attempt!", message: "Please try again. Use your Robert College organization account.", preferredStyle: .alert)
+              alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+              self.present(alert, animated: true, completion: nil)
+          }
+            if credential != nil {
+                self.loadingVC.modalPresentationStyle = .overCurrentContext
+                self.loadingVC.modalTransitionStyle = .crossDissolve
+                self.present(self.loadingVC, animated: true, completion: nil)
+                Auth.auth().signIn(with: credential!) { authResult, error in
+                    if error != nil {
+                        self.dismiss(animated: true)
+                        let alert = UIAlertController(title: "Unsuccessful Log In Attempt!", message: "Please try again.", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    } else {
+                        guard let authResult = authResult else {
+                            return
+                        }
                     
-                //MARK: Correct User Credentials
-                } else {
-                    //MARK: Create User
-                    let removetext = "@robcol.k12.tr"
-                    var name = email
-                    if let range = name!.range(of: removetext) {
-                        name!.removeSubrange(range)
-                    }
-                    self?.getUserData {
-                        if self?.isLoggedInOnAnotherDevice == true {
-                            let alert = UIAlertController(title: "Logged in another device", message: "Please log out on another device. If you do not have access to your device, please get in contact with your administrator.", preferredStyle: .alert)
-                            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-                            self?.present(alert, animated: true, completion: nil)
-                            
-                        } else {
-                            if self?.account_check == 1 {
-                                self?.navigateToTabBarViewController()
-                                self?.updateUserDataLogIn() {
+                        
+                        self.getUserData {
+                            if self.isLoggedInOnAnotherDevice == true {
+                                self.dismiss(animated: true)
+                                do {
+                                    try Auth.auth().signOut()
+                                } catch let signOutError as NSError {
+                                    print("Error signing out: %@", signOutError)
                                 }
-                            } else if self?.account_check == 0 {
-                                self?.navigateToTabBarViewController()
-                                self?.updateUserData(name: name!) {
+                                let alert = UIAlertController(title: "Logged in another device", message: "Please log out on another device. If you do not have access to your device, please get in contact with your administrator.", preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                                self.present(alert, animated: true, completion: nil)
+
+                            } else {
+                                let removetext = "@robcol.k12.tr"
+                                //var name = authResult.user.email
+                                var name = authResult.user.displayName
+                                if let range = name!.range(of: removetext) {
+                                    name!.removeSubrange(range)
+                                }
+                                if self.account_check == 1 {
+                                    self.dismiss(animated: true)
+                                    self.navigateToTabBarViewController()
+                                    self.updateUserDataLogIn() {}
+                                } else if self.account_check == 0 {
+                                    self.navigateToTabBarViewController()
+                                    self.dismiss(animated: true)
+                                    self.updateUserData(name: name ?? "User") {}
                                 }
                             }
                         }
@@ -189,7 +162,7 @@ class LogInViewController: UIViewController {
             }
         }
     }
-
+    
     
     
 //MARK: Navigation to TabBarViewController
@@ -235,7 +208,8 @@ class LogInViewController: UIViewController {
         db.collection("users").document(Auth.auth().currentUser!.uid).setData([
             "name": name,
             "score": 0,
-            "login": 1
+            "login": 1,
+            //"gameName": self.gameNameArray
         ]) { err in
             if let err = err {
                 print("Error writing document: \(err)")
@@ -268,5 +242,18 @@ extension UIViewController {
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+}
+
+
+
+//MARK: UIButton Image Extension
+extension UIButton {
+    func moveImageLeftTextCenter(imagePadding: CGFloat = 20.0){
+        guard let imageViewWidth = self.imageView?.frame.width else{return}
+        guard let titleLabelWidth = self.titleLabel?.intrinsicContentSize.width else{return}
+        self.contentHorizontalAlignment = .left
+        imageEdgeInsets = UIEdgeInsets(top: 0.0, left: imagePadding - imageViewWidth / 2, bottom: 0.0, right: 0.0)
+        titleEdgeInsets = UIEdgeInsets(top: 0.0, left: (bounds.width - titleLabelWidth) / 2 - imageViewWidth, bottom: 0.0, right: 0.0)
     }
 }
