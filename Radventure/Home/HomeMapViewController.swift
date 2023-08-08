@@ -521,6 +521,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 self.forceQuitButtonCheck = 0
                 self.startButtoncheck = 1
                 self.score = 0
+                self.gameDataUpdate()
                 self.timer_label.invalidate()
                 self.timerLabel.text = "00:00"
                 for PinAnnotation in self.map.annotations {
@@ -533,7 +534,6 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                         self.present(alert, animated: true, completion: nil)
                     }
                 }
-                self.gameDataUpdate()
             } else {
                 let alert = UIAlertController(title: "Password is incorrect.", message: "Communicate with an administrator to enter the password.", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
@@ -771,6 +771,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 forceQuitButtonCheck = 0
                 startButtoncheck = 1
                 timer_label.invalidate()
+                gameDataUpdate()
                 timerLabel.text = "00:00"
                 for PinAnnotation in self.map.annotations {
                     self.map.removeAnnotation(PinAnnotation)
@@ -782,8 +783,6 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                         self.present(alert, animated: true, completion: nil)
                     }
                 }
-                
-                gameDataUpdate()
             }
         } else {
             let alert = UIAlertController(title: "Answer is not correct.", message: "Please try again.", preferredStyle: .alert)
@@ -801,7 +800,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
         df.dateFormat = "dd/MM/yyyy HH:mm:ss"
         let dateString = df.string(from: date)
         gameCount = String(Int(gameCount)! + 1)
-        self.db.collection("users").document(self.useruid!).updateData(["gameCount": gameCount, "gameName.\(gameCount).name": gameName, "gameName.\(gameCount).score": String(score), "gameName.\(gameCount).date": dateString]) { (error) in
+        self.db.collection("users").document(self.useruid!).updateData(["gameCount": gameCount, "gameName.\(gameCount).name": gameName, "gameName.\(gameCount).score": String(score), "gameName.\(gameCount).date": dateString, "gameName.\(gameCount).remainingTime": self.timerLabel.text!]) { (error) in
             if error != nil {
                 let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
