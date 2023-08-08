@@ -15,6 +15,9 @@
 		1F4EFC422A67E372009D0461 /* ScoreboardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EFC412A67E372009D0461 /* ScoreboardTableViewCell.swift */; };
 		1FAD08392A6AA26300EA7D3F /* AppCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAD08382A6AA26300EA7D3F /* AppCheck.swift */; };
 		1FD758962A6C165200EA4781 /* CompassCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD758952A6C165200EA4781 /* CompassCanvas.swift */; };
+		1FDB5E9E2A82927E006A473A /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDB5E9D2A82927E006A473A /* LoadingViewController.swift */; };
+		1FDB5EA12A82960F006A473A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDB5EA02A82960F006A473A /* ProfileViewController.swift */; };
+		1FDB5EA32A829FD0006A473A /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDB5EA22A829FD0006A473A /* TableViewCell.swift */; };
 		1FDC802A2A44927E00F9CC96 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC80292A44927E00F9CC96 /* AppDelegate.swift */; };
 		1FDC802C2A44927E00F9CC96 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC802B2A44927E00F9CC96 /* SceneDelegate.swift */; };
 		1FDC802E2A44927E00F9CC96 /* HomeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDC802D2A44927E00F9CC96 /* HomeMapViewController.swift */; };
@@ -61,6 +64,9 @@
 		1FAD08362A6A92E700EA7D3F /* Radventure.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Radventure.entitlements; sourceTree = "<group>"; };
 		1FAD08382A6AA26300EA7D3F /* AppCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCheck.swift; sourceTree = "<group>"; };
 		1FD758952A6C165200EA4781 /* CompassCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCanvas.swift; sourceTree = "<group>"; };
+		1FDB5E9D2A82927E006A473A /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
+		1FDB5EA02A82960F006A473A /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		1FDB5EA22A829FD0006A473A /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		1FDC80262A44927E00F9CC96 /* Radventure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Radventure.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FDC80292A44927E00F9CC96 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1FDC802B2A44927E00F9CC96 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -122,6 +128,15 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
+		1FDB5E9F2A8295FC006A473A /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				1FDB5EA02A82960F006A473A /* ProfileViewController.swift */,
+				1FDB5EA22A829FD0006A473A /* TableViewCell.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		1FDC801D2A44927E00F9CC96 = {
 			isa = PBXGroup;
 			children = (
@@ -153,9 +168,10 @@
 			children = (
 				1FAD08362A6A92E700EA7D3F /* Radventure.entitlements */,
 				1FDC805B2A44978000F9CC96 /* Helper */,
+				1FDC805F2A4497B100F9CC96 /* Login */,
 				1FDC805C2A44978A00F9CC96 /* Home */,
 				1FDC805D2A44979B00F9CC96 /* Score Board */,
-				1FDC805F2A4497B100F9CC96 /* Login */,
+				1FDB5E9F2A8295FC006A473A /* Profile */,
 				1FDC80292A44927E00F9CC96 /* AppDelegate.swift */,
 				1FDC802B2A44927E00F9CC96 /* SceneDelegate.swift */,
 				1FDC80612A44984600F9CC96 /* TabBarViewController.swift */,
@@ -198,6 +214,7 @@
 				1F4EFC3F2A66C8FC009D0461 /* RulesViewController.swift */,
 				1FAD08382A6AA26300EA7D3F /* AppCheck.swift */,
 				1FD758952A6C165200EA4781 /* CompassCanvas.swift */,
+				1FDB5E9D2A82927E006A473A /* LoadingViewController.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -511,10 +528,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FDB5EA32A829FD0006A473A /* TableViewCell.swift in Sources */,
 				1F4EFC402A66C8FC009D0461 /* RulesViewController.swift in Sources */,
 				1FDC80622A44984600F9CC96 /* TabBarViewController.swift in Sources */,
 				1FDC802E2A44927E00F9CC96 /* HomeMapViewController.swift in Sources */,
 				1F4EFC3C2A66A452009D0461 /* CustomAnnotation.swift in Sources */,
+				1FDB5EA12A82960F006A473A /* ProfileViewController.swift in Sources */,
 				1FD758962A6C165200EA4781 /* CompassCanvas.swift in Sources */,
 				1F4EFC362A65E110009D0461 /* LogInViewController.swift in Sources */,
 				1F4EFC422A67E372009D0461 /* ScoreboardTableViewCell.swift in Sources */,
@@ -522,6 +541,7 @@
 				1F4EFC382A65E388009D0461 /* LocationManager.swift in Sources */,
 				1FDC802A2A44927E00F9CC96 /* AppDelegate.swift in Sources */,
 				1FDC80662A449A0C00F9CC96 /* ScoreboardViewController.swift in Sources */,
+				1FDB5E9E2A82927E006A473A /* LoadingViewController.swift in Sources */,
 				1FDC802C2A44927E00F9CC96 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -692,24 +712,26 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Radventure/Radventure.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = NV57XZ3KBV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Radventure/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Robert Compass";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Please allow application to use your location for GPS.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarHidden = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 14;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.CanDuru.Radventure;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -729,24 +751,26 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Radventure/Radventure.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = NV57XZ3KBV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Radventure/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Robert Compass";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Please allow application to use your location for GPS.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarHidden = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 14;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.CanDuru.Radventure;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
