@@ -41,11 +41,11 @@ You can use [CocoaPods](http://cocoapods.org/) to install `Firebase, Analytics, 
   pod 'FirebaseAuth'
   pod 'FirebaseFirestore'
   pod 'FirebaseDatabase'
-  pod 'Firebase/Messaging'
-  pod 'Firebase/Crashlytics'
+  pod 'FirebaseMessaging'
+  pod 'FirebaseCrashlytics'
   pod 'FirebasePerformance'
   pod 'FirebaseAppCheck'
-  pod 'FirebaseInAppMessaging'
+  pod 'FirebaseInAppMessaging', "> 10.7-beta"
 ```
 
 ## Photos from Application

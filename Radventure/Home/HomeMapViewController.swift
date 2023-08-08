@@ -23,6 +23,19 @@ struct PinLocationsStructure{
     let name, question, answer: String
 }
 
+//MARK: Game Name Structure
+struct GameNameStructure{
+    var name, score, time: String
+    
+    var firestoreData: [String: Any] {
+        return [
+            "name": name,
+            "score": score,
+            "time": time,
+        ]
+    }
+}
+
 class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
 
 //MARK: Set Up
@@ -55,6 +68,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     var randomRouteArray = ["coordinates", "coordinates2", "coordinates3", "coordinates4"]
     var user_latitude = 0.0
     var user_longitude = 0.0
+    var gameCount = ""
     
     //MARK: Map Set Up
     private let map: MKMapView = {
@@ -89,7 +103,8 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     let canvasView = CanvasView()
     let locationManager = CLLocationManager()
 
-    
+    //MARK: Game Name Setup
+    var gameNameData: [GameNameStructure] = []
     
 //MARK: Load
     override func viewDidLoad() {
@@ -140,6 +155,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                                 self.present(alert, animated: true, completion: nil)
                             }
                         }
+                        self.gameDataUpdate()
                         let alert = UIAlertController(title: "Activity automatically stopped.", message: "Since the finishing time is passed, activity is stopped.", preferredStyle: .alert)
                         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
                         self.present(alert, animated: true, completion: nil)
@@ -164,6 +180,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                                 self.present(alert, animated: true, completion: nil)
                             }
                         }
+                        self.gameDataUpdate()
                         let alert = UIAlertController(title: "Activity automatically stopped.", message: "Since the finishing time is passed, activity is stopped.", preferredStyle: .alert)
                         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
                         self.present(alert, animated: true, completion: nil)
@@ -418,11 +435,11 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     var startingMinuteInt = 0
     var finishHourIntStart = 0
     var finishMinuteIntStart = 0
+    var gameName = ""
     @objc func startButtonAction(){
 
         let hour = Calendar.current.component(.hour, from: Date())
         let min = Calendar.current.component(.minute, from: Date())
-        
         contactDatabase() {
             if (self.startingHourInt > hour) {
                 let alert = UIAlertController(title: "Please wait for starting time.", message: "", preferredStyle: .alert)
@@ -443,8 +460,9 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
             } else {
                 AudioServicesPlaySystemSound(SystemSoundID(1304))
                 AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-                let alert = UIAlertController(title: "Your data will be lost!", message: "When you start the activity, if exists, your previous score from another activity will be erased.", preferredStyle: .alert)
+                let alert = UIAlertController(title: "You are about to start the activity!", message: "When you start the activity, you will be not able to force quit from it without administration password.", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "I am aware of my action.", style: .default, handler: { (_) in
+                    self.gameNameDatabase()
                     self.randomRoute = Int.random(in: 0...3)
                     self.RandomRouteChoice = self.randomRouteArray[self.randomRoute]
                     self.didSetCount1 = 0
@@ -515,6 +533,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                         self.present(alert, animated: true, completion: nil)
                     }
                 }
+                self.gameDataUpdate()
             } else {
                 let alert = UIAlertController(title: "Password is incorrect.", message: "Communicate with an administrator to enter the password.", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
@@ -575,6 +594,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                             self.present(alert, animated: true, completion: nil)
                         }
                     }
+                    self.gameDataUpdate()
                 } else if (seconds_text < 10) {
                     let timeString = String(minutes)
                     let secondString = String(seconds_text)
@@ -762,6 +782,8 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                         self.present(alert, animated: true, completion: nil)
                     }
                 }
+                
+                gameDataUpdate()
             }
         } else {
             let alert = UIAlertController(title: "Answer is not correct.", message: "Please try again.", preferredStyle: .alert)
@@ -770,6 +792,23 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
 
+
+    
+//MARK: Game Data Update
+    func gameDataUpdate(){
+        let date = Date()
+        let df = DateFormatter()
+        df.dateFormat = "dd/MM/yyyy HH:mm:ss"
+        let dateString = df.string(from: date)
+        gameCount = String(Int(gameCount)! + 1)
+        self.db.collection("users").document(self.useruid!).updateData(["gameCount": gameCount, "gameName.\(gameCount).name": gameName, "gameName.\(gameCount).score": String(score), "gameName.\(gameCount).date": dateString]) { (error) in
+            if error != nil {
+                let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
    
     
 //MARK: Timer Data
@@ -807,6 +846,18 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     
+//MARK: Communiaction with Database for Game Name
+    func gameNameDatabase(){
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("game")
+        ref.observeSingleEvent(of: .value) { snapshot in
+            for case let child as DataSnapshot in snapshot.children {
+                guard let dict = child.value as? [String:Any] else {
+                    return
+                }
+                self.gameName = dict["gameName"] as! String
+            }
+        }
+    }
     
 //MARK: Communication with Database for Password w/ Completion
     func contactDatabasePassword(completion: @escaping () -> ()){
@@ -834,6 +885,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 self.done_array = document.data()?["locations"] as? Array ?? []
                 self.score = document.data()?["score"] as! Int
                 self.RandomRouteChoice = document.data()?["route"] as? String ?? "coordinates"
+                self.gameCount = document.data()?["gameCount"] as? String ?? "0"
                 completion()
             } else {
                 print("Document does not exist")

@@ -2,6 +2,16 @@
 
 Radventure Application for multipurpose usage;
 
+## [1.2.0] (1) (2023-08-08)
+- Ver. 1.2.0 buid is ready for testing.
+- Updated login function.
+- Adjusted login function for Microsoft login.
+- Removed Firebase Authentication, using email and password.
+- Added profile page, enabling previous scores view.
+- Added delete score option with administration password.
+- Added loading view for login page.
+- Changed the alert message about losing data when "Start Activity" button clicked.
+
 ## [1.1.0] (1) (2023-07-20)
 - Ver. 1.1.0 buid is ready for testing.
 - Adjusted to iOS 14.0.
