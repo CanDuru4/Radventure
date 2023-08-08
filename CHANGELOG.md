@@ -9,6 +9,7 @@ Radventure Application for multipurpose usage;
 - Removed Firebase Authentication, using email and password.
 - Added profile page, enabling previous scores view.
 - Added delete score option with administration password.
+- Added loading view for login page.
 - Changed the alert message about losing data when "Start Activity" button clicked.
 
 ## [1.1.0] (1) (2023-07-20)
