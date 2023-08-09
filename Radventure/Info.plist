@@ -14,10 +14,18 @@
 		</dict>
 	</array>
     <key>NSAppTransportSecurity</key>
-      <dict>
-      <key>NSAllowsArbitraryLoads</key>
-      <true/>
-      </dict> 
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+    <true/>
+    </dict>
+    <key>NSExceptionDomains</key>
+    <dict>
+        <key>app-measurement.com</key>
+        <dict>
+            <key>NSExceptionAllowsInsecureHTTPLoads</key>
+            <true/>
+        </dict>
+    </dict>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
