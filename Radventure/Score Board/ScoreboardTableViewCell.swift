@@ -35,7 +35,7 @@ class ScoreboardTableViewCell: UITableViewCell {
         override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
             super.init(style: style, reuseIdentifier: ScoreboardTableViewCell.identifer)
             configureViews()
-
+            self.selectionStyle = UITableViewCell.SelectionStyle.none
         }
         
         //MARK: Set Contents

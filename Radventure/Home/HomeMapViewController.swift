@@ -65,10 +65,10 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     var forceQuitPassword = ""
     var randomRoute = 100
     var RandomRouteChoice = ""
-    var randomRouteArray = ["coordinates", "coordinates2", "coordinates3", "coordinates4"]
     var user_latitude = 0.0
     var user_longitude = 0.0
     var gameCount = ""
+    var arrayCount: [String] = []
     
     //MARK: Map Set Up
     private let map: MKMapView = {
@@ -125,6 +125,8 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.delegate = self
         locationManager.startUpdatingHeading()
         
+        
+
         //MARK: User Info Load
         getUserData(){
             
@@ -464,20 +466,24 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 let okAction = UIAlertAction(title: "I am aware of my action.", style: .default, handler: { (_) in
                     self.gameNameDatabase()
                     self.randomRoute = Int.random(in: 0...3)
-                    self.RandomRouteChoice = self.randomRouteArray[self.randomRoute]
-                    self.didSetCount1 = 0
-                    self.didSetCount2 = 0
-                    self.updateUserDatato0()
-                    self.timerLabelFunction()
-                    self.countPins(choice_pin: self.RandomRouteChoice) {
-                        self.PinLocationData(choice_pinlocationdata: self.RandomRouteChoice){
-                            self.startButton.isHidden = true
-                            self.forceQuitButton.isHidden = false
-                            self.logOutButton.isHidden = true
-                            self.forceQuitButtonCheck = 1
-                            self.startButtoncheck = 0
-                            self.score = 0
-                            self.done_array = []
+                    self.contactDatabaseArrayCount(){
+                        let arrayCount = self.arrayCount.count
+                        self.randomRoute = Int.random(in: 0...3)
+                        self.RandomRouteChoice = self.arrayCount[self.randomRoute]
+                        self.didSetCount1 = 0
+                        self.didSetCount2 = 0
+                        self.updateUserDatato0()
+                        self.timerLabelFunction()
+                        self.countPins(choice_pin: self.RandomRouteChoice) {
+                            self.PinLocationData(choice_pinlocationdata: self.RandomRouteChoice){
+                                self.startButton.isHidden = true
+                                self.forceQuitButton.isHidden = false
+                                self.logOutButton.isHidden = true
+                                self.forceQuitButtonCheck = 1
+                                self.startButtoncheck = 0
+                                self.score = 0
+                                self.done_array = []
+                            }
                         }
                     }
                 })
@@ -795,6 +801,12 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     
 //MARK: Game Data Update
     func gameDataUpdate(){
+        gameDataUpdateDatabase(){
+            ProfileViewController().getUserScoreData {
+            }
+        }
+    }
+    func gameDataUpdateDatabase(completion: @escaping () -> ()){
         let date = Date()
         let df = DateFormatter()
         df.dateFormat = "dd/MM/yyyy HH:mm:ss"
@@ -806,9 +818,9 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }
+            completion()
         }
     }
-   
     
 //MARK: Timer Data
     func timer_database(completion: @escaping () -> ()){
@@ -843,6 +855,23 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
             }
         }
     }
+    
+    
+    
+//MARK: Communication with Database for Array Number w/ Completion
+    func contactDatabaseArrayCount(completion: @escaping () -> ()){
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app/").reference()
+        ref.observeSingleEvent(of: .value) { snapshot in
+            for case let child as DataSnapshot in snapshot.children {
+                let result = child.key.contains("coordinates")
+                if result{
+                    self.arrayCount.append(child.key)
+                }
+            }
+            completion()
+        }
+    }
+
     
     
 //MARK: Communiaction with Database for Game Name

@@ -189,11 +189,8 @@ class ProfileViewController: UIViewController {
                 let alert = UIAlertController(title: "Scores are deleted.", message: "", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
-                Firestore.firestore().collection("users").document(Auth.auth().currentUser!.uid).updateData(["score": 0, "time": "", "gameCount": 0, "gameName": FieldValue.delete()]) { (error) in
-                    if error != nil {
-                        let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-                        self.present(alert, animated: true, completion: nil)
+                self.updateDataClear(){
+                    ScoreboardViewController().getUserData {
                     }
                 }
             } else {
@@ -203,7 +200,16 @@ class ProfileViewController: UIViewController {
             }
         }
     }
-    
+    func updateDataClear(completion: @escaping () -> ()){
+        Firestore.firestore().collection("users").document(Auth.auth().currentUser!.uid).updateData(["score": 0, "time": "", "gameCount": 0, "gameName": FieldValue.delete()]) { (error) in
+            if error != nil {
+                let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+            completion()
+        }
+    }
     
     
 //MARK: Get User Data
