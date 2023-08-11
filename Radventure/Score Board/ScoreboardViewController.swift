@@ -26,6 +26,7 @@ class ScoreboardViewController: UIViewController {
     var useruid = Auth.auth().currentUser?.uid
     var db = Firestore.firestore()
     var noScoreLabel = UILabel()
+    var scoreboardLabel = UILabel()
 
     //MARK: Table Setup
     lazy var ScoreboardTable: UITableView = {
@@ -60,6 +61,13 @@ class ScoreboardViewController: UIViewController {
         //MARK: Table Data Repeat
         self.noScoreLabel.isHidden = true
         getUserData {
+            if self.gameNameVar != "" {
+                self.scoreboardLabel.text = "Scoreboard of \(self.gameNameVar)"
+                self.scoreboardLabel.font = self.scoreboardLabel.font.withSize(25)
+            } else {
+                self.scoreboardLabel.text = "Scoreboard"
+                self.scoreboardLabel.font = self.scoreboardLabel.font.withSize(40)
+            }
             self.sortedscoreboardData = self.scoreboardData
             self.sortedscoreboardData = self.sortedscoreboardData.sorted { $0.score > $1.score }
             let count1 = self.sortedscoreboardData.count - 1
@@ -99,18 +107,17 @@ class ScoreboardViewController: UIViewController {
     
 //MARK: Set Layout
     func setLayout(){
-        
-        let scoreboardLabel = UILabel()
         scoreboardLabel.textColor = UIColor(named: "AppColor2")
         scoreboardLabel.text = "Scoreboard"
         scoreboardLabel.font = scoreboardLabel.font.withSize(40)
         scoreboardLabel.textAlignment = .left
+        scoreboardLabel.numberOfLines = -1
         scoreboardLabel.clipsToBounds = true
         view.addSubview(scoreboardLabel)
         scoreboardLabel.underline()
         
         scoreboardLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([scoreboardLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -20), scoreboardLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)])
+        NSLayoutConstraint.activate([scoreboardLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -20), scoreboardLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20), scoreboardLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)])
         
         let scoreboardexplainationLabel = UILabel()
         scoreboardexplainationLabel.textColor = UIColor(named: "AppColor2")
@@ -194,6 +201,13 @@ class ScoreboardViewController: UIViewController {
             self.scoreboardData = []
             self.sortedscoreboardData = []
             self.getUserData {
+                if self.gameNameVar != "" {
+                    self.scoreboardLabel.text = "Scoreboard of \(self.gameNameVar)"
+                    self.scoreboardLabel.font = self.scoreboardLabel.font.withSize(25)
+                } else {
+                    self.scoreboardLabel.text = "Scoreboard"
+                    self.scoreboardLabel.font = self.scoreboardLabel.font.withSize(40)
+                }
                 self.sortedscoreboardData = self.scoreboardData
                 self.sortedscoreboardData = self.sortedscoreboardData.sorted { $0.score > $1.score }
                 let count2 = self.sortedscoreboardData.count - 1
