@@ -18,9 +18,15 @@ struct ScoreboardStructure{
 
 class ScoreboardViewController: UIViewController {
 
+//MARK: Set Up
+    
+    
+    
+    //MARK: Variable Setup
     var useruid = Auth.auth().currentUser?.uid
     var db = Firestore.firestore()
-    
+    var noScoreLabel = UILabel()
+
     //MARK: Table Setup
     lazy var ScoreboardTable: UITableView = {
         let tb = UITableView()
@@ -29,36 +35,54 @@ class ScoreboardViewController: UIViewController {
         tb.register(ScoreboardTableViewCell.self, forCellReuseIdentifier: ScoreboardTableViewCell.identifer)
         return tb
     }()
-
+    
+    //MARK: Array Setup
     var scoreboardData:[ScoreboardStructure] = []
     var sortedscoreboardData:[ScoreboardStructure] = []
     
+    
+    
+//MARK: Load
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //MARK: General Load
         view.backgroundColor = UIColor(named: "AppColor1")
         ScoreboardTable.backgroundColor = UIColor(named: "AppColor1")
         ScoreboardTable.separatorColor = UIColor(named: "AppColor2")
+        
+        //MARK: Table Load
         view.addSubview(ScoreboardTable)
+        
+        //MARK: Set Layout
         setLayout()
+        
+        //MARK: Table Data Repeat
+        self.noScoreLabel.isHidden = true
         getUserData {
             self.sortedscoreboardData = self.scoreboardData
             self.sortedscoreboardData = self.sortedscoreboardData.sorted { $0.score > $1.score }
             let count1 = self.sortedscoreboardData.count - 1
-            for i in 0...count1 {
-                if i+1 > count1 {
-                    
-                } else {
-                    if self.sortedscoreboardData[i].score == self.sortedscoreboardData[i+1].score {
-                        if self.sortedscoreboardData[i+1].time != "" && self.sortedscoreboardData[i].time != "" {
-                            let separator = ":"
-                            let array_i_1 = self.sortedscoreboardData[i+1].time.components(separatedBy: separator)
-                            let time_i_1 = ((Int(array_i_1[0])! * 60) + Int(array_i_1[1])!)
-                            
-                            let array_i = self.sortedscoreboardData[i].time.components(separatedBy: separator)
-                            let time_i = ((Int(array_i[0])! * 60) + Int(array_i[1])!)
+            if count1 < 0 {
+                self.noScoreLabel.isHidden = false
+            } else {
+                self.noScoreLabel.isHidden = true
+                for i in 0...count1 {
+                    if i+1 > count1 {
+                        
+                    } else {
+                        if self.sortedscoreboardData[i].score == self.sortedscoreboardData[i+1].score {
+                            if self.sortedscoreboardData[i+1].time != "" && self.sortedscoreboardData[i].time != "" {
+                                let separator = ":"
+                                let array_i_1 = self.sortedscoreboardData[i+1].time.components(separatedBy: separator)
+                                let time_i_1 = ((Int(array_i_1[0])! * 60) + Int(array_i_1[1])!)
+                                
+                                let array_i = self.sortedscoreboardData[i].time.components(separatedBy: separator)
+                                let time_i = ((Int(array_i[0])! * 60) + Int(array_i[1])!)
 
-                            if time_i > time_i_1 {
-                                self.sortedscoreboardData.swapAt(i, i+1)
+                                if time_i > time_i_1 {
+                                    self.sortedscoreboardData.swapAt(i, i+1)
+                                }
                             }
                         }
                     }
@@ -66,10 +90,14 @@ class ScoreboardViewController: UIViewController {
             }
             self.ScoreboardTable.reloadData()
         }
+        
+        //MARK: Table Data Repeat
         getUserDataRepeat()
     }
     
-    //MARK: Table
+    
+    
+//MARK: Set Layout
     func setLayout(){
         
         let scoreboardLabel = UILabel()
@@ -95,29 +123,71 @@ class ScoreboardViewController: UIViewController {
         scoreboardexplainationLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([scoreboardexplainationLabel.topAnchor.constraint(equalTo: scoreboardLabel.bottomAnchor, constant: 5), scoreboardexplainationLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20), scoreboardexplainationLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)])
         
+        //MARK: No Score Label
+        noScoreLabel.font = noScoreLabel.font.withSize(20)
+        noScoreLabel.text = "Scoreboard will load when you start to your first activity. Get ready for the competition!"
+        noScoreLabel.textColor = .white
+        noScoreLabel.numberOfLines = -1
+        noScoreLabel.textAlignment = .left
+        noScoreLabel.clipsToBounds = true
+        view.addSubview(noScoreLabel)
+        
+        noScoreLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            noScoreLabel.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            noScoreLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            noScoreLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+            ])
+        
         ScoreboardTable.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([ScoreboardTable.topAnchor.constraint(equalTo: scoreboardexplainationLabel.bottomAnchor, constant: 10), ScoreboardTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor), ScoreboardTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor), ScoreboardTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)])
     }
     
+    
+    
+//MARK: Table Data
     var name = ""
     var score = 0
     var time = ""
+    var gameNameVar = ""
     func getUserData(completion: @escaping () -> ()) {
-        db.collection("users").getDocuments { querySnapshot, err in
-            if err != nil{
-                
-            } else {
-                for document in querySnapshot!.documents {
-                    self.name = document.get("name") as? String ?? ""
-                    self.score = document.get("score") as? Int ?? 0
-                    self.time = document.get("time") as? String ?? ""
-                    self.scoreboardData.append(ScoreboardStructure(score: self.score, name: self.name, time: self.time))
+        getUserInfo {
+            let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("scores")
+            ref.observeSingleEvent(of: .value) { snapshot in
+                for case let child as DataSnapshot in snapshot.children {
+                    guard let dict = child.value as? [String:Any] else {
+                        return
+                    }
+
+                    let gameNameCheck = snapshot.value as! Dictionary<String, Any>
+                    for (gameName, _) in gameNameCheck {
+                        if gameName == self.gameNameVar {
+                            let info = dict as? Dictionary<String, Any> ?? nil
+                            if info != nil {
+                                for (_, value) in info! {
+                                    let info2 = value as! Dictionary<String, Any>
+                                    for (key2, value2) in info2 {
+                                        if key2 == "username" {
+                                            self.name = value2 as? String ?? ""
+                                        } else if key2 == "score" {
+                                            self.score = value2 as? Int ?? 0
+                                        } else if key2 == "time" {
+                                            self.time = value2 as? String ?? ""
+
+                                        }
+                                    }
+                                    self.scoreboardData.append(ScoreboardStructure(score: self.score, name: self.name, time: self.time))
+                                }
+                            }
+                        }
+                        completion()
+                    }
                 }
-                completion()
             }
         }
     }
     
+    //MARK: Table Data Repeat
     var timer = Timer()
     func getUserDataRepeat(){
         timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
@@ -127,21 +197,26 @@ class ScoreboardViewController: UIViewController {
                 self.sortedscoreboardData = self.scoreboardData
                 self.sortedscoreboardData = self.sortedscoreboardData.sorted { $0.score > $1.score }
                 let count2 = self.sortedscoreboardData.count - 1
-                for i in 0...count2 {
-                    if i+1 > count2 {
-                        
-                    } else {
-                        if self.sortedscoreboardData[i].score == self.sortedscoreboardData[i+1].score {
-                            if self.sortedscoreboardData[i+1].time != "" && self.sortedscoreboardData[i].time != "" {
-                                let separator = ":"
-                                let array_i_1 = self.sortedscoreboardData[i+1].time.components(separatedBy: separator)
-                                let time_i_1 = ((Int(array_i_1[0])! * 60) + Int(array_i_1[1])!)
-                                
-                                let array_i = self.sortedscoreboardData[i].time.components(separatedBy: separator)
-                                let time_i = ((Int(array_i[0])! * 60) + Int(array_i[1])!)
+                if count2 < 0 {
+                    self.noScoreLabel.isHidden = false
+                } else {
+                    self.noScoreLabel.isHidden = true
+                    for i in 0...count2 {
+                        if i+1 > count2 {
+                            
+                        } else {
+                            if self.sortedscoreboardData[i].score == self.sortedscoreboardData[i+1].score {
+                                if self.sortedscoreboardData[i+1].time != "" && self.sortedscoreboardData[i].time != "" {
+                                    let separator = ":"
+                                    let array_i_1 = self.sortedscoreboardData[i+1].time.components(separatedBy: separator)
+                                    let time_i_1 = ((Int(array_i_1[0])! * 60) + Int(array_i_1[1])!)
+                                    
+                                    let array_i = self.sortedscoreboardData[i].time.components(separatedBy: separator)
+                                    let time_i = ((Int(array_i[0])! * 60) + Int(array_i[1])!)
 
-                                if time_i > time_i_1 {
-                                    self.sortedscoreboardData.swapAt(i, i+1)
+                                    if time_i > time_i_1 {
+                                        self.sortedscoreboardData.swapAt(i, i+1)
+                                    }
                                 }
                             }
                         }
@@ -151,7 +226,30 @@ class ScoreboardViewController: UIViewController {
             }
         })
     }
+    
+    
+    
+//MARK: Get User Info
+    func getUserInfo(completion: @escaping () -> ()) {
+        db.collection("users").getDocuments { querySnapshot, err in
+            if err != nil{
+
+            } else {
+                let docRef = self.db.collection("users").document(self.useruid!)
+                docRef.getDocument { (document, error) in
+                    if let document = document, document.exists {
+                        self.gameNameVar = document.get("gameNameString") as? String ?? ""
+                        completion()
+                    } else {
+                        print("Document does not exist")
+                    }
+                }
+            }
+        }
+    }
 }
+
+
 
 //MARK: TableView Extension
 extension ScoreboardViewController: UITableViewDelegate, UITableViewDataSource {

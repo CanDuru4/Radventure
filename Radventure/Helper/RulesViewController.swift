@@ -15,9 +15,10 @@ class RulesViewController: UIViewController, WKNavigationDelegate, WKUIDelegate 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        //MARK: Map Set Up
+        //MARK: Webview Set Up
         let webView = WKWebView()
         webView.navigationDelegate = self
+        webView.configuration.defaultWebpagePreferences.allowsContentJavaScript = false
         view = webView
         
         //MARK: Back Button Set Up
