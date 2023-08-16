@@ -70,6 +70,9 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     var gameCount = ""
     var arrayCount: [String] = []
     var user_name = ""
+    var searchParameter = 0.0
+    var map_latitude = 0.0
+    var map_longitude = 0.0
     
     //MARK: Map Set Up
     private let map: MKMapView = {
@@ -242,8 +245,11 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 guard let strongSelf = self else {
                     return
                 }
-            strongSelf.map.setRegion(MKCoordinateRegion(center: self!.center_coordinate, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
-                strongSelf.map.showsUserLocation = true
+                self!.contactDatabaseLocationInfo {
+                    let centercoordinates = CLLocationCoordinate2D(latitude: self!.map_latitude, longitude: self!.map_longitude)
+                    strongSelf.map.setRegion(MKCoordinateRegion(center: self!.center_coordinate, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
+                    strongSelf.map.showsUserLocation = true
+                }
             }
         }
     }
@@ -708,39 +714,28 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
             let userLocation = CLLocation(latitude: (self.user_latitude), longitude: (self.user_longitude))
             let distancetodestination = selectedItem.distance(from: userLocation)
         
-            //MARK: CLOSED FOR TESTİNG
-            //MARK: Verification of Location: Perimeter is 35 meters
-//            if distancetodestination < 40 {
-//                let name_chosen = self.filteredpinlocationsdata[0].name
-//                let question_chosen = self.filteredpinlocationsdata[0].question
-//                let alert = UIAlertController(title: "Question of the \(name_chosen)", message: question_chosen, preferredStyle: .alert)
-//                alert.addTextField { (textField) in
-//                    textField.placeholder = "Please enter your answer"
-//                }
-//                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil))
-//                alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
-//                    self.user_answer = alert?.textFields![0].text ?? ""
-//                    self.answercheck()
-//                }))
-//                self.present(alert, animated: true, completion: nil)
-//            } else {
-//                let alert = UIAlertController(title: "You are not in the correct location.", message: "You should be in 100 perimeter circle around the point.", preferredStyle: .alert)
-//                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-//                self.present(alert, animated: true, completion: nil)
-//            }
-            
-            let name_chosen = self.filteredpinlocationsdata[0].name
-            let question_chosen = self.filteredpinlocationsdata[0].question
-            let alert = UIAlertController(title: "Question of the \(name_chosen)", message: question_chosen, preferredStyle: .alert)
-            alert.addTextField { (textField) in
-                textField.placeholder = "Please enter your answer"
+            //MARK: Verification of Location
+            print(self.searchParameter)
+            self.contactDatabaseSearchParameter {
+                if distancetodestination < self.searchParameter {
+                    let name_chosen = self.filteredpinlocationsdata[0].name
+                    let question_chosen = self.filteredpinlocationsdata[0].question
+                    let alert = UIAlertController(title: "Question of the \(name_chosen)", message: question_chosen, preferredStyle: .alert)
+                    alert.addTextField { (textField) in
+                        textField.placeholder = "Please enter your answer"
+                    }
+                    alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil))
+                    alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
+                        self.user_answer = alert?.textFields![0].text ?? ""
+                        self.answercheck()
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                } else {
+                    let alert = UIAlertController(title: "You are not in the correct location.", message: "You should be in \(Int((self.searchParameter))) meter perimeter circle around the point.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }
             }
-            alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil))
-            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
-                self.user_answer = alert?.textFields![0].text ?? ""
-                self.answercheck()
-            }))
-            self.present(alert, animated: true, completion: nil)
         }
     }
     
@@ -880,7 +875,39 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
             }
         }
     }
+  
     
+    
+//MARK: Communication with Database for Search Parameter w/ Completion
+    func contactDatabaseSearchParameter(completion: @escaping () -> ()){
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("searchParameter")
+        ref.observeSingleEvent(of: .value) { snapshot in
+            for case let child as DataSnapshot in snapshot.children {
+                guard let dict = child.value as? [String:Any] else {
+                    return
+                }
+                self.searchParameter = dict["searchParameter"] as! Double
+                completion()
+            }
+        }
+    }
+    
+    
+    
+    //MARK: Communication with Database for Location w/ Completion
+    func contactDatabaseLocationInfo(completion: @escaping () -> ()){
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("locationData")
+        ref.observeSingleEvent(of: .value) { snapshot in
+            for case let child as DataSnapshot in snapshot.children {
+                guard let dict = child.value as? [String:Any] else {
+                    return
+                }
+                self.map_latitude = dict["latitude"] as! Double
+                self.map_longitude = dict["longitude"] as! Double
+                completion()
+            }
+        }
+    }
     
     
 //MARK: Communication with Database for Array Number w/ Completion
