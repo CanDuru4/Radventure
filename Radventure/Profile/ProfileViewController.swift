@@ -37,6 +37,7 @@ class ProfileViewController: UIViewController {
     var gameArrayCount = 0
     var passwordKeyDatabase = ""
     var scoreClearPassword = ""
+    var currentuseruid = Auth.auth().currentUser?.uid
 
     //MARK: Table Setup
     lazy var table: UITableView = {
@@ -190,7 +191,9 @@ class ProfileViewController: UIViewController {
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 self.updateDataClear(){
-                    ScoreboardViewController().getUserData {
+                    self.updateCommonDataClear {
+                        ScoreboardViewController().getUserData {
+                        }
                     }
                 }
             } else {
@@ -210,6 +213,25 @@ class ProfileViewController: UIViewController {
             completion()
         }
     }
+    func updateCommonDataClear(completion: @escaping () -> ()){
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app/").reference().child("scores")
+        ref.observeSingleEvent(of: .value) { snapshot in
+            for case let child as DataSnapshot in snapshot.children {
+                let info = child.value as! Dictionary<String, Any>
+                for (_, value) in info {
+                    let info2 = value as! Dictionary<String, Any>
+                    for (key2, value2) in info2 {
+                        if key2 == "uid" {
+                            if value2 as! String == Auth.auth().currentUser!.uid {
+                                ref.child(child.key).child(self.currentuseruid!).removeValue()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     
     
 //MARK: Get User Data
@@ -234,6 +256,7 @@ class ProfileViewController: UIViewController {
     
 //MARK: Get User Score Data
     func getUserScoreData(completion: @escaping () -> ()){
+        self.profileInfo = []
         let db = Firestore.firestore()
         let user = (Auth.auth().currentUser?.uid)!
         let docRef = db.collection("users").document(user)
