@@ -204,11 +204,9 @@ class ScoreboardViewController: UIViewController {
     var timer = Timer()
     func getUserDataRepeat(){
         timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
-            print("repeat çalışıyor")
             self.scoreboardData = []
             self.sortedscoreboardData = []
             self.getUserData {
-                print("bu da çalışıyor")
                 if self.gameNameVar != "" {
                     self.scoreboardLabel.text = "Scoreboard of \(self.gameNameVar)"
                     self.scoreboardLabel.font = self.scoreboardLabel.font.withSize(25)

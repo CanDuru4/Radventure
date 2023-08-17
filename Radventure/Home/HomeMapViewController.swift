@@ -731,7 +731,6 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
             let distancetodestination = selectedItem.distance(from: userLocation)
         
             //MARK: Verification of Location
-            print(self.searchParameter)
             self.contactDatabaseSearchParameter {
                 if distancetodestination < self.searchParameter {
                     let name_chosen = self.filteredpinlocationsdata[0].name
