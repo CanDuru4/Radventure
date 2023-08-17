@@ -150,9 +150,13 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                         self.startButtoncheck = 1
                         self.gameDataUpdate(){
                             self.score = 0
+                            self.timer_label.invalidate()
+                            self.timerLabel.text = "00:00"
                         }
-                        self.timer_label.invalidate()
-                        self.timerLabel.text = "00:00"
+                        ProfileViewController().getUserScoreData {
+                            ProfileViewController().getUserScoreData2 {
+                            }
+                        }
                         for PinAnnotation in self.map.annotations {
                             self.map.removeAnnotation(PinAnnotation)
                         }
@@ -176,9 +180,13 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                         self.startButtoncheck = 1
                         self.gameDataUpdate(){
                             self.score = 0
+                            self.timer_label.invalidate()
+                            self.timerLabel.text = "00:00"
                         }
-                        self.timer_label.invalidate()
-                        self.timerLabel.text = "00:00"
+                        ProfileViewController().getUserScoreData {
+                            ProfileViewController().getUserScoreData2 {
+                            }
+                        }
                         for PinAnnotation in self.map.annotations {
                             self.map.removeAnnotation(PinAnnotation)
                         }
@@ -487,8 +495,8 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                             self.didSetCount1 = 0
                             self.didSetCount2 = 0
                             self.updateUserDatato0()
-                            let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("scores").child(self.gameName).child(self.user_name)
-                            ref.setValue(["username": self.user_name, "score": 0, "time": ""] as [String : Any])
+                            let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("scores").child(self.gameName).child(self.useruid!)
+                            ref.setValue(["username": self.user_name, "score": 0, "time": "", "uid": self.useruid!] as [String : Any])
                             self.timerLabelFunction()
                             self.countPins(choice_pin: self.RandomRouteChoice) {
                                 self.PinLocationData(choice_pinlocationdata: self.RandomRouteChoice){
@@ -545,9 +553,13 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 self.startButtoncheck = 1
                 self.gameDataUpdate(){
                     self.score = 0
+                    self.timer_label.invalidate()
+                    self.timerLabel.text = "00:00"
                 }
-                self.timer_label.invalidate()
-                self.timerLabel.text = "00:00"
+                ProfileViewController().getUserScoreData {
+                    ProfileViewController().getUserScoreData2 {
+                    }
+                }
                 for PinAnnotation in self.map.annotations {
                     self.map.removeAnnotation(PinAnnotation)
                 }
@@ -606,8 +618,6 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                     self.logOutButton.isHidden = false
                     self.forceQuitButtonCheck = 0
                     self.startButtoncheck = 1
-                    self.timer_label.invalidate()
-                    self.timerLabel.text = "00:00"
                     for PinAnnotation in self.map.annotations {
                         self.map.removeAnnotation(PinAnnotation)
                     }
@@ -619,6 +629,12 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                         }
                     }
                     self.gameDataUpdate(){
+                        self.timer_label.invalidate()
+                        self.timerLabel.text = "00:00"
+                    }
+                    ProfileViewController().getUserScoreData {
+                        ProfileViewController().getUserScoreData2 {
+                        }
                     }
                 } else if (seconds_text < 10) {
                     let timeString = String(minutes)
@@ -777,8 +793,8 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                     self.present(alert, animated: true, completion: nil)
                 }
             }
-            let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("scores").child(gameName).child(user_name)
-            ref.setValue(["username": user_name, "score": self.score, "time": self.timerLabel.text!] as [String : Any])
+            let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("scores").child(gameName).child(useruid!)
+            ref.setValue(["username": user_name, "score": self.score, "time": self.timerLabel.text!, "uid": useruid!] as [String : Any])
             
             
             if self.location_count == 0 {
@@ -792,10 +808,14 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 logOutButton.isHidden = false
                 forceQuitButtonCheck = 0
                 startButtoncheck = 1
-                timer_label.invalidate()
                 self.gameDataUpdate(){
+                    self.timer_label.invalidate()
+                    self.timerLabel.text = "00:00"
                 }
-                timerLabel.text = "00:00"
+                ProfileViewController().getUserScoreData {
+                    ProfileViewController().getUserScoreData2 {
+                    }
+                }
                 for PinAnnotation in self.map.annotations {
                     self.map.removeAnnotation(PinAnnotation)
                 }

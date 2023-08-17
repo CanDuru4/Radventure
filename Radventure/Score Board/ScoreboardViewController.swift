@@ -157,38 +157,44 @@ class ScoreboardViewController: UIViewController {
     var score = 0
     var time = ""
     var gameNameVar = ""
+    var check = 0
     func getUserData(completion: @escaping () -> ()) {
+        check = 0
         getUserInfo {
             let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("scores")
             ref.observeSingleEvent(of: .value) { snapshot in
                 for case let child as DataSnapshot in snapshot.children {
                     guard let dict = child.value as? [String:Any] else {
+                        completion()
                         return
                     }
 
                     let gameNameCheck = snapshot.value as! Dictionary<String, Any>
                     for (gameName, _) in gameNameCheck {
                         if gameName == self.gameNameVar {
-                            let info = dict as? Dictionary<String, Any> ?? nil
-                            if info != nil {
-                                for (_, value) in info! {
-                                    let info2 = value as! Dictionary<String, Any>
-                                    for (key2, value2) in info2 {
-                                        if key2 == "username" {
-                                            self.name = value2 as? String ?? ""
-                                        } else if key2 == "score" {
-                                            self.score = value2 as? Int ?? 0
-                                        } else if key2 == "time" {
-                                            self.time = value2 as? String ?? ""
+                            let info = dict
+                            for (_, value) in info {
+                                let info2 = value as! Dictionary<String, Any>
+                                for (key2, value2) in info2 {
+                                    if key2 == "username" {
+                                        self.name = value2 as? String ?? ""
+                                    } else if key2 == "score" {
+                                        self.score = value2 as? Int ?? 0
+                                    } else if key2 == "time" {
+                                        self.time = value2 as? String ?? ""
 
-                                        }
                                     }
-                                    self.scoreboardData.append(ScoreboardStructure(score: self.score, name: self.name, time: self.time))
                                 }
+                                self.scoreboardData.append(ScoreboardStructure(score: self.score, name: self.name, time: self.time))
                             }
                         }
-                        completion()
                     }
+                    self.check = 1
+                    completion()
+                }
+                
+                if self.check != 1 {
+                    completion()
                 }
             }
         }
@@ -198,9 +204,11 @@ class ScoreboardViewController: UIViewController {
     var timer = Timer()
     func getUserDataRepeat(){
         timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
+            print("repeat çalışıyor")
             self.scoreboardData = []
             self.sortedscoreboardData = []
             self.getUserData {
+                print("bu da çalışıyor")
                 if self.gameNameVar != "" {
                     self.scoreboardLabel.text = "Scoreboard of \(self.gameNameVar)"
                     self.scoreboardLabel.font = self.scoreboardLabel.font.withSize(25)
@@ -278,29 +286,33 @@ extension ScoreboardViewController: UITableViewDelegate, UITableViewDataSource {
     //MARK: Cell Content
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ScoreboardTableViewCell.identifer, for: indexPath) as! ScoreboardTableViewCell
-        cell.dataStructure = sortedscoreboardData[indexPath.row]
-        
-        cell.backgroundColor = UIColor(named: "AppColor1")
-        let title_text = "\((indexPath.row) + 1). \((sortedscoreboardData[indexPath.row].name).firstUppercased)"
-        cell.titleLabel.font = cell.titleLabel.font.withSize(20)
-        cell.titleLabel.textColor = UIColor(named: "AppColor2")
-        let attributedString = NSMutableAttributedString(string: title_text)
-        attributedString.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: title_text.count))
-        cell.titleLabel.attributedText = attributedString
-        
-        cell.detailLabel_score.text = "Score: \(String(sortedscoreboardData[indexPath.row].score))"
-        cell.detailLabel_score.font = cell.titleLabel.font.withSize(15)
-        cell.detailLabel_score.textColor = UIColor(named: "AppColor2")
-        
-        if (sortedscoreboardData[indexPath.row].time) == "" {
-            cell.detailLabel_time.text = "Not submitted any question yet."
+        if sortedscoreboardData.count != 0 {
+            cell.dataStructure = sortedscoreboardData[indexPath.row]
+            
+            cell.backgroundColor = UIColor(named: "AppColor1")
+            let title_text = "\((indexPath.row) + 1). \((sortedscoreboardData[indexPath.row].name).firstUppercased)"
+            cell.titleLabel.font = cell.titleLabel.font.withSize(20)
+            cell.titleLabel.textColor = UIColor(named: "AppColor2")
+            let attributedString = NSMutableAttributedString(string: title_text)
+            attributedString.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: title_text.count))
+            cell.titleLabel.attributedText = attributedString
+            
+            cell.detailLabel_score.text = "Score: \(String(sortedscoreboardData[indexPath.row].score))"
+            cell.detailLabel_score.font = cell.titleLabel.font.withSize(15)
+            cell.detailLabel_score.textColor = UIColor(named: "AppColor2")
+            
+            if (sortedscoreboardData[indexPath.row].time) == "" {
+                cell.detailLabel_time.text = "Not submitted any question yet."
+            } else {
+                cell.detailLabel_time.text = "Remaining Time: \(sortedscoreboardData[indexPath.row].time)"
+            }
+            cell.detailLabel_time.textAlignment = .right
+            cell.detailLabel_time.font = cell.titleLabel.font.withSize(15)
+            cell.detailLabel_time.textColor = UIColor(named: "AppColor2")
+            return cell
         } else {
-            cell.detailLabel_time.text = "Remaining Time: \(sortedscoreboardData[indexPath.row].time)"
+            return cell
         }
-        cell.detailLabel_time.textAlignment = .right
-        cell.detailLabel_time.font = cell.titleLabel.font.withSize(15)
-        cell.detailLabel_time.textColor = UIColor(named: "AppColor2")
-        return cell
     }
 
     //MARK: Table Height
