@@ -20,7 +20,7 @@ import SceneKit
 //MARK: Pin Data Structure
 struct PinLocationsStructure{
     let latitude, longitude: Double
-    let name, question, answer: String
+    let name, question, answer, questionType, optionsList: String
 }
 
 //MARK: Game Name Structure
@@ -36,13 +36,20 @@ struct GameNameStructure{
     }
 }
 
+//MARK: Team Name Structure
+struct TeamStructure{
+    let name, uid: String
+}
+
+
+
 class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
 
 //MARK: Set Up
 
     
+    
     //MARK: Variable Set Up
-    var center_coordinate = CLLocationCoordinate2D(latitude: 41.066993155414536, longitude: 29.034859552149705)
     var place_name = ""
     var user_answer = ""
     var passwordKeyDatabase = ""
@@ -73,6 +80,14 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     var searchParameter = 0.0
     var map_latitude = 0.0
     var map_longitude = 0.0
+    var teamCheck = 0
+    var teamPersonNumber = 0
+    var gameNameList: [String] = []
+    var gameChosen = ""
+    var teammembers: [TeamStructure] = []
+    var game_password = ""
+    var arrayCheck: [String] = []
+    var questionType = ""
     
     //MARK: Map Set Up
     private let map: MKMapView = {
@@ -95,7 +110,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 filteredpinlocationsdata = pinlocationsdata
             }
         }
-    }
+    }                                                                                                                                                               
     var done_array = [String]()
     var filteredpinlocationsdata:[PinLocationsStructure] = []
     
@@ -123,13 +138,16 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
         setMapLayout()
         mapLocation()
         setButton()
+        if #available(iOS 16.0, *) {
+            map.preferredConfiguration = MKHybridMapConfiguration()
+        } else {
+            map.mapType = .hybrid
+        }
         map.delegate = self
 
         //MARK: Compass Delegate
         locationManager.delegate = self
         locationManager.startUpdatingHeading()
-        
-        
 
         //MARK: User Info Load
         getUserData(){
@@ -137,90 +155,103 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
             
             //MARK: User Started Before
             if self.start_check == 1 {
-                self.contactDatabase {
-                    let hour = Calendar.current.component(.hour, from: Date())
-                    let min = Calendar.current.component(.minute, from: Date())
-                    if (self.finishHourIntStart < hour) {
-                        AudioServicesPlaySystemSound(SystemSoundID(1304))
-                        AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-                        self.forceQuitButton.isHidden = true
-                        self.startButton.isHidden = false
-                        self.logOutButton.isHidden = false
-                        self.forceQuitButtonCheck = 0
-                        self.startButtoncheck = 1
-                        self.gameDataUpdate(){
-                            self.score = 0
-                            self.timer_label.invalidate()
-                            self.timerLabel.text = "00:00"
-                        }
-                        ProfileViewController().getUserScoreData {
-                            ProfileViewController().getUserScoreData2 {
+                self.contactDatabaseGames() {
+                    self.contactDatabase {
+                        let hour = Calendar.current.component(.hour, from: Date())
+                        let min = Calendar.current.component(.minute, from: Date())
+                        if (self.finishHourIntStart < hour) {
+                            AudioServicesPlaySystemSound(SystemSoundID(1304))
+                            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+                            self.forceQuitButton.isHidden = true
+                            self.startButton.isHidden = false
+                            self.logOutButton.isHidden = false
+                            self.forceQuitButtonCheck = 0
+                            self.startButtoncheck = 1
+                            self.gameDataUpdate(){
+                                if self.teamPersonNumber != 0 {
+                                    for teammember in self.teammembers {
+                                        self.firebaseTeamConnect(uid: teammember.uid, name: teammember.name)
+                                    }
+                                }
+                                self.score = 0
+                                self.timer_label.invalidate()
+                                self.timerLabel.text = "00:00"
                             }
-                        }
-                        for PinAnnotation in self.map.annotations {
-                            self.map.removeAnnotation(PinAnnotation)
-                        }
-                        self.db.collection("users").document(self.useruid!).updateData(["start": 0, "locations": [String]()]) { (error) in
-                            if error != nil {
-                                let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
-                                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-                                self.present(alert, animated: true, completion: nil)
+                            ProfileViewController().getUserScoreData {
+                                ProfileViewController().getUserScoreData2 {
+                                }
                             }
-                        }
-                        let alert = UIAlertController(title: "Activity automatically stopped.", message: "Since the finishing time is passed, activity is stopped.", preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-                        self.present(alert, animated: true, completion: nil)
-                    } else if (self.finishHourIntStart == hour && self.finishMinuteIntStart < min){
-                        AudioServicesPlaySystemSound(SystemSoundID(1304))
-                        AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-                        self.forceQuitButton.isHidden = true
-                        self.startButton.isHidden = false
-                        self.logOutButton.isHidden = false
-                        self.forceQuitButtonCheck = 0
-                        self.startButtoncheck = 1
-                        self.gameDataUpdate(){
-                            self.score = 0
-                            self.timer_label.invalidate()
-                            self.timerLabel.text = "00:00"
-                        }
-                        ProfileViewController().getUserScoreData {
-                            ProfileViewController().getUserScoreData2 {
+                            for PinAnnotation in self.map.annotations {
+                                self.map.removeAnnotation(PinAnnotation)
                             }
-                        }
-                        for PinAnnotation in self.map.annotations {
-                            self.map.removeAnnotation(PinAnnotation)
-                        }
-                        self.db.collection("users").document(self.useruid!).updateData(["start": 0, "locations": [String]()]) { (error) in
-                            if error != nil {
-                                let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
-                                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-                                self.present(alert, animated: true, completion: nil)
+                            self.db.collection("users").document(self.useruid!).updateData(["start": 0, "locations": [String]()]) { (error) in
+                                if error != nil {
+                                    let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
+                                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                                    self.present(alert, animated: true, completion: nil)
+                                }
                             }
-                        }
-                        let alert = UIAlertController(title: "Activity automatically stopped.", message: "Since the finishing time is passed, activity is stopped.", preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-                        self.present(alert, animated: true, completion: nil)
-                    } else {
-                        self.timerLabelFunction()
-                        self.countPins2(choice_pin2: self.RandomRouteChoice) {
-                            self.PinLocationData(choice_pinlocationdata: self.RandomRouteChoice){
-                                self.startButton.isHidden = true
-                                self.forceQuitButton.isHidden = false
-                                self.logOutButton.isHidden = true
-                                self.forceQuitButtonCheck = 1
-                                self.startButtoncheck = 0
-                                self.location_count = self.pinlocationsdata.count
-                                for i in self.done_array{
-                                    self.pinlocationsdata = self.pinlocationsdata.filter { $0.name.lowercased() != i.lowercased() }
-                                    self.didSetCount2 = self.didSetCount2 - 1
-                                    self.children_count2 = self.children_count2 - 1
-                                    self.location_count = self.location_count - 1
+                            let alert = UIAlertController(title: "Activity automatically stopped.", message: "Since the finishing time is passed, activity is stopped.", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                            self.present(alert, animated: true, completion: nil)
+                        } else if (self.finishHourIntStart == hour && self.finishMinuteIntStart < min){
+                            AudioServicesPlaySystemSound(SystemSoundID(1304))
+                            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+                            self.forceQuitButton.isHidden = true
+                            self.startButton.isHidden = false
+                            self.logOutButton.isHidden = false
+                            self.forceQuitButtonCheck = 0
+                            self.startButtoncheck = 1
+                            self.gameDataUpdate(){
+                                if self.teamPersonNumber != 0 {
+                                    for teammember in self.teammembers {
+                                        self.firebaseTeamConnect(uid: teammember.uid, name: teammember.name)
+                                    }
+                                }
+                                self.score = 0
+                                self.timer_label.invalidate()
+                                self.timerLabel.text = "00:00"
+                            }
+                            ProfileViewController().getUserScoreData {
+                                ProfileViewController().getUserScoreData2 {
+                                }
+                            }
+                            for PinAnnotation in self.map.annotations {
+                                self.map.removeAnnotation(PinAnnotation)
+                            }
+                            self.db.collection("users").document(self.useruid!).updateData(["start": 0, "locations": [String]()]) { (error) in
+                                if error != nil {
+                                    let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
+                                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                                    self.present(alert, animated: true, completion: nil)
+                                }
+                            }
+                            let alert = UIAlertController(title: "Activity automatically stopped.", message: "Since the finishing time is passed, activity is stopped.", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                            self.present(alert, animated: true, completion: nil)
+                        } else {
+                            self.timerLabelFunction()
+                            self.countPins2(choice_pin2: self.RandomRouteChoice) {
+                                self.PinLocationData(choice_pinlocationdata: self.RandomRouteChoice){
+                                    self.startButton.isHidden = true
+                                    self.forceQuitButton.isHidden = false
+                                    self.logOutButton.isHidden = true
+                                    self.forceQuitButtonCheck = 1
+                                    self.startButtoncheck = 0
+                                    self.location_count = self.pinlocationsdata.count
+                                    for i in self.done_array{
+                                        self.pinlocationsdata = self.pinlocationsdata.filter { $0.name.lowercased() != i.lowercased() }
+                                        self.didSetCount2 = self.didSetCount2 - 1
+                                        self.children_count2 = self.children_count2 - 1
+                                        self.location_count = self.location_count - 1
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+            
             //MARK: User Starting First Time
             else {
                 self.startButton.isHidden = false
@@ -231,6 +262,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
             }
         }
 
+
         
         //MARK: Back Button Set Up
         let backButton = UIBarButtonItem()
@@ -238,6 +270,8 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
         self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
     }
    
+    
+    
 //MARK: Location Manager Function for Compass
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         let angle = newHeading.trueHeading * .pi / 180
@@ -247,6 +281,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     }
 
     
+    
 //MARK: Map
     func mapLocation(){
         LocationManager.shared.getUserLocation { [weak self] location in DispatchQueue.main.async {
@@ -254,8 +289,9 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                     return
                 }
                 self!.contactDatabaseLocationInfo {
+                    
                     let centercoordinates = CLLocationCoordinate2D(latitude: self!.map_latitude, longitude: self!.map_longitude)
-                    strongSelf.map.setRegion(MKCoordinateRegion(center: self!.center_coordinate, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
+                    strongSelf.map.setRegion(MKCoordinateRegion(center: centercoordinates, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
                     strongSelf.map.showsUserLocation = true
                 }
             }
@@ -266,7 +302,6 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
         map.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([map.topAnchor.constraint(equalTo: view.topAnchor), map.bottomAnchor.constraint(equalTo: view.bottomAnchor), map.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor), map.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)])
     }
-    
     
     
     
@@ -324,10 +359,37 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
         zoomInButton.layer.cornerRadius = 10
         zoomInButton.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner] // Top right corner, Top left corner respectively
         
+        //MARK: Map Satellite  Button
+        let mapSatelliteButton = UIButton(type: .custom)
+        mapSatelliteButton.backgroundColor = UIColor(named: "AppColor1")
+        mapSatelliteButton.setImage(UIImage(systemName: "globe")?.resized(to: CGSize(width: 25, height: 25)).withTintColor(.white), for: .normal)
+        mapSatelliteButton.addTarget(self, action: #selector(mapSatellite), for: .touchUpInside)
+        view.addSubview(mapSatelliteButton)
+        
+        mapSatelliteButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([mapSatelliteButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10), mapSatelliteButton.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: 20), mapSatelliteButton.widthAnchor.constraint(equalToConstant: 50), mapSatelliteButton.heightAnchor.constraint(equalToConstant: 50)])
+        mapSatelliteButton.layer.cornerRadius = 25
+        mapSatelliteButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner] // Top right corner, Top left corner respectively
+        
+        //MARK: Map Standard Button
+        let mapStandard = UIButton(type: .custom)
+        mapStandard.backgroundColor = UIColor(named: "AppColor1")
+        mapStandard.setImage(UIImage(systemName: "map.fill")?.resized(to: CGSize(width: 25, height: 25)).withTintColor(.white), for: .normal)
+        mapStandard.addTarget(self, action: #selector(mapStandardAction), for: .touchUpInside)
+        view.addSubview(mapStandard)
+        
+        mapStandard.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([mapStandard.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10), mapStandard.bottomAnchor.constraint(equalTo: mapSatelliteButton.topAnchor), mapStandard.widthAnchor.constraint(equalToConstant: 50), mapStandard.heightAnchor.constraint(equalToConstant: 50)])
+        mapStandard.layer.cornerRadius = 25
+        mapStandard.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner] // Top right corner, Top left corner respectively
+        
         //MARK: Log Out Button
         logOutButton.setTitle("Log Out", for: .normal)
         logOutButton.setTitleColor(UIColor(named: "AppColor1"), for: .normal)
         logOutButton.addTarget(self, action: #selector(logOutAction), for: .touchUpInside)
+        logOutButton.layer.cornerRadius = 5
+        logOutButton.clipsToBounds = true
+        logOutButton.backgroundColor = UIColor(white: 100, alpha: 0.005)
         logOutButton.underline()
         view.addSubview(logOutButton)
         
@@ -351,6 +413,9 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
         forceQuitButton.setTitle("Force Quit", for: .normal)
         forceQuitButton.setTitleColor(UIColor(named: "AppColor1"), for: .normal)
         forceQuitButton.addTarget(self, action: #selector(forceQuitButtonAction), for: .touchUpInside)
+        forceQuitButton.layer.cornerRadius = 5
+        forceQuitButton.clipsToBounds = true
+        forceQuitButton.backgroundColor = UIColor(white: 100, alpha: 0.005)
         view.addSubview(forceQuitButton)
         forceQuitButton.underline()
         
@@ -393,25 +458,50 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-    var zoom_count = 14
+  
+    
+//MARK: Map Sattelite Button Action
+    @objc func mapSatellite() {
+        if #available(iOS 16.0, *) {
+            map.preferredConfiguration = MKHybridMapConfiguration()
+        } else {
+            map.mapType = .hybrid
+        }
+    }
+
+
+
+//MARK: Map Standard Button Action
+    @objc func mapStandardAction() {
+        if #available(iOS 16.0, *) {
+            map.preferredConfiguration = MKStandardMapConfiguration()
+        } else {
+            map.mapType = .standard
+        }
+    }
+    
+    
+    
 //MARK: Zoom In Button Action
     @objc func zoomIn() {
         zoomMap(byFactor: 0.5)
-        zoom_count = zoom_count-1
     }
 
+    
+    
 //MARK: Zoom Out Button Action
     @objc func zoomOut() {
-        if zoom_count < 14 {
-            zoomMap(byFactor: 2)
-            zoom_count = zoom_count+1
-        }
+        zoomMap(byFactor: 2)
     }
+    
+    
     
 //MARK: Rules Button Action
     @objc func rules(){
         self.present(RulesViewController(), animated: true)
     }
+    
+    
     
 //MARK: Log Out Button Action
     @objc func logOutAction(){
@@ -449,77 +539,305 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
+    
+    
 //MARK: Start Button Action
+    @objc func startButtonAction(){
+        self.gameNameList = []
+        self.teammembers = []
+        self.teamMembersString = ""
+        self.arrayCheck = []
+        
+        contactDatabaseGameNameList(){
+            if self.gameNameList.count != 0 {
+                let alert = UIAlertController(title: "Avaiable Game Names", message: "", preferredStyle: .actionSheet)
+                let maxnumber = self.gameNameList.count - 1
+                if maxnumber == 0 {
+                    let okAction = UIAlertAction(title: self.gameNameList[0], style: .default, handler: { (_) in
+                        self.gameChosen = self.gameNameList[0]
+                        self.alertAction()
+                    })
+                    alert.addAction(okAction)
+                } else {
+                    for i in 0...maxnumber {
+                        let okAction = UIAlertAction(title: self.gameNameList[i], style: .default, handler: { (_) in
+                            self.gameChosen = self.gameNameList[i]
+                            
+                            self.alertAction()
+                        })
+                        alert.addAction(okAction)
+                    }
+                }
+                let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (_) in
+                    self.gameNameList = []
+                    self.teammembers = []
+                })
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true, completion: nil)
+                
+            } else {
+                let alert = UIAlertController(title: "No Avaliable Games Rigth Now! Please try again later.", message: "", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    
+    
+//MARK: Star Button Game Choice Action
     var startingHourInt = 0
     var startingMinuteInt = 0
     var finishHourIntStart = 0
     var finishMinuteIntStart = 0
     var gameName = ""
-    @objc func startButtonAction(){
-
-        let hour = Calendar.current.component(.hour, from: Date())
-        let min = Calendar.current.component(.minute, from: Date())
-        contactDatabase() {
-            if (self.startingHourInt > hour) {
-                let alert = UIAlertController(title: "Please wait for starting time.", message: "", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-            } else if (self.startingHourInt == hour && self.startingMinuteInt > min){
-                let alert = UIAlertController(title: "Please wait for starting time.", message: "", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-            } else if (self.finishHourIntStart < hour) {
-                let alert = UIAlertController(title: "Please check for starting time.", message: "", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-            } else if (self.finishHourIntStart == hour && self.finishMinuteIntStart < min){
-                let alert = UIAlertController(title: "Please check for starting time.", message: "", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-            } else {
-                AudioServicesPlaySystemSound(SystemSoundID(1304))
-                AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-                let alert = UIAlertController(title: "You are about to start the activity!", message: "When you start the activity, you will be not able to force quit from it without administration password.", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "I am aware of my action.", style: .default, handler: { (_) in
-                    self.gameNameDatabase() {
-                        self.randomRoute = Int.random(in: 0...3)
-                        self.contactDatabaseArrayCount(){
-                            var randomChoice = self.arrayCount.count
-                            if randomChoice == 0 {
+    var teamMembersString = ""
+    
+    func alertAction(){
+        self.contactDatabaseGames() {
+            //MARK: Password Check
+            let alert = UIAlertController(title: "Enter the Password of the Game", message: "Communicate with your administrator to enter the password.", preferredStyle: .alert)
+            alert.addTextField { (textField) in
+                textField.placeholder = "Password"
+            }
+            alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil))
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
+                
+                if self.game_password == (alert?.textFields![0].text ?? "") {
+                    let hour = Calendar.current.component(.hour, from: Date())
+                    let min = Calendar.current.component(.minute, from: Date())
+                    
+                    self.contactDatabase() {
+                        if (self.startingHourInt > hour) {
+                            let alert = UIAlertController(title: "Please wait for starting time.", message: "", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                            self.present(alert, animated: true, completion: nil)
+                        } else if (self.startingHourInt == hour && self.startingMinuteInt > min){
+                            let alert = UIAlertController(title: "Please wait for starting time.", message: "", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                            self.present(alert, animated: true, completion: nil)
+                        } else if (self.finishHourIntStart < hour) {
+                            let alert = UIAlertController(title: "Please check for starting time.", message: "", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                            self.present(alert, animated: true, completion: nil)
+                        } else if (self.finishHourIntStart == hour && self.finishMinuteIntStart < min){
+                            let alert = UIAlertController(title: "Please check for starting time.", message: "", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                            self.present(alert, animated: true, completion: nil)
+                        } else {
+                            AudioServicesPlaySystemSound(SystemSoundID(1304))
+                            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+                            let alert = UIAlertController(title: "You are about to start the activity!", message: "When you start the activity, you will be not able to force quit from it without administration password.", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "I am aware of my action.", style: .default, handler: { (_) in
                                 
-                            } else {
-                                randomChoice = randomChoice - 1
-                            }
-                            self.randomRoute = Int.random(in: 0...randomChoice)
-                            self.RandomRouteChoice = self.arrayCount[self.randomRoute]
-                            self.didSetCount1 = 0
-                            self.didSetCount2 = 0
-                            self.updateUserDatato0()
-                            let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("scores").child(self.gameName).child(self.useruid!)
-                            ref.setValue(["username": self.user_name, "score": 0, "time": "", "uid": self.useruid!] as [String : Any])
-                            self.timerLabelFunction()
-                            self.countPins(choice_pin: self.RandomRouteChoice) {
-                                self.PinLocationData(choice_pinlocationdata: self.RandomRouteChoice){
-                                    self.startButton.isHidden = true
-                                    self.forceQuitButton.isHidden = false
-                                    self.logOutButton.isHidden = true
-                                    self.forceQuitButtonCheck = 1
-                                    self.startButtoncheck = 0
-                                    self.score = 0
-                                    self.done_array = []
+                                self.teamPersonName(){
+                                    self.contactDatabaseArrayCount(){
+                                        var randomChoice = self.arrayCount.count
+                                        if randomChoice == 0 {
+                                            
+                                        } else {
+                                            randomChoice = randomChoice - 1
+                                        }
+                                        self.randomRoute = Int.random(in: 0...randomChoice)
+                                        self.RandomRouteChoice = self.arrayCount[self.randomRoute]
+                                        self.didSetCount1 = 0
+                                        self.didSetCount2 = 0
+                                        var count_array = 0
+
+                                        for i in self.teammembers {
+                                            count_array = count_array + 1
+                                            if count_array != self.teammembers.count {
+                                                self.teamMembersString.append("\(i.name), ")
+                                            } else {
+                                                self.teamMembersString.append("\(i.name)")
+                                            }
+                                        }
+                                        self.updateUserDatato0()
+
+                                        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("scores").child(self.gameChosen).child(self.useruid!)
+                                        ref.setValue(["username": self.user_name, "score": 0, "time": "", "uid": self.useruid!, "teammembers": self.teamMembersString] as [String : Any])
+                                        self.timerLabelFunction()
+                                        self.countPins(choice_pin: self.RandomRouteChoice) {
+                                            self.PinLocationData(choice_pinlocationdata: self.RandomRouteChoice){
+                                                self.startButton.isHidden = true
+                                                self.forceQuitButton.isHidden = false
+                                                self.logOutButton.isHidden = true
+                                                self.forceQuitButtonCheck = 1
+                                                self.startButtoncheck = 0
+                                                self.score = 0
+                                                self.done_array = []
+                                            }
+                                        }
+                                    }
                                 }
+                            })
+                            alert.addAction(okAction)
+                            alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil))
+                            alert.preferredAction = okAction
+                            self.present(alert, animated: true, completion: nil)
+                        }
+                    }
+                } else {
+                    let alert = UIAlertController(title: "Password is not Correct!", message: "", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    
+    
+//MARK: Communication with Database for Game Names w/ Completion
+    func contactDatabaseGameNameList(completion: @escaping () -> ()){
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("games")
+        ref.observeSingleEvent(of: .value) { snapshot in
+            for case _ as DataSnapshot in snapshot.children {
+                let gameaAvailable = snapshot.value as! Dictionary<String, Any>
+                for (gameName, gameValue) in gameaAvailable {
+                    let gameValueDictionary = gameValue as! Dictionary<String, Any>
+                    for (key, value) in gameValueDictionary {
+                        if key == "validation" {
+                            if value as! Int == 1 {
+                                self.gameNameList.append(gameName)
                             }
                         }
                     }
-                })
-                alert.addAction(okAction)
-                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil))
-                alert.preferredAction = okAction
-                self.present(alert, animated: true, completion: nil)
+                }
+            }
+            completion()
+        }
+    }
+    
+    
+    
+//MARK: Communication with Database for Games Information w/ Completion
+    func contactDatabaseGames(completion: @escaping () -> ()){
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("games")
+
+        ref.observeSingleEvent(of: .value) { snapshot in
+            for case _ as DataSnapshot in snapshot.children {
+                let gameaAvailable = snapshot.value as! Dictionary<String, Any>
+    
+                for (gameName, gameValue) in gameaAvailable {
+                    let gameValueDictionary = gameValue as! Dictionary<String, Any>
+                    
+                    if gameName == self.gameChosen {
+                        var document_count2 = 0
+                        for (key2, value2) in gameValueDictionary {
+                            document_count2 = document_count2 + 1
+                            if key2 == "team" {
+                                self.teamCheck = value2 as! Int
+                            } else if key2 == "teamPersonNumber" {
+                                self.teamPersonNumber = value2 as! Int
+                            } else if key2 == "password" {
+                                self.game_password = value2 as! String
+                            }
+                            if document_count2 == gameaAvailable.count {
+                                completion()
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 
+    
+    
+//MARK: Team Members Name Function
+    func teamPersonName(completion: @escaping () -> ()) {
+        if teamPersonNumber != 0 {
+            let alert = UIAlertController(title: "Team Members", message: "Please write the all team members' full name to the fields.", preferredStyle: .alert)
+                    
+            for i in 1...teamPersonNumber {
+                alert.addTextField { (textField) in
+                    textField.placeholder = "Please enter name of the team member \(i)."
+                }
+            }
+            
+            alert.addAction(UIAlertAction(title: "Submit", style: .default, handler: { [weak alert] (_) in
+                var document_count = 0
+                let text_field_count = alert!.textFields!.count
+                for i in alert!.textFields! {
+                    if i.text == "" {
+                        self.dismiss(animated: true)
+                        let alert = UIAlertController(title: "Please fill the all fields!", message: "", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                        return
+                    } else {
+                        self.db.collection("users").getDocuments() { (querySnapshot, err) in
+                            if let err = err {
+                                completion()
+                                print("Error getting documents: \(err)")
+                            } else {
+                                let document_max = querySnapshot!.documents.count
+                                for document in querySnapshot!.documents {
+                                    self.addingToDatabase(i: i, documentID: document.documentID) {
+                                        document_count = document_count + 1
+                                        if (document_max * text_field_count) == document_count {
+                                            for nameofmissing in self.arrayCheck {
+                                                self.teammembers.append(TeamStructure(name: nameofmissing, uid: UUID().uuidString))
+                                            }
+                                        }
+                                        if (document_max * text_field_count) == document_count {
+                                            completion()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }))
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            completion()
+        }
+    }
+    
+    var appendText = 1
+    func addingToDatabase(i: UITextField, documentID: String, completion: @escaping () -> ()) {
+        let docRef = self.db.collection("users").document(documentID)
+        docRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                let uid = document.data()?["uid"] as? String ?? ""
+                var users_name = document.data()?["name"] as? String ?? ""
+                
+                if let paranthesisRange = users_name.range(of: ") ") {
+                    users_name.removeSubrange(users_name.startIndex..<(paranthesisRange.upperBound))
+                }
+                
+                let lowercased_userText = i.text!.lowercased()
+                var finalizedText = lowercased_userText.replacingOccurrences(of: "ö", with: "o")
+                finalizedText = finalizedText.replacingOccurrences(of: "ü", with: "u")
+                finalizedText = finalizedText.replacingOccurrences(of: "ç", with: "c")
+                finalizedText = finalizedText.replacingOccurrences(of: "ş", with: "s")
+                finalizedText = finalizedText.replacingOccurrences(of: "ğ", with: "g")
+                finalizedText = finalizedText.replacingOccurrences(of: "ı", with: "i")
+                if self.arrayCheck.contains(finalizedText){
+                } else {
+                    for i in self.teammembers {
+                        if i.name == finalizedText {
+                            self.appendText = 0
+                        }
+                    }
+                    if self.appendText == 1 {
+                        self.arrayCheck.append(finalizedText)
+                    }
+                }
+                
+                if users_name.lowercased() == finalizedText.lowercased() {
+                    self.teammembers.append(TeamStructure(name: users_name.lowercased(), uid: uid))
+                    self.arrayCheck = self.arrayCheck.filter { $0 != finalizedText }
+                }
+            } 
+            completion()
+        }
+    }
+    
     
     
 //MARK: Force Quit Button Action
@@ -552,6 +870,11 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 self.forceQuitButtonCheck = 0
                 self.startButtoncheck = 1
                 self.gameDataUpdate(){
+                    if self.teamPersonNumber != 0 {
+                        for teammember in self.teammembers {
+                            self.firebaseTeamConnect(uid: teammember.uid, name: teammember.name)
+                        }
+                    }
                     self.score = 0
                     self.timer_label.invalidate()
                     self.timerLabel.text = "00:00"
@@ -584,11 +907,20 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     func zoomMap(byFactor delta: Double) {
         var region: MKCoordinateRegion = self.map.region
         var span: MKCoordinateSpan = map.region.span
-        span.latitudeDelta *= delta
-        span.longitudeDelta *= delta
+        
+        let newLatitudeDelta = span.latitudeDelta * delta
+        let newLongitudeDelta = span.longitudeDelta * delta
+        
+        let maxDeltaValue: CLLocationDegrees = 180
+        let minDeltaValue: CLLocationDegrees = 0.0001
+        
+        span.latitudeDelta = min(max(newLatitudeDelta, minDeltaValue), maxDeltaValue)
+        span.longitudeDelta = min(max(newLongitudeDelta, minDeltaValue), maxDeltaValue)
+        
         region.span = span
         map.setRegion(region, animated: true)
     }
+
     
     
 //MARK: Timer Label Function
@@ -629,6 +961,11 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                         }
                     }
                     self.gameDataUpdate(){
+                        if self.teamPersonNumber != 0 {
+                            for teammember in self.teammembers {
+                                self.firebaseTeamConnect(uid: teammember.uid, name: teammember.name)
+                            }
+                        }
                         self.timer_label.invalidate()
                         self.timerLabel.text = "00:00"
                     }
@@ -658,6 +995,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     
+    
 //MARK: Pin Location Annotation
     var PinAnnotations: CustomPointAnnotation!
     var PinAnnotationView:MKPinAnnotationView!
@@ -677,9 +1015,10 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     }
 
     
+    
 //MARK: Location Data
     func countPins(choice_pin: String, completion: @escaping () -> ()){
-        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child(choice_pin)
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("games").child(gameChosen).child(choice_pin)
         ref.observe(DataEventType.value, with: { (snapshot) in
             self.children_count = Int(snapshot.childrenCount)
             completion()
@@ -687,7 +1026,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func countPins2(choice_pin2: String, completion: @escaping () -> ()){
-        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child(choice_pin2)
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("games").child(gameChosen).child(choice_pin2)
         ref.observe(DataEventType.value, with: { (snapshot) in
             self.children_count2 = Int(snapshot.childrenCount)
             completion()
@@ -695,12 +1034,14 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     @objc func PinLocationData(choice_pinlocationdata: String, completion: @escaping () -> ()){
-        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child(choice_pinlocationdata)
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("games").child(gameChosen).child(choice_pinlocationdata)
         var name = ""
         var latitude = 0.000
         var longitude = 0.000
         var question = ""
         var answer = ""
+        var questionType = ""
+        var options = ""
         
         ref.observeSingleEvent(of: .value) { snapshot in
             for case let child as DataSnapshot in snapshot.children {
@@ -712,15 +1053,19 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 longitude = dict["longitude"] as! Double
                 question = dict["question"] as! String
                 answer = dict["answer"] as! String
-                
+                questionType = dict["questionType"] as! String
+                options = dict["options"] as! String
+
                 self.didSetCount1 = self.didSetCount1 + 1
                 self.didSetCount2 = self.didSetCount2 + 1
-                self.pinlocationsdata.append(PinLocationsStructure(latitude: latitude, longitude: longitude, name: name, question: question, answer: answer))
+                self.pinlocationsdata.append(PinLocationsStructure(latitude: latitude, longitude: longitude, name: name, question: question, answer: answer, questionType: questionType, optionsList: options))
                 self.location_count = self.pinlocationsdata.count
             }
             completion()
         }
     }
+    
+    
     
 //MARK: Display Question Function
     @objc func displayQuestion(){
@@ -735,16 +1080,31 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 if distancetodestination < self.searchParameter {
                     let name_chosen = self.filteredpinlocationsdata[0].name
                     let question_chosen = self.filteredpinlocationsdata[0].question
-                    let alert = UIAlertController(title: "Question of the \(name_chosen)", message: question_chosen, preferredStyle: .alert)
-                    alert.addTextField { (textField) in
-                        textField.placeholder = "Please enter your answer"
+                    
+                    if self.filteredpinlocationsdata[0].questionType == "mcq" {
+                        let alert = UIAlertController(title: "Question of the \(name_chosen)", message: question_chosen, preferredStyle: .alert)
+                        let result = self.filteredpinlocationsdata[0].optionsList.components(separatedBy: ", ")
+                        for i in result {
+                            alert.addAction(UIAlertAction(title: i, style: .default, handler: { (_) in
+                                self.user_answer = i
+                                self.answercheck()
+                            }))
+                        }
+                        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                        
+                    } else {
+                        let alert = UIAlertController(title: "Question of the \(name_chosen)", message: question_chosen, preferredStyle: .alert)
+                        alert.addTextField { (textField) in
+                            textField.placeholder = "Please enter your answer"
+                        }
+                        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil))
+                        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
+                            self.user_answer = alert?.textFields![0].text ?? ""
+                            self.answercheck()
+                        }))
+                        self.present(alert, animated: true, completion: nil)
                     }
-                    alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil))
-                    alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
-                        self.user_answer = alert?.textFields![0].text ?? ""
-                        self.answercheck()
-                    }))
-                    self.present(alert, animated: true, completion: nil)
                 } else {
                     let alert = UIAlertController(title: "You are not in the correct location.", message: "You should be in \(Int((self.searchParameter))) meter perimeter circle around the point.", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
@@ -753,6 +1113,8 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
             }
         }
     }
+    
+    
     
 //MARK: User Location for Area Check
     func location_check(completion: @escaping () -> ()) {
@@ -766,6 +1128,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
             }
         }
     }
+    
     
     
 //MARK: Check Answer Function
@@ -782,9 +1145,6 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
             pinlocationsdata = pinlocationsdata.filter { $0.name.lowercased() != filteredpinlocationsdata[0].name.lowercased() }
             score = score + 100
             
-            
-            
-            
             self.db.collection("users").document(self.useruid!).updateData(["locations": self.done_array,"score": self.score, "time": self.timerLabel.text!, "uid": self.useruid ?? ""]) { (error) in
                 if error != nil {
                     let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
@@ -792,9 +1152,8 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                     self.present(alert, animated: true, completion: nil)
                 }
             }
-            let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("scores").child(gameName).child(useruid!)
-            ref.setValue(["username": user_name, "score": self.score, "time": self.timerLabel.text!, "uid": useruid!] as [String : Any])
-            
+            let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("scores").child(gameChosen).child(useruid!)
+            ref.setValue(["username": user_name, "score": self.score, "time": self.timerLabel.text!, "uid": useruid!, "teammembers": self.teamMembersString] as [String : Any])
             
             if self.location_count == 0 {
                 AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
@@ -808,6 +1167,11 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 forceQuitButtonCheck = 0
                 startButtoncheck = 1
                 self.gameDataUpdate(){
+                    if self.teamPersonNumber != 0 {
+                        for teammember in self.teammembers {
+                            self.firebaseTeamConnect(uid: teammember.uid, name: teammember.name)
+                        }
+                    }
                     self.timer_label.invalidate()
                     self.timerLabel.text = "00:00"
                 }
@@ -843,35 +1207,84 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
             }
         }
     }
+    
+    let date = Date()
+    let df = DateFormatter()
     func gameDataUpdateDatabase(completion: @escaping () -> ()){
-        let date = Date()
-        let df = DateFormatter()
         df.dateFormat = "dd/MM/yyyy HH:mm:ss"
         let dateString = df.string(from: date)
         gameCount = String(Int(gameCount)! + 1)
-        gameNameDatabase(){
-            self.db.collection("users").document(self.useruid!).updateData(["gameCount": self.gameCount, "gameName.\(self.gameCount).name": self.gameName, "gameName.\(self.self.gameCount).score": String(self.score), "gameName.\(self.gameCount).date": dateString, "gameName.\(self.gameCount).remainingTime": self.timerLabel.text!]) { (error) in
-                if error != nil {
-                    let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
+        self.db.collection("users").document(self.useruid!).updateData(["gameCount": self.gameCount, "gameName.\(self.gameCount).name": self.gameChosen, "gameName.\(self.self.gameCount).score": String(self.score),"gameName.\(self.gameCount).teamMembers": self.teamMembersString, "gameName.\(self.gameCount).date": dateString, "gameName.\(self.gameCount).remainingTime": self.timerLabel.text!]) { (error) in
+            if error != nil {
+                let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+            completion()
+        }
+    }
+    
+    
+    
+//MARK: Team Members Firebase Data Update
+    func firebaseTeamConnect(uid: String, name: String) {
+        df.dateFormat = "dd/MM/yyyy HH:mm:ss"
+        let dateString = df.string(from: date)
+        var teamFirebase = ""
+        teamFirebase = teamMembersString
+        teamFirebase = teamFirebase.capitalized
+        if teamFirebase.contains(", \(user_name)") {
+            teamFirebase = teamFirebase.replacingOccurrences(of: ", \(user_name)", with: "")
+        } else {
+            teamFirebase = teamFirebase.replacingOccurrences(of: "\(user_name) ,", with: "")
+        }
+        teamFirebase.append(", \(user_name.capitalized)")
+        db.collection("users").document(uid).getDocument { (document, error) in
+            if let document = document, document.exists {
+                let user_game_count = document.data()?["gameCount"] as? Int ?? 0
+                
+                self.db.collection("users").document(uid).updateData(["gameCount": user_game_count+1, "gameName.\(self.gameCount).name": self.gameChosen, "gameName.\(self.gameCount).score": String(self.score),"gameName.\(self.gameCount).teamMembers": teamFirebase, "gameName.\(self.gameCount).date": dateString, "gameName.\(self.gameCount).remainingTime": self.timerLabel.text!]) { (error) in
+                    if error != nil {
+                    }
                 }
-                completion()
+            } else {
+                self.db.collection("users").document(uid).setData([
+                    "name": name,
+                    "uid": uid,
+                ]) { err in
+                    if let err = err {
+                        print("Error writing document: \(err)")
+                    } else {
+                        print("Document successfully written!")
+                    }
+                }
+                self.db.collection("users").document(uid).updateData([
+                    "gameCount": 1,
+                    "gameName.1.name": self.gameChosen,
+                    "gameName.1.score": String(self.score),
+                    "gameName.1.teamMembers": self.teamMembersString,
+                    "gameName.1.date": dateString,
+                    "gameName.1.remainingTime": self.timerLabel.text!
+                ])
             }
         }
     }
     
+    
+    
 //MARK: Timer Data
     func timer_database(completion: @escaping () -> ()){
-        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("time")
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference()
         ref.observeSingleEvent(of: .value) { snapshot in
             for case let child as DataSnapshot in snapshot.children {
                 guard let dict = child.value as? [String:Any] else {
                     return
                 }
-                self.finishHourInt = dict["finishHourInt"] as! Int
-                self.finishMinuteInt = dict["finishMinuteInt"] as! Int
-                completion()
+                if child.key == "time" {
+                    self.finishHourInt = dict["finishHourInt"] as! Int
+                    self.finishMinuteInt = dict["finishMinuteInt"] as! Int
+                    completion()
+                }
             }
         }
     }
@@ -880,17 +1293,19 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     
 //MARK: Communication with Database w/ Completion
     func contactDatabase(completion: @escaping () -> ()){
-        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("time")
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference()
         ref.observeSingleEvent(of: .value) { snapshot in
             for case let child as DataSnapshot in snapshot.children {
                 guard let dict = child.value as? [String:Any] else {
                     return
                 }
-                self.startingHourInt = dict["startingHourInt"] as! Int
-                self.startingMinuteInt = dict["startingMinuteInt"] as! Int
-                self.finishHourIntStart = dict["finishHourInt"] as! Int
-                self.finishMinuteIntStart = dict["finishMinuteInt"] as! Int
-                completion()
+                if child.key == "time" {
+                    self.startingHourInt = dict["startingHourInt"] as! Int
+                    self.startingMinuteInt = dict["startingMinuteInt"] as! Int
+                    self.finishHourIntStart = dict["finishHourInt"] as! Int
+                    self.finishMinuteIntStart = dict["finishMinuteInt"] as! Int
+                    completion()
+                }
             }
         }
     }
@@ -899,39 +1314,44 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     
 //MARK: Communication with Database for Search Parameter w/ Completion
     func contactDatabaseSearchParameter(completion: @escaping () -> ()){
-        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("searchParameter")
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference()
         ref.observeSingleEvent(of: .value) { snapshot in
             for case let child as DataSnapshot in snapshot.children {
                 guard let dict = child.value as? [String:Any] else {
                     return
                 }
-                self.searchParameter = dict["searchParameter"] as! Double
-                completion()
+                if child.key == "searchParameter" {
+                    self.searchParameter = dict["searchParameter"] as! Double
+                    completion()
+                }
             }
         }
     }
     
     
     
-    //MARK: Communication with Database for Location w/ Completion
+//MARK: Communication with Database for Location w/ Completion
     func contactDatabaseLocationInfo(completion: @escaping () -> ()){
-        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("locationData")
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference()
         ref.observeSingleEvent(of: .value) { snapshot in
             for case let child as DataSnapshot in snapshot.children {
                 guard let dict = child.value as? [String:Any] else {
                     return
                 }
-                self.map_latitude = dict["latitude"] as! Double
-                self.map_longitude = dict["longitude"] as! Double
-                completion()
+                if child.key == "locationData" {
+                    self.map_latitude = dict["latitude"] as! Double
+                    self.map_longitude = dict["longitude"] as! Double
+                    completion()
+                }
             }
         }
     }
+    
     
     
 //MARK: Communication with Database for Array Number w/ Completion
     func contactDatabaseArrayCount(completion: @escaping () -> ()){
-        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app/").reference()
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app/").reference().child("games").child(gameChosen)
         ref.observeSingleEvent(of: .value) { snapshot in
             var count = snapshot.childrenCount
             for case let child as DataSnapshot in snapshot.children {
@@ -950,30 +1370,18 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
 
     
     
-//MARK: Communiaction with Database for Game Name
-    func gameNameDatabase(completion: @escaping () -> ()){
-        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("game")
-        ref.observeSingleEvent(of: .value) { snapshot in
-            for case let child as DataSnapshot in snapshot.children {
-                guard let dict = child.value as? [String:Any] else {
-                    return
-                }
-                self.gameName = dict["gameName"] as! String
-                completion()
-            }
-        }
-    }
-    
 //MARK: Communication with Database for Password w/ Completion
     func contactDatabasePassword(completion: @escaping () -> ()){
-        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("password")
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference()
         ref.observeSingleEvent(of: .value) { snapshot in
             for case let child as DataSnapshot in snapshot.children {
                 guard let dict = child.value as? [String:Any] else {
                     return
                 }
-                self.passwordKeyDatabase = dict["password"] as! String
-                completion()
+                if child.key == "password" {
+                    self.passwordKeyDatabase = dict["password"] as! String
+                    completion()
+                }
             }
         }
     }
@@ -992,6 +1400,8 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 self.score = document.data()?["score"] as! Int
                 self.RandomRouteChoice = document.data()?["route"] as? String ?? "coordinates"
                 self.gameCount = document.data()?["gameCount"] as? String ?? "0"
+                self.gameChosen = document.data()?["gameNameString"] as? String ?? ""
+                self.teamMembersString = document.data()?["teamMembers"] as? String ?? ""
                 completion()
             } else {
                 print("Document does not exist")
@@ -1003,7 +1413,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
         
 //MARK: Update Score with starting
     func updateUserDatato0(){
-        db.collection("users").document(self.useruid!).updateData(["gameNameString": gameName,"score": 0, "start": 1,"time": "", "uid": self.useruid!, "locations": [String](), "route": self.RandomRouteChoice]) { (error) in
+        db.collection("users").document(self.useruid!).updateData(["teamMembers": teamMembersString,"gameNameString": gameChosen,"score": 0, "start": 1,"time": "", "uid": self.useruid!, "locations": [String](), "route": self.RandomRouteChoice]) { (error) in
             if error != nil {
                 let alert = UIAlertController(title: "An error occured. Try again.", message: "", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
@@ -1050,16 +1460,28 @@ extension HomeMapViewController : MKMapViewDelegate {
         
         //MARK: Pin Annotation
         if annotation.customidentifier == "pinAnnotation" {
-            let pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: String(annotation.hash))
-            let rightButton = UIButton(type: .contactAdd)
-            rightButton.setImage(UIImage(systemName: "checkmark.seal.fill")?.withTintColor(.systemGreen, renderingMode: .alwaysOriginal), for: .normal)
-            rightButton.tag = annotation.hash
-            pinView.image = UIImage(systemName: "pin.fill")!.withRenderingMode(.alwaysOriginal).withTintColor(.systemBlue, renderingMode: .alwaysOriginal).resized(to: CGSize(width: 25, height: 25))
-            pinView.animatesDrop = false
-            pinView.canShowCallout = true
-            pinView.rightCalloutAccessoryView = rightButton
-            rightButton.addTarget(self, action: #selector(displayQuestion), for: .touchUpInside)
-            return pinView
+            if #available(iOS 17.0, *) {
+                let pinView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: String(annotation.hash))
+                let rightButton = UIButton(type: .contactAdd)
+                rightButton.setImage(UIImage(systemName: "checkmark.seal.fill")?.withTintColor(.systemGreen, renderingMode: .alwaysOriginal), for: .normal)
+                rightButton.tag = annotation.hash
+                pinView.glyphImage = UIImage(systemName: "pin.fill")!.withRenderingMode(.alwaysOriginal).withTintColor(.systemBlue, renderingMode: .alwaysOriginal).resized(to: CGSize(width: 30, height: 30))
+                pinView.canShowCallout = true
+                pinView.rightCalloutAccessoryView = rightButton
+                rightButton.addTarget(self, action: #selector(displayQuestion), for: .touchUpInside)
+                return pinView
+            } else {
+                let pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: String(annotation.hash))
+                let rightButton = UIButton(type: .contactAdd)
+                rightButton.setImage(UIImage(systemName: "checkmark.seal.fill")?.withTintColor(.systemGreen, renderingMode: .alwaysOriginal), for: .normal)
+                rightButton.tag = annotation.hash
+                pinView.image = UIImage(systemName: "pin.fill")!.withRenderingMode(.alwaysOriginal).withTintColor(.systemBlue, renderingMode: .alwaysOriginal).resized(to: CGSize(width: 25, height: 25))
+                pinView.animatesDrop = false
+                pinView.canShowCallout = true
+                pinView.rightCalloutAccessoryView = rightButton
+                rightButton.addTarget(self, action: #selector(displayQuestion), for: .touchUpInside)
+                return pinView
+            }
         }
         return annotationView
     }

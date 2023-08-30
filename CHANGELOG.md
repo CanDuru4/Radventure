@@ -2,6 +2,16 @@
 
 Radventure Application for multipurpose usage;
 
+## [2.0.0] (1) (2023-08-30)
+- Ver. 2.0.0 buid is ready for testing.
+- Added team synchronization.
+- Added options to play more than one game.
+- Added buttons for changing map view.
+- Added support for various multiple choice question (e.g. multiple choice and open-ended questions)
+- Added option to see last four games in scoreboard.
+- Updated Firebase connection.
+- Update zoom in and zoom out function to eliminate the crashing error.
+
 ## [1.2.0] (1) (2023-08-08)
 - Ver. 1.2.0 buid is ready for testing.
 - Updated login function.
