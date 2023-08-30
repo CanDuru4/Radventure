@@ -18,6 +18,7 @@ class TableViewCell: UITableViewCell {
     var detailLabel_score:UILabel!
     var detailLabel_time: UILabel!
     var detailLabel_remaining: UILabel!
+    var detailLabel_team: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -56,6 +57,12 @@ class TableViewCell: UITableViewCell {
         detailLabel_score.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(detailLabel_score)
         
+        //MARK: Team Member Subtitle
+        detailLabel_team = UILabel()
+        detailLabel_team.numberOfLines = -1
+        detailLabel_team.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(detailLabel_team)
+        
         //MARK: Remaning Time Subtitle
         detailLabel_remaining = UILabel()
         detailLabel_remaining.numberOfLines = -1
@@ -81,9 +88,14 @@ class TableViewCell: UITableViewCell {
             detailLabel_score.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
             detailLabel_score.widthAnchor.constraint(equalTo: self.widthAnchor),
             
+            //MARK: Team Constraints
+            detailLabel_team.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
+            detailLabel_team.topAnchor.constraint(equalTo: detailLabel_score.bottomAnchor, constant: 5),
+            detailLabel_team.widthAnchor.constraint(equalTo: self.widthAnchor),
+            
             //MARK: Remaning Time Subtitle
             detailLabel_remaining.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
-            detailLabel_remaining.topAnchor.constraint(equalTo: detailLabel_score.bottomAnchor, constant: 5),
+            detailLabel_remaining.topAnchor.constraint(equalTo: detailLabel_team.bottomAnchor, constant: 5),
             
             //MARK: Date Constraints
             detailLabel_time.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),

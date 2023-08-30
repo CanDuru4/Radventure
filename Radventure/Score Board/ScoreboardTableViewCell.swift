@@ -17,7 +17,8 @@ class ScoreboardTableViewCell: UITableViewCell {
         var titleLabel:UILabel!
         var detailLabel_score:UILabel!
         var detailLabel_time: UILabel!
-        
+        var detailLabel_team: UILabel!
+            
         override func awakeFromNib() {
             super.awakeFromNib()
         }
@@ -60,6 +61,12 @@ class ScoreboardTableViewCell: UITableViewCell {
             detailLabel_time.numberOfLines = -1
             detailLabel_time.translatesAutoresizingMaskIntoConstraints = false
             self.addSubview(detailLabel_time)
+            
+            //MARK: Team Member Subtitle
+            detailLabel_team = UILabel()
+            detailLabel_team.numberOfLines = -1
+            detailLabel_team.translatesAutoresizingMaskIntoConstraints = false
+            self.addSubview(detailLabel_team)
 
             
 
@@ -79,6 +86,10 @@ class ScoreboardTableViewCell: UITableViewCell {
             detailLabel_time.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
             detailLabel_time.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
             detailLabel_time.widthAnchor.constraint(equalToConstant: 250),
+            
+            detailLabel_team.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
+            detailLabel_team.topAnchor.constraint(equalTo: detailLabel_score.bottomAnchor, constant: 5),
+            detailLabel_team.widthAnchor.constraint(equalTo: self.widthAnchor),
         ])
         
     }
