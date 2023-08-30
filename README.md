@@ -23,6 +23,7 @@ This application is currently in the development stage.
 - [x] Force quit with administrator key
 - [x] Features of rules page, timer, zoom in and out, and etc.
 - [x] Live Scoreboard (updated every 10 seconds)
+- [x] Team Synchronization
 
 ## Requirements
 

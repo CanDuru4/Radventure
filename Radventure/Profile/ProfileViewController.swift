@@ -18,13 +18,16 @@ struct Info {
     var score: String
     var time_stamp: String
     var remainingTime: String
+    var team: String
 }
+
+
 
 class ProfileViewController: UIViewController {
 
 //MARK: Set Up
     
-    
+
     
     //MARK: Variable Set Up
     let hiText = UILabel()
@@ -34,12 +37,13 @@ class ProfileViewController: UIViewController {
     var score = ""
     var date = ""
     var time = ""
+    var team = ""
     var gameArrayCount = 0
     var passwordKeyDatabase = ""
     var scoreClearPassword = ""
     var currentuseruid = Auth.auth().currentUser?.uid
 
-    //MARK: Table Setup
+    //MARK: Table Set Up
     lazy var table: UITableView = {
         let tb = UITableView()
         tb.delegate = self
@@ -49,7 +53,7 @@ class ProfileViewController: UIViewController {
     }()
     var selectedCellIndexPath: IndexPath?
 
-    //MARK: Profile Info Array Setup
+    //MARK: Profile Info Array Set Up
     var profileInfo: [Info] = [] {
         didSet{
             if profileInfo.count != 0 {
@@ -192,7 +196,7 @@ class ProfileViewController: UIViewController {
                 self.present(alert, animated: true, completion: nil)
                 self.updateDataClear(){
                     self.updateCommonDataClear {
-                        ScoreboardViewController().getUserData {
+                        ScoreboardViewController().getUserData(gameNameCheckString: self.gameName) {
                         }
                     }
                 }
@@ -289,9 +293,12 @@ class ProfileViewController: UIViewController {
                                     self.date = value2 as! String
                                 } else if key2 == "remainingTime" {
                                     self.time = value2 as! String
+                                } else if key2 == "teamMembers" {
+                                    self.team = value2 as! String
                                 }
                             }
-                            self.profileInfo.append(Info(name: self.gameName, score: self.score, time_stamp: self.date, remainingTime: self.time))
+                            self.profileInfo.append(Info(name: self.gameName, score: self.score, time_stamp: self.date, remainingTime: self.time, team: self.team))
+                            self.profileInfo.sort(by: { $0.time_stamp.compare($1.time_stamp) == .orderedAscending })
                         }
                     }
                 }
@@ -321,14 +328,16 @@ class ProfileViewController: UIViewController {
     
 //MARK: Communication with Database for Password w/ Completion
     func contactDatabasePassword(completion: @escaping () -> ()){
-        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("password")
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference()
         ref.observeSingleEvent(of: .value) { snapshot in
             for case let child as DataSnapshot in snapshot.children {
                 guard let dict = child.value as? [String:Any] else {
                     return
                 }
-                self.passwordKeyDatabase = dict["scorePassword"] as! String
-                completion()
+                if child.key == "password" {
+                    self.passwordKeyDatabase = dict["scorePassword"] as! String
+                    completion()
+                }
             }
         }
     }
@@ -375,6 +384,10 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         cell.detailLabel_score.font = cell.titleLabel.font.withSize(15)
         cell.detailLabel_score.textColor = .white
 
+        cell.detailLabel_team.text = "Team Members: \(profileInfo[indexPath.row].team)"
+        cell.detailLabel_team.font = cell.titleLabel.font.withSize(15)
+        cell.detailLabel_team.textColor = .white
+        
         let splitStringArray = profileInfo[indexPath.row].remainingTime.split(separator: ":", maxSplits: 1).map(String.init)
         cell.detailLabel_remaining.text = "Remaining Time: \(splitStringArray[0]) minutes and \(splitStringArray[1]) seconds"
         cell.detailLabel_remaining.font = cell.titleLabel.font.withSize(15)
@@ -391,7 +404,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
     //MARK: Table Height
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 120
+        return 140
     }
     
     
