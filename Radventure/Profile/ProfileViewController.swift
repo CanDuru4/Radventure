@@ -298,7 +298,7 @@ class ProfileViewController: UIViewController {
                                 }
                             }
                             self.profileInfo.append(Info(name: self.gameName, score: self.score, time_stamp: self.date, remainingTime: self.time, team: self.team))
-                            self.profileInfo.sort(by: { $0.time_stamp.compare($1.time_stamp) == .orderedAscending })
+                            self.profileInfo.sort(by: { $0.time_stamp.compare($1.time_stamp) == .orderedDescending })
                         }
                     }
                 }
