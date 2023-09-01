@@ -149,6 +149,7 @@ class LogInViewController: UIViewController {
                                 let removetext = "@robcol.k12.tr"
                                 //var name = authResult.user.email
                                 var name = authResult.user.displayName
+                                var email = authResult.user.email
                                 if let range = name!.range(of: removetext) {
                                     name!.removeSubrange(range)
                                 }
@@ -157,7 +158,7 @@ class LogInViewController: UIViewController {
                                     self.navigateToTabBarViewController()
                                     self.updateUserDataLogIn() {}
                                 } else if self.account_check == 0 {
-                                    self.updateUserData(name: name ?? "User") {}
+                                    self.updateUserData(name: name ?? "User", email: email ?? "user@robcol.k12.tr") {}
                                     self.navigateToTabBarViewController()
                                     self.dismiss(animated: true)
                                 }
@@ -210,11 +211,12 @@ class LogInViewController: UIViewController {
     
     
 //MARK: Creating User Data (previously not logged in)
-    func updateUserData(name: String, completion: @escaping () -> ()) {
-        completionCheck(name: name){
+    func updateUserData(name: String, email: String, completion: @escaping () -> ()) {
+        completionCheck(name: name, email: email){
             if self.completionCheck == 1 {
                 self.db.collection("users").document(Auth.auth().currentUser!.uid).setData([
                     "name": name,
+                    "email": email,
                     "score": 0,
                     "login": 1,
                     //"gameName": self.gameNameArray
@@ -232,7 +234,7 @@ class LogInViewController: UIViewController {
         }
     }
 
-    func completionCheck(name: String,completion: @escaping () -> ()) {
+    func completionCheck(name: String, email: String,completion: @escaping () -> ()) {
         self.db.collection("users").getDocuments() { (querySnapshot, err) in
             if let err = err {
                 print("Error getting documents: \(err)")
@@ -240,6 +242,7 @@ class LogInViewController: UIViewController {
                 for document in querySnapshot!.documents {
                     let scoreCheck = document.data()["score"] as? Int ?? -1
                     let nameCheck = document.data()["name"] as? String ?? ""
+                    let emailCheck = document.data()["email"] as? String ?? ""
                     let gameCount = document.data()["gameCount"] as? Int ?? 0
                     
                     var name_removed = name
@@ -247,7 +250,7 @@ class LogInViewController: UIViewController {
                         name_removed.removeSubrange(name_removed.startIndex..<(paranthesisRange.upperBound))
                     }
                     
-                    if scoreCheck == -1 && nameCheck.lowercased() == name_removed.lowercased() {
+                    if scoreCheck == -1 && email.lowercased() == emailCheck.lowercased() {
                         if document.data()["gameName"] != nil {
                             let info = document.data()["gameName"] as? Dictionary<String, Any> ?? nil
                             if info != nil {
@@ -269,6 +272,7 @@ class LogInViewController: UIViewController {
                                     self.profileInfo.append(Info(name: self.gameName, score: self.score, time_stamp: self.date, remainingTime: self.time, team: self.team))
                                     self.db.collection("users").document(Auth.auth().currentUser!.uid).setData([
                                         "name": name,
+                                        "email": email,
                                         "score": 0,
                                         "login": 1,
                                     ]) { err in

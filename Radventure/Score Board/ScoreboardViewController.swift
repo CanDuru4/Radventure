@@ -241,7 +241,7 @@ class ScoreboardViewController: UIViewController {
         check = 0
         self.gameArray = []
         getUserInfo {
-            self.gameArray.sort(by: { $0.time.compare($1.time) == .orderedAscending })
+            self.gameArray.sort(by: { $0.time.compare($1.time) == .orderedDescending })
             let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("scores")
             ref.observeSingleEvent(of: .value) { snapshot in
                 for case let child as DataSnapshot in snapshot.children {
@@ -251,7 +251,7 @@ class ScoreboardViewController: UIViewController {
                     }
 
                     let gameNameCheck = snapshot.value as! Dictionary<String, Any>
-                    var countGameNameCheck = gameNameCheck.count
+                    let countGameNameCheck = gameNameCheck.count
                     var countGame = 0
                     for (gameName, _) in gameNameCheck {
                         countGame = countGame + 1
@@ -916,7 +916,7 @@ extension ScoreboardViewController: UITableViewDelegate, UITableViewDataSource {
             cell.detailLabel_time.font = cell.titleLabel.font.withSize(15)
             cell.detailLabel_time.textColor = UIColor(named: "AppColor2")
             
-            cell.detailLabel_team.text = "Team: \(String(sortedscoreboardData[indexPath.row].team))"
+            cell.detailLabel_team.text = "Team: \(String(sortedscoreboardData[indexPath.row].team).capitalized)"
             cell.detailLabel_team.font = cell.titleLabel.font.withSize(15)
             cell.detailLabel_team.textColor = UIColor(named: "AppColor2")
             return cell

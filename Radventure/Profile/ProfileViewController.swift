@@ -384,7 +384,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         cell.detailLabel_score.font = cell.titleLabel.font.withSize(15)
         cell.detailLabel_score.textColor = .white
 
-        cell.detailLabel_team.text = "Team Members: \(profileInfo[indexPath.row].team)"
+        cell.detailLabel_team.text = "Team Members: \((profileInfo[indexPath.row].team).capitalized)"
         cell.detailLabel_team.font = cell.titleLabel.font.withSize(15)
         cell.detailLabel_team.textColor = .white
         
