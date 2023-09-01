@@ -38,7 +38,11 @@ struct GameNameStructure{
 
 //MARK: Team Name Structure
 struct TeamStructure{
-    let name, uid: String
+    let name, uid, email: String
+}
+
+struct TeamMemberStructure {
+    let name, email: String
 }
 
 
@@ -110,7 +114,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 filteredpinlocationsdata = pinlocationsdata
             }
         }
-    }                                                                                                                                                               
+    }
     var done_array = [String]()
     var filteredpinlocationsdata:[PinLocationsStructure] = []
     
@@ -170,7 +174,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                             self.gameDataUpdate(){
                                 if self.teamPersonNumber != 0 {
                                     for teammember in self.teammembers {
-                                        self.firebaseTeamConnect(uid: teammember.uid, name: teammember.name)
+                                        self.firebaseTeamConnect(uid: teammember.uid, email: teammember.email, name: teammember.name)
                                     }
                                 }
                                 self.score = 0
@@ -205,7 +209,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                             self.gameDataUpdate(){
                                 if self.teamPersonNumber != 0 {
                                     for teammember in self.teammembers {
-                                        self.firebaseTeamConnect(uid: teammember.uid, name: teammember.name)
+                                        self.firebaseTeamConnect(uid: teammember.uid, email: teammember.email, name: teammember.name)
                                     }
                                 }
                                 self.score = 0
@@ -747,20 +751,28 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     
     
 //MARK: Team Members Name Function
+    var textFieldName: [TeamMemberStructure] = []
     func teamPersonName(completion: @escaping () -> ()) {
         if teamPersonNumber != 0 {
+            textFieldName = []
             let alert = UIAlertController(title: "Team Members", message: "Please write the all team members' full name to the fields.", preferredStyle: .alert)
                     
             for i in 1...teamPersonNumber {
                 alert.addTextField { (textField) in
                     textField.placeholder = "Please enter name of the team member \(i)."
                 }
+                alert.addTextField { (textField) in
+                    textField.placeholder = "Please enter robcol email of the team member \(i)."
+                }
             }
             
             alert.addAction(UIAlertAction(title: "Submit", style: .default, handler: { [weak alert] (_) in
                 var document_count = 0
                 let text_field_count = alert!.textFields!.count
+                var count_set = 0
+                var email_textfield = ""
                 for i in alert!.textFields! {
+                    count_set = count_set + 1
                     if i.text == "" {
                         self.dismiss(animated: true)
                         let alert = UIAlertController(title: "Please fill the all fields!", message: "", preferredStyle: .alert)
@@ -768,27 +780,39 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                         self.present(alert, animated: true, completion: nil)
                         return
                     } else {
-                        self.db.collection("users").getDocuments() { (querySnapshot, err) in
-                            if let err = err {
-                                completion()
-                                print("Error getting documents: \(err)")
-                            } else {
-                                let document_max = querySnapshot!.documents.count
-                                for document in querySnapshot!.documents {
-                                    self.addingToDatabase(i: i, documentID: document.documentID) {
-                                        document_count = document_count + 1
-                                        if (document_max * text_field_count) == document_count {
-                                            for nameofmissing in self.arrayCheck {
-                                                self.teammembers.append(TeamStructure(name: nameofmissing, uid: UUID().uuidString))
+                        if count_set % 2  == 0 {
+                            print(self.textFieldName)
+                            self.db.collection("users").getDocuments() { (querySnapshot, err) in
+                                if let err = err {
+                                    completion()
+                                    print("Error getting documents: \(err)")
+                                } else {
+                                    let document_max = querySnapshot!.documents.count
+                                    for document in querySnapshot!.documents {
+                                        self.addingToDatabase(i: i, documentID: document.documentID) {
+                                            document_count = document_count + 1
+                                            if (document_max * ((text_field_count) / 2)) == document_count {
+                                                for emailofmissing in self.arrayCheck {
+                                                    for j in self.textFieldName {
+                                                        if emailofmissing == j.email {
+                                                            self.teammembers.append(TeamStructure(name: j.name, uid: UUID().uuidString, email: emailofmissing))
+                                                            print("appended")
+                                                        }
+                                                    }
+                                                }
                                             }
-                                        }
-                                        if (document_max * text_field_count) == document_count {
-                                            completion()
+                                            if (document_max * ((text_field_count) / 2)) == document_count {
+                                                print("completion: \(self.teammembers)")
+                                                completion()
+                                            }
                                         }
                                     }
                                 }
                             }
+                        } else {
+                            self.textFieldName.append(TeamMemberStructure(name: i.text!, email: alert!.textFields![count_set].text!))
                         }
+
                     }
                 }
             }))
@@ -805,6 +829,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
             if let document = document, document.exists {
                 let uid = document.data()?["uid"] as? String ?? ""
                 var users_name = document.data()?["name"] as? String ?? ""
+                var users_email = document.data()?["email"] as? String ?? ""
                 
                 if let paranthesisRange = users_name.range(of: ") ") {
                     users_name.removeSubrange(users_name.startIndex..<(paranthesisRange.upperBound))
@@ -817,10 +842,11 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 finalizedText = finalizedText.replacingOccurrences(of: "ş", with: "s")
                 finalizedText = finalizedText.replacingOccurrences(of: "ğ", with: "g")
                 finalizedText = finalizedText.replacingOccurrences(of: "ı", with: "i")
+                
                 if self.arrayCheck.contains(finalizedText){
                 } else {
                     for i in self.teammembers {
-                        if i.name == finalizedText {
+                        if i.email == finalizedText {
                             self.appendText = 0
                         }
                     }
@@ -830,10 +856,10 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 }
                 
                 if users_name.lowercased() == finalizedText.lowercased() {
-                    self.teammembers.append(TeamStructure(name: users_name.lowercased(), uid: uid))
+                    self.teammembers.append(TeamStructure(name: users_name.lowercased(), uid: uid, email: users_email.lowercased()))
                     self.arrayCheck = self.arrayCheck.filter { $0 != finalizedText }
                 }
-            } 
+            }
             completion()
         }
     }
@@ -872,7 +898,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 self.gameDataUpdate(){
                     if self.teamPersonNumber != 0 {
                         for teammember in self.teammembers {
-                            self.firebaseTeamConnect(uid: teammember.uid, name: teammember.name)
+                            self.firebaseTeamConnect(uid: teammember.uid, email: teammember.email, name: teammember.name)
                         }
                     }
                     self.score = 0
@@ -963,7 +989,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                     self.gameDataUpdate(){
                         if self.teamPersonNumber != 0 {
                             for teammember in self.teammembers {
-                                self.firebaseTeamConnect(uid: teammember.uid, name: teammember.name)
+                                self.firebaseTeamConnect(uid: teammember.uid, email: teammember.email, name: teammember.name)
                             }
                         }
                         self.timer_label.invalidate()
@@ -1131,6 +1157,59 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     
     
     
+//MARK: Team Members Firebase Data Update
+    func firebaseTeamConnect(uid: String, email: String, name: String) {
+        df.dateFormat = "dd/MM/yyyy HH:mm:ss"
+        let dateString = df.string(from: date)
+        var teamFirebase = ""
+        teamFirebase = teamMembersString
+        if teamFirebase.contains(", \(name)") {
+            teamFirebase = teamFirebase.replacingOccurrences(of: ", \(name)", with: "")
+        } else {
+            teamFirebase = teamFirebase.replacingOccurrences(of: "\(name) ,", with: "")
+        }
+        var current_user_name = user_name.capitalized
+        if let paranthesisRange = current_user_name.range(of: ") ") {
+            current_user_name.removeSubrange(current_user_name.startIndex..<(paranthesisRange.upperBound))
+        }
+        teamFirebase.append(", \(current_user_name)")
+        teamFirebase = teamFirebase.capitalized
+        print("okokokokok: \(teamFirebase)")
+        
+        db.collection("users").document(uid).getDocument { (document, error) in
+            if let document = document, document.exists {
+                let user_game_count = document.data()?["gameCount"] as? Int ?? 0
+                
+                self.db.collection("users").document(uid).updateData(["gameCount": user_game_count+1, "gameName.\(self.gameCount).name": self.gameChosen, "gameName.\(self.gameCount).score": String(self.score),"gameName.\(self.gameCount).teamMembers": teamFirebase, "gameName.\(self.gameCount).date": dateString, "gameName.\(self.gameCount).remainingTime": self.timerLabel.text!]) { (error) in
+                    if error != nil {
+                    }
+                }
+            } else {
+                self.db.collection("users").document(uid).setData([
+                    "name": name,
+                    "email": email,
+                    "uid": uid,
+                ]) { err in
+                    if let err = err {
+                        print("Error writing document: \(err)")
+                    } else {
+                        print("Document successfully written!")
+                    }
+                }
+                self.db.collection("users").document(uid).updateData([
+                    "gameCount": 1,
+                    "gameName.1.name": self.gameChosen,
+                    "gameName.1.score": String(self.score),
+                    "gameName.1.teamMembers": teamFirebase,
+                    "gameName.1.date": dateString,
+                    "gameName.1.remainingTime": self.timerLabel.text!
+                ])
+            }
+        }
+    }
+    
+    
+    
 //MARK: Check Answer Function
     func answercheck(){
         let real_answer = filteredpinlocationsdata[0].answer.lowercased()
@@ -1169,7 +1248,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 self.gameDataUpdate(){
                     if self.teamPersonNumber != 0 {
                         for teammember in self.teammembers {
-                            self.firebaseTeamConnect(uid: teammember.uid, name: teammember.name)
+                            self.firebaseTeamConnect(uid: teammember.uid, email: teammember.email, name: teammember.name)
                         }
                     }
                     self.timer_label.invalidate()
@@ -1221,52 +1300,6 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 self.present(alert, animated: true, completion: nil)
             }
             completion()
-        }
-    }
-    
-    
-    
-//MARK: Team Members Firebase Data Update
-    func firebaseTeamConnect(uid: String, name: String) {
-        df.dateFormat = "dd/MM/yyyy HH:mm:ss"
-        let dateString = df.string(from: date)
-        var teamFirebase = ""
-        teamFirebase = teamMembersString
-        teamFirebase = teamFirebase.capitalized
-        if teamFirebase.contains(", \(user_name)") {
-            teamFirebase = teamFirebase.replacingOccurrences(of: ", \(user_name)", with: "")
-        } else {
-            teamFirebase = teamFirebase.replacingOccurrences(of: "\(user_name) ,", with: "")
-        }
-        teamFirebase.append(", \(user_name.capitalized)")
-        db.collection("users").document(uid).getDocument { (document, error) in
-            if let document = document, document.exists {
-                let user_game_count = document.data()?["gameCount"] as? Int ?? 0
-                
-                self.db.collection("users").document(uid).updateData(["gameCount": user_game_count+1, "gameName.\(self.gameCount).name": self.gameChosen, "gameName.\(self.gameCount).score": String(self.score),"gameName.\(self.gameCount).teamMembers": teamFirebase, "gameName.\(self.gameCount).date": dateString, "gameName.\(self.gameCount).remainingTime": self.timerLabel.text!]) { (error) in
-                    if error != nil {
-                    }
-                }
-            } else {
-                self.db.collection("users").document(uid).setData([
-                    "name": name,
-                    "uid": uid,
-                ]) { err in
-                    if let err = err {
-                        print("Error writing document: \(err)")
-                    } else {
-                        print("Document successfully written!")
-                    }
-                }
-                self.db.collection("users").document(uid).updateData([
-                    "gameCount": 1,
-                    "gameName.1.name": self.gameChosen,
-                    "gameName.1.score": String(self.score),
-                    "gameName.1.teamMembers": self.teamMembersString,
-                    "gameName.1.date": dateString,
-                    "gameName.1.remainingTime": self.timerLabel.text!
-                ])
-            }
         }
     }
     
