@@ -262,20 +262,22 @@ class ProfileViewController: UIViewController {
     func getUserScoreData(completion: @escaping () -> ()){
         self.profileInfo = []
         let db = Firestore.firestore()
-        let user = (Auth.auth().currentUser?.uid)!
+        let user = (Auth.auth().currentUser?.uid) ?? ""
         let docRef = db.collection("users").document(user)
         docRef.getDocument { (document, error) in
             if let document = document, document.exists {
                 self.gameArrayCount = Int(document.data()?["gameCount"] as? String ?? "0")!
                 completion()
             } else {
+                self.gameArrayCount = 0
+                completion()
                 print("Document does not exist")
             }
         }
     }
     func getUserScoreData2(completion: @escaping () -> ()){
         let db = Firestore.firestore()
-        let user = (Auth.auth().currentUser?.uid)!
+        let user = (Auth.auth().currentUser?.uid) ?? ""
         let docRef = db.collection("users").document(user)
         docRef.getDocument { (document, error) in
             if let document = document, document.exists {
@@ -305,6 +307,7 @@ class ProfileViewController: UIViewController {
                 completion()
             } else {
                 print("Document does not exist")
+                completion()
             }
         }
     }

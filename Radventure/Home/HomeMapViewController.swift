@@ -770,7 +770,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 var document_count = 0
                 let text_field_count = alert!.textFields!.count
                 var count_set = 0
-                var email_textfield = ""
+                _ = ""
                 for i in alert!.textFields! {
                     count_set = count_set + 1
                     if i.text == "" {
@@ -781,7 +781,6 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                         return
                     } else {
                         if count_set % 2  == 0 {
-                            print(self.textFieldName)
                             self.db.collection("users").getDocuments() { (querySnapshot, err) in
                                 if let err = err {
                                     completion()
@@ -796,13 +795,11 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                                                     for j in self.textFieldName {
                                                         if emailofmissing == j.email {
                                                             self.teammembers.append(TeamStructure(name: j.name, uid: UUID().uuidString, email: emailofmissing))
-                                                            print("appended")
                                                         }
                                                     }
                                                 }
                                             }
                                             if (document_max * ((text_field_count) / 2)) == document_count {
-                                                print("completion: \(self.teammembers)")
                                                 completion()
                                             }
                                         }
@@ -1174,7 +1171,6 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
         }
         teamFirebase.append(", \(current_user_name)")
         teamFirebase = teamFirebase.capitalized
-        print("okokokokok: \(teamFirebase)")
         
         db.collection("users").document(uid).getDocument { (document, error) in
             if let document = document, document.exists {
