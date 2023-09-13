@@ -1233,7 +1233,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
             if self.location_count == 0 {
                 AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
                 AudioServicesPlaySystemSound(SystemSoundID(1304))
-                let alert = UIAlertController(title: "You finished the activity!", message: "Please return to the Maze.", preferredStyle: .alert)
+                let alert = UIAlertController(title: "You finished the activity!", message: "Please return to the starting point.", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 forceQuitButton.isHidden = true
