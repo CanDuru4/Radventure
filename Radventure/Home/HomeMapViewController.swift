@@ -697,15 +697,16 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     func contactDatabaseGameNameList(completion: @escaping () -> ()){
         let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("games")
         ref.observeSingleEvent(of: .value) { snapshot in
-            for case _ as DataSnapshot in snapshot.children {
-                let gameaAvailable = snapshot.value as! Dictionary<String, Any>
-                for (gameName, gameValue) in gameaAvailable {
-                    let gameValueDictionary = gameValue as! Dictionary<String, Any>
-                    for (key, value) in gameValueDictionary {
-                        if key == "validation" {
-                            if value as! Int == 1 {
-                                self.gameNameList.append(gameName)
-                            }
+            let gameaAvailable = snapshot.value as! Dictionary<String, Any>
+            for (gameName, gameValue) in gameaAvailable {
+                print("2")
+                let gameValueDictionary = gameValue as! Dictionary<String, Any>
+                for (key, value) in gameValueDictionary {
+                    print("3")
+                    if key == "validation" {
+                        if value as! Int == 1 {
+                            self.gameNameList.append(gameName)
+                            print(self.gameNameList)
                         }
                     }
                 }
