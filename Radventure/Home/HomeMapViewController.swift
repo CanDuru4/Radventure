@@ -697,15 +697,16 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     func contactDatabaseGameNameList(completion: @escaping () -> ()){
         let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("games")
         ref.observeSingleEvent(of: .value) { snapshot in
-            for case _ as DataSnapshot in snapshot.children {
-                let gameaAvailable = snapshot.value as! Dictionary<String, Any>
-                for (gameName, gameValue) in gameaAvailable {
-                    let gameValueDictionary = gameValue as! Dictionary<String, Any>
-                    for (key, value) in gameValueDictionary {
-                        if key == "validation" {
-                            if value as! Int == 1 {
-                                self.gameNameList.append(gameName)
-                            }
+            let gameaAvailable = snapshot.value as! Dictionary<String, Any>
+            for (gameName, gameValue) in gameaAvailable {
+                print("2")
+                let gameValueDictionary = gameValue as! Dictionary<String, Any>
+                for (key, value) in gameValueDictionary {
+                    print("3")
+                    if key == "validation" {
+                        if value as! Int == 1 {
+                            self.gameNameList.append(gameName)
+                            print(self.gameNameList)
                         }
                     }
                 }
@@ -770,7 +771,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                 var document_count = 0
                 let text_field_count = alert!.textFields!.count
                 var count_set = 0
-                var email_textfield = ""
+                _ = ""
                 for i in alert!.textFields! {
                     count_set = count_set + 1
                     if i.text == "" {
@@ -781,7 +782,6 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                         return
                     } else {
                         if count_set % 2  == 0 {
-                            print(self.textFieldName)
                             self.db.collection("users").getDocuments() { (querySnapshot, err) in
                                 if let err = err {
                                     completion()
@@ -796,13 +796,11 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                                                     for j in self.textFieldName {
                                                         if emailofmissing == j.email {
                                                             self.teammembers.append(TeamStructure(name: j.name, uid: UUID().uuidString, email: emailofmissing))
-                                                            print("appended")
                                                         }
                                                     }
                                                 }
                                             }
                                             if (document_max * ((text_field_count) / 2)) == document_count {
-                                                print("completion: \(self.teammembers)")
                                                 completion()
                                             }
                                         }
@@ -1174,7 +1172,6 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
         }
         teamFirebase.append(", \(current_user_name)")
         teamFirebase = teamFirebase.capitalized
-        print("okokokokok: \(teamFirebase)")
         
         db.collection("users").document(uid).getDocument { (document, error) in
             if let document = document, document.exists {
@@ -1237,7 +1234,7 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
             if self.location_count == 0 {
                 AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
                 AudioServicesPlaySystemSound(SystemSoundID(1304))
-                let alert = UIAlertController(title: "You finished the activity!", message: "Please return to the Maze.", preferredStyle: .alert)
+                let alert = UIAlertController(title: "You finished the activity!", message: "Please return to the starting point.", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 forceQuitButton.isHidden = true
