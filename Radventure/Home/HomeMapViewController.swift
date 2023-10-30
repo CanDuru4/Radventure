@@ -699,10 +699,8 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
         ref.observeSingleEvent(of: .value) { snapshot in
             let gameaAvailable = snapshot.value as! Dictionary<String, Any>
             for (gameName, gameValue) in gameaAvailable {
-                print("2")
                 let gameValueDictionary = gameValue as! Dictionary<String, Any>
                 for (key, value) in gameValueDictionary {
-                    print("3")
                     if key == "validation" {
                         if value as! Int == 1 {
                             self.gameNameList.append(gameName)
