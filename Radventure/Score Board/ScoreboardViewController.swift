@@ -916,9 +916,13 @@ extension ScoreboardViewController: UITableViewDelegate, UITableViewDataSource {
             cell.detailLabel_time.font = cell.titleLabel.font.withSize(15)
             cell.detailLabel_time.textColor = UIColor(named: "AppColor2")
             
-            cell.detailLabel_team.text = "Team: \(String(sortedscoreboardData[indexPath.row].team).capitalized)"
-            cell.detailLabel_team.font = cell.titleLabel.font.withSize(15)
-            cell.detailLabel_team.textColor = UIColor(named: "AppColor2")
+            if sortedscoreboardData[indexPath.row].team == "" {
+                
+            } else {
+                cell.detailLabel_team.text = "Team: \(String(sortedscoreboardData[indexPath.row].team).capitalized)"
+                cell.detailLabel_team.font = cell.titleLabel.font.withSize(15)
+                cell.detailLabel_team.textColor = UIColor(named: "AppColor2")
+            }
             return cell
         } else {
             return cell
@@ -927,7 +931,11 @@ extension ScoreboardViewController: UITableViewDelegate, UITableViewDataSource {
 
     //MARK: Table Height
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        if sortedscoreboardData[indexPath.row].team == "" {
+            return 75
+        } else {
+            return 100
+        }
     }
 }
 
