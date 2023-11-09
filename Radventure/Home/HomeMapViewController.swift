@@ -704,7 +704,6 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
                     if key == "validation" {
                         if value as! Int == 1 {
                             self.gameNameList.append(gameName)
-                            print(self.gameNameList)
                         }
                     }
                 }

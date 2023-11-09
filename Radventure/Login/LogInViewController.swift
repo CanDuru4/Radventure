@@ -202,7 +202,7 @@ class LogInViewController: UIViewController {
     func updateUserDataLogIn(completion: @escaping () -> ()) {
         db.collection("users").document(Auth.auth().currentUser!.uid).updateData(["login": 1]) { (error) in
             if error != nil {
-                // Handle the error if needed
+                print(error)
             }
             completion()
         }
@@ -239,7 +239,15 @@ class LogInViewController: UIViewController {
             if let err = err {
                 print("Error getting documents: \(err)")
             } else {
+                var count = 0
+                var check = 1
+                
+                if querySnapshot!.documents.count == 0 {
+                    completion()
+                }
+                
                 for document in querySnapshot!.documents {
+                    count = count + 1
                     let scoreCheck = document.data()["score"] as? Int ?? -1
                     let nameCheck = document.data()["name"] as? String ?? ""
                     let emailCheck = document.data()["email"] as? String ?? ""
@@ -288,6 +296,7 @@ class LogInViewController: UIViewController {
                                                 "gameName.\((gameCount+1)).remainingTime": self.time
                                             ])
                                             self.completionCheck = 0
+                                            check = 0
                                             self.db.collection("users").document(document.documentID).delete()
                                             completion()
                                         }
@@ -295,6 +304,10 @@ class LogInViewController: UIViewController {
                                 }
                             }
                         }
+                    }
+                    if count == querySnapshot!.documents.count && check == 1 {
+                        self.completionCheck = 1
+                        completion()
                     }
                 }
             }
