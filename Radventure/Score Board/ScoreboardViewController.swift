@@ -931,10 +931,15 @@ extension ScoreboardViewController: UITableViewDelegate, UITableViewDataSource {
 
     //MARK: Table Height
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if sortedscoreboardData[indexPath.row].team == "" {
-            return 75
+        let count = sortedscoreboardData.count
+        if indexPath.row < count {
+            if sortedscoreboardData[indexPath.row].team == "" {
+                return 75
+            } else {
+                return 100
+            }
         } else {
-            return 100
+            return 75
         }
     }
 }
