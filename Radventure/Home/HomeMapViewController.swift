@@ -1301,16 +1301,36 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     
 //MARK: Timer Data
     func timer_database(completion: @escaping () -> ()){
-        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference()
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("games")
         ref.observeSingleEvent(of: .value) { snapshot in
             for case let child as DataSnapshot in snapshot.children {
                 guard let dict = child.value as? [String:Any] else {
                     return
                 }
-                if child.key == "time" {
-                    self.finishHourInt = dict["finishHourInt"] as! Int
-                    self.finishMinuteInt = dict["finishMinuteInt"] as! Int
-                    completion()
+//                if child.key == "time" {
+//                    self.finishHourInt = dict["finishHourInt"] as! Int
+//                    self.finishMinuteInt = dict["finishMinuteInt"] as! Int
+//                    completion()
+//                }
+                
+                let timeCheck = snapshot.value as! Dictionary<String, Any>
+                for (gameName, _) in timeCheck {
+                    if gameName == self.gameChosen {
+                        let info = dict
+                        for (key, value) in info {
+                            if key == "time" {
+                                let info2 = value as! Dictionary<String, Any>
+                                for (key2, value2) in info2 {
+                                    if key2 == "finishHourInt" {
+                                        self.finishHourInt = value2 as? Int ?? 0
+                                    } else if key2 == "finishMinuteInt" {
+                                        self.finishMinuteInt = value2 as? Int ?? 0
+                                    }
+                                }
+                                completion()
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1320,18 +1340,42 @@ class HomeMapViewController: UIViewController, CLLocationManagerDelegate {
     
 //MARK: Communication with Database w/ Completion
     func contactDatabase(completion: @escaping () -> ()){
-        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference()
+        let ref = Database.database(url: "https://radventure-robert-default-rtdb.europe-west1.firebasedatabase.app").reference().child("games")
         ref.observeSingleEvent(of: .value) { snapshot in
             for case let child as DataSnapshot in snapshot.children {
                 guard let dict = child.value as? [String:Any] else {
                     return
                 }
-                if child.key == "time" {
-                    self.startingHourInt = dict["startingHourInt"] as! Int
-                    self.startingMinuteInt = dict["startingMinuteInt"] as! Int
-                    self.finishHourIntStart = dict["finishHourInt"] as! Int
-                    self.finishMinuteIntStart = dict["finishMinuteInt"] as! Int
-                    completion()
+//                if child.key == "time" {
+//                    self.startingHourInt = dict["startingHourInt"] as! Int
+//                    self.startingMinuteInt = dict["startingMinuteInt"] as! Int
+//                    self.finishHourIntStart = dict["finishHourInt"] as! Int
+//                    self.finishMinuteIntStart = dict["finishMinuteInt"] as! Int
+//                    completion()
+//                }
+                
+                let timeCheck = snapshot.value as! Dictionary<String, Any>
+                for (gameName, _) in timeCheck {
+                    if gameName == self.gameChosen {
+                        let info = dict
+                        for (key, value) in info {
+                            if key == "time" {
+                                let info2 = value as! Dictionary<String, Any>
+                                for (key2, value2) in info2 {
+                                    if key2 == "finishHourInt" {
+                                        self.finishHourIntStart = value2 as? Int ?? 0
+                                    } else if key2 == "finishMinuteInt" {
+                                        self.finishMinuteIntStart = value2 as? Int ?? 0
+                                    } else if key2 == "startingHourInt" {
+                                        self.startingHourInt = value2 as? Int ?? 0
+                                    } else if key2 == "startingMinuteInt" {
+                                        self.startingMinuteInt = value2 as? Int ?? 0
+                                    }
+                                }
+                                completion()
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1490,7 +1534,7 @@ extension HomeMapViewController : MKMapViewDelegate {
             if #available(iOS 17.0, *) {
                 let pinView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: String(annotation.hash))
                 let rightButton = UIButton(type: .contactAdd)
-                rightButton.setImage(UIImage(systemName: "checkmark.seal.fill")?.withTintColor(.systemGreen, renderingMode: .alwaysOriginal), for: .normal)
+                rightButton.setImage(UIImage(systemName: "questionmark.bubble.fill")?.withTintColor(.systemRed, renderingMode: .alwaysOriginal), for: .normal)
                 rightButton.tag = annotation.hash
                 pinView.glyphImage = UIImage(systemName: "pin.fill")!.withRenderingMode(.alwaysOriginal).withTintColor(.systemBlue, renderingMode: .alwaysOriginal).resized(to: CGSize(width: 30, height: 30))
                 pinView.canShowCallout = true
@@ -1500,7 +1544,7 @@ extension HomeMapViewController : MKMapViewDelegate {
             } else {
                 let pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: String(annotation.hash))
                 let rightButton = UIButton(type: .contactAdd)
-                rightButton.setImage(UIImage(systemName: "checkmark.seal.fill")?.withTintColor(.systemGreen, renderingMode: .alwaysOriginal), for: .normal)
+                rightButton.setImage(UIImage(systemName: "questionmark.circle.fill")?.withTintColor(.systemRed, renderingMode: .alwaysOriginal), for: .normal)
                 rightButton.tag = annotation.hash
                 pinView.image = UIImage(systemName: "pin.fill")!.withRenderingMode(.alwaysOriginal).withTintColor(.systemBlue, renderingMode: .alwaysOriginal).resized(to: CGSize(width: 25, height: 25))
                 pinView.animatesDrop = false
