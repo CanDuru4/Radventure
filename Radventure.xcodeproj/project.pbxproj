@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		118F0824B54FAAA5FCBEC1B3 /* Pods_Radventure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 504CFC607AA29B3B025B80BE /* Pods_Radventure.framework */; };
 		1F160E1E2A86C13700D94BA2 /* LogoLaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F160E1D2A86C13700D94BA2 /* LogoLaunchScreen.png */; };
-		1F4EFC362A65E110009D0461 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EFC352A65E110009D0461 /* LogInViewController.swift */; };
 		1F4EFC382A65E388009D0461 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EFC372A65E388009D0461 /* LocationManager.swift */; };
 		1F4EFC3A2A668D34009D0461 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1F4EFC392A668D34009D0461 /* GoogleService-Info.plist */; };
 		1F4EFC3C2A66A452009D0461 /* CustomAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EFC3B2A66A452009D0461 /* CustomAnnotation.swift */; };
@@ -17,6 +16,7 @@
 		1F4EFC422A67E372009D0461 /* ScoreboardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EFC412A67E372009D0461 /* ScoreboardTableViewCell.swift */; };
 		1F8360E72B14F3DC00563084 /* keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1F8360E62B14F3DC00563084 /* keys.plist */; };
 		1FAD08392A6AA26300EA7D3F /* AppCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAD08382A6AA26300EA7D3F /* AppCheck.swift */; };
+		1FBA92D82B15D940001EDB74 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBA92D72B15D940001EDB74 /* LogInViewController.swift */; };
 		1FD758962A6C165200EA4781 /* CompassCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD758952A6C165200EA4781 /* CompassCanvas.swift */; };
 		1FDB5E9E2A82927E006A473A /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDB5E9D2A82927E006A473A /* LoadingViewController.swift */; };
 		1FDB5EA12A82960F006A473A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDB5EA02A82960F006A473A /* ProfileViewController.swift */; };
@@ -58,7 +58,6 @@
 		1F097B202A5CA127005FBA32 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		1F097B212A5CA134005FBA32 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		1F160E1D2A86C13700D94BA2 /* LogoLaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LogoLaunchScreen.png; sourceTree = "<group>"; };
-		1F4EFC352A65E110009D0461 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		1F4EFC372A65E388009D0461 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		1F4EFC392A668D34009D0461 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1F4EFC3B2A66A452009D0461 /* CustomAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnotation.swift; sourceTree = "<group>"; };
@@ -67,6 +66,7 @@
 		1F8360E62B14F3DC00563084 /* keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = keys.plist; sourceTree = "<group>"; };
 		1FAD08362A6A92E700EA7D3F /* Radventure.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Radventure.entitlements; sourceTree = "<group>"; };
 		1FAD08382A6AA26300EA7D3F /* AppCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCheck.swift; sourceTree = "<group>"; };
+		1FBA92D72B15D940001EDB74 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		1FD758952A6C165200EA4781 /* CompassCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCanvas.swift; sourceTree = "<group>"; };
 		1FDB5E9D2A82927E006A473A /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		1FDB5EA02A82960F006A473A /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -243,7 +243,7 @@
 		1FDC805F2A4497B100F9CC96 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				1F4EFC352A65E110009D0461 /* LogInViewController.swift */,
+				1FBA92D72B15D940001EDB74 /* LogInViewController.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -539,8 +539,8 @@
 				1F4EFC3C2A66A452009D0461 /* CustomAnnotation.swift in Sources */,
 				1FDB5EA12A82960F006A473A /* ProfileViewController.swift in Sources */,
 				1FD758962A6C165200EA4781 /* CompassCanvas.swift in Sources */,
-				1F4EFC362A65E110009D0461 /* LogInViewController.swift in Sources */,
 				1F4EFC422A67E372009D0461 /* ScoreboardTableViewCell.swift in Sources */,
+				1FBA92D82B15D940001EDB74 /* LogInViewController.swift in Sources */,
 				1FAD08392A6AA26300EA7D3F /* AppCheck.swift in Sources */,
 				1F4EFC382A65E388009D0461 /* LocationManager.swift in Sources */,
 				1FDC802A2A44927E00F9CC96 /* AppDelegate.swift in Sources */,
