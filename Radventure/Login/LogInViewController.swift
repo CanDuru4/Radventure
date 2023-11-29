@@ -109,10 +109,11 @@ class LogInViewController: UIViewController {
         if let path = Bundle.main.path(forResource: "Keys", ofType: "plist") {
                keys = NSDictionary(contentsOfFile: path)
            }
-        let tenantID = keys!["tenantID"] as? String
+        let tenantID = keys?["tenantID"] as? String ?? ""
         
         //MARK: Valid   ate All Fields Filled
         account_check = 0
+        print("HI" + tenantID)
         provider.customParameters = [
             "prompt": "consent",
             "tenant": tenantID

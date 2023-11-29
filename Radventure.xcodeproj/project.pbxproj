@@ -14,7 +14,7 @@
 		1F4EFC3C2A66A452009D0461 /* CustomAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EFC3B2A66A452009D0461 /* CustomAnnotation.swift */; };
 		1F4EFC402A66C8FC009D0461 /* RulesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EFC3F2A66C8FC009D0461 /* RulesViewController.swift */; };
 		1F4EFC422A67E372009D0461 /* ScoreboardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EFC412A67E372009D0461 /* ScoreboardTableViewCell.swift */; };
-		1F8360E72B14F3DC00563084 /* keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1F8360E62B14F3DC00563084 /* keys.plist */; };
+		1F8360E72B14F3DC00563084 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1F8360E62B14F3DC00563084 /* Keys.plist */; };
 		1FAD08392A6AA26300EA7D3F /* AppCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAD08382A6AA26300EA7D3F /* AppCheck.swift */; };
 		1FBA92D82B15D940001EDB74 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBA92D72B15D940001EDB74 /* LogInViewController.swift */; };
 		1FD758962A6C165200EA4781 /* CompassCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD758952A6C165200EA4781 /* CompassCanvas.swift */; };
@@ -63,7 +63,7 @@
 		1F4EFC3B2A66A452009D0461 /* CustomAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnotation.swift; sourceTree = "<group>"; };
 		1F4EFC3F2A66C8FC009D0461 /* RulesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesViewController.swift; sourceTree = "<group>"; };
 		1F4EFC412A67E372009D0461 /* ScoreboardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreboardTableViewCell.swift; sourceTree = "<group>"; };
-		1F8360E62B14F3DC00563084 /* keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = keys.plist; sourceTree = "<group>"; };
+		1F8360E62B14F3DC00563084 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		1FAD08362A6A92E700EA7D3F /* Radventure.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Radventure.entitlements; sourceTree = "<group>"; };
 		1FAD08382A6AA26300EA7D3F /* AppCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCheck.swift; sourceTree = "<group>"; };
 		1FBA92D72B15D940001EDB74 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
@@ -181,7 +181,7 @@
 				1FDC80342A44927F00F9CC96 /* LaunchScreen.storyboard */,
 				1FDC80372A44927F00F9CC96 /* Info.plist */,
 				1F4EFC392A668D34009D0461 /* GoogleService-Info.plist */,
-				1F8360E62B14F3DC00563084 /* keys.plist */,
+				1F8360E62B14F3DC00563084 /* Keys.plist */,
 			);
 			path = Radventure;
 			sourceTree = "<group>";
@@ -381,7 +381,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1F8360E72B14F3DC00563084 /* keys.plist in Resources */,
+				1F8360E72B14F3DC00563084 /* Keys.plist in Resources */,
 				1FDC80362A44927F00F9CC96 /* LaunchScreen.storyboard in Resources */,
 				1F4EFC3A2A668D34009D0461 /* GoogleService-Info.plist in Resources */,
 				1FDC80332A44927F00F9CC96 /* Assets.xcassets in Resources */,
@@ -718,7 +718,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Radventure/Radventure.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 30;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = NV57XZ3KBV;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -758,7 +758,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Radventure/Radventure.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 30;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = NV57XZ3KBV;
 				GENERATE_INFOPLIST_FILE = YES;
